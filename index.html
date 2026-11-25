@@ -19,7 +19,7 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; }
         
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn {
@@ -30,7 +30,7 @@
 </head>
 <body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800">
 
-    <!-- Top Role Switcher Banner (For Demo/Testing Purpose) -->
+    <!-- Top Role Switcher Banner -->
     <div id="demo-top-bar" class="bg-slate-900 text-white px-4 py-2.5 shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
             <div class="flex items-center gap-2">
@@ -53,13 +53,13 @@
         </div>
     </div>
 
-    <!-- Client Portal Mode Banner (Shown when opened via Shared Link) -->
-    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2 text-xs border-b border-indigo-800">
+    <!-- Client Portal Mode Banner (Clean Company Header without back button) -->
+    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2.5 text-xs border-b border-indigo-800">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <span id="shared-link-label"><i class="fa-solid fa-link mr-1.5 text-indigo-400"></i> आप Shared Client Link मोड में हैं</span>
-            <button onclick="exitSharedLinkMode()" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded font-semibold transition">
-                <i class="fa-solid fa-arrow-left mr-1"></i> वापस Demo Mode में जाएं
-            </button>
+            <span id="shared-link-label"><i class="fa-solid fa-building mr-1.5 text-indigo-400"></i> WorkTrack Client Portal</span>
+            <span class="text-[11px] text-indigo-300 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secure Portal
+            </span>
         </div>
     </div>
 
@@ -70,75 +70,120 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 1. SUPER ADMIN PANEL VIEW (SAAS OWNER)     -->
+    <!-- 1. SUPER ADMIN PANEL VIEW (PASSWORD PROTECTED) -->
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-                <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-sm">W</div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
-                        <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+        
+        <!-- Super Admin Password Lock Screen -->
+        <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-slate-900 text-amber-400 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md mb-3">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <span class="inline-block bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full mb-2">
+                    <i class="fa-solid fa-lock mr-1"></i> OWNER ACCESS ONLY
+                </span>
+                <h2 class="text-xl font-bold text-slate-900">Super Admin सुरक्षा लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1">नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें</p>
+            </div>
+
+            <form onsubmit="handleSuperAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Super Admin Password</label>
+                    <div class="relative">
+                        <input type="password" id="sa-login-pass" required placeholder="अपना गुप्त पासवर्ड डालें..." class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
+                        <button type="button" onclick="togglePasswordVisibility('sa-login-pass', this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
-            <button onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-plus"></i> नई कंपनी (Tenant) जोड़ें
-            </button>
-        </div>
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-unlock-keyhole text-amber-400"></i> कंट्रोल सेंटर अनलॉक करें
+                </button>
+            </form>
 
-        <!-- SaaS KPI Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-slate-500">कुल रजिस्टर्ड कंपनियाँ</span>
-                    <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
-                </div>
-                <p id="sa-total-companies" class="text-3xl font-bold text-slate-900 mt-2">0</p>
-                <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up"></i> Live Firebase Sync</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-slate-500">कुल एक्टिव वर्कर्स (All Tenants)</span>
-                    <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
-                </div>
-                <p id="sa-total-workers" class="text-3xl font-bold text-slate-900 mt-2">0</p>
-                <p class="text-xs text-slate-500 mt-1">सभी कंपनियों के कर्मचारी मिलाकर</p>
-            </div>
-            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-medium text-slate-500">मासिक सब्सक्रिप्शन आय (MRR)</span>
-                    <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                </div>
-                <p id="sa-mrr" class="text-3xl font-bold text-slate-900 mt-2">₹0</p>
-                <p class="text-xs text-emerald-600 mt-1 font-medium">एक्टिव प्लान्स से अनुमानित आय</p>
+            <div class="mt-5 pt-4 border-t border-slate-100 text-center">
+                <p class="text-[11px] text-slate-400">डिफ़ॉल्ट पासवर्ड: <span class="font-mono font-bold text-slate-600">admin@1234</span> (अंदर जाकर आप इसे बदल सकते हैं)</p>
             </div>
         </div>
 
-        <!-- Companies Table -->
-        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h2 class="text-base font-bold text-slate-800">क्लाइंट कंपनियाँ (Tenants) और शेयर करने योग्य पोर्टल लिंक्स</h2>
-                <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">प्रत्येक कंपनी के लिए 2 अलग-अलग Share Links उपलब्ध</span>
+        <!-- Super Admin Main Dashboard (Unlocked) -->
+        <div id="sa-dashboard-wrapper" class="hidden">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-sm">W</div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
+                            <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="openModal('modal-change-sa-pass')" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3.5 py-2.5 rounded-xl font-medium text-xs shadow-sm transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-key text-amber-600"></i> पासवर्ड बदलें
+                    </button>
+                    <button onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-plus"></i> नई कंपनी (Tenant) जोड़ें
+                    </button>
+                    <button onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl font-semibold text-xs transition flex items-center gap-1.5" title="पैनल लॉक करें">
+                        <i class="fa-solid fa-lock"></i> लॉक करें
+                    </button>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                            <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
-                            <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
-                            <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
-                            <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
-                            <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
-                            <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
-                        </tr>
-                    </thead>
-                    <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
-                        <!-- Rendered dynamically -->
-                    </tbody>
-                </table>
+
+            <!-- SaaS KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500">कुल रजिस्टर्ड कंपनियाँ</span>
+                        <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
+                    </div>
+                    <p id="sa-total-companies" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                    <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up"></i> Live Firebase Sync</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500">कुल एक्टिव वर्कर्स (All Tenants)</span>
+                        <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
+                    </div>
+                    <p id="sa-total-workers" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                    <p class="text-xs text-slate-500 mt-1">सभी कंपनियों के कर्मचारी मिलाकर</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500">मासिक सब्सक्रिप्शन आय (MRR)</span>
+                        <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                    </div>
+                    <p id="sa-mrr" class="text-3xl font-bold text-slate-900 mt-2">₹0</p>
+                    <p class="text-xs text-emerald-600 mt-1 font-medium">एक्टिव प्लान्स से अनुमानित आय</p>
+                </div>
+            </div>
+
+            <!-- Companies Table -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <h2 class="text-base font-bold text-slate-800">क्लाइंट कंपनियाँ (Tenants) और शेयर करने योग्य पोर्टल लिंक्स</h2>
+                    <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">प्रत्येक कंपनी के लिए 2 अलग-अलग Share Links उपलब्ध</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
+                                <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
+                                <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
+                                <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
+                                <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
+                                <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -174,7 +219,7 @@
             </form>
 
             <div class="mt-6 pt-4 border-t border-slate-100">
-                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">डेमो Admin लॉगिन (क्लिक करके भरें):</p>
+                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">उपलब्ध Admin लॉगिन (क्लिक करके भरें):</p>
                 <div id="demo-ca-credentials" class="flex flex-wrap justify-center gap-2"></div>
             </div>
         </div>
@@ -200,7 +245,7 @@
                         <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </select>
                     </div>
-                    <button onclick="openCompanyLinksModal(activeCompanyId)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                    <button onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
                         <i class="fa-solid fa-share-nodes"></i> Worker Link शेयर करें
                     </button>
                     <button onclick="logoutCompanyAdmin()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition" title="लॉगआउट करें">
@@ -357,7 +402,7 @@
 
             <!-- Demo Quick Login Helper -->
             <div class="mt-6 pt-4 border-t border-slate-100">
-                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">डेमो के लिए उपलब्ध Worker IDs (क्लिक करें):</p>
+                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">उपलब्ध Worker IDs (क्लिक करें):</p>
                 <div id="demo-worker-credentials" class="flex flex-wrap justify-center gap-2">
                 </div>
             </div>
@@ -418,8 +463,35 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- MODALS (ADD COMPANY / ADD WORKER / LINKS)  -->
+    <!-- MODALS (CHANGE SA PASS / ADD COMPANY / LINKS) -->
     <!-- ========================================== -->
+
+    <!-- Modal: Change Super Admin Password -->
+    <div id="modal-change-sa-pass" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-key text-amber-500 mr-1.5"></i>Super Admin पासवर्ड बदलें</h3>
+                <button onclick="closeModal('modal-change-sa-pass')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleChangeSuperAdminPassword(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">पुराना पासवर्ड (Current Password)</label>
+                    <input type="password" id="sa-old-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">नया पासवर्ड (New Password)</label>
+                    <input type="text" id="sa-new-pass" required minlength="4" placeholder="कम से कम 4 अक्षर/अंक" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <p class="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+                    <i class="fa-solid fa-cloud-arrow-up text-indigo-600 mr-1"></i> आपका नया पासवर्ड सुरक्षित रूप से आपके Firebase डेटाबेस में सेव हो जाएगा।
+                </p>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-change-sa-pass')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">नया पासवर्ड सेव करें</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- Modal: Add New Company (Super Admin) -->
     <div id="modal-add-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -462,18 +534,18 @@
         </div>
     </div>
 
-    <!-- Modal: Company Shareable Links (2 Separate Links) -->
+    <!-- Modal: Company Shareable Links -->
     <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-2">
                 <h3 id="links-modal-title" class="text-lg font-bold text-slate-900">कंपनी पोर्टल लिंक्स</h3>
                 <button onclick="closeModal('modal-company-links')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <p class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:</p>
+            <p id="links-modal-subtitle" class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:</p>
 
             <div class="space-y-4">
-                <!-- Link 1: Company Admin Link -->
-                <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+                <!-- Link 1: Company Admin Link (Hidden in Company Admin View) -->
+                <div id="admin-link-section" class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
                     <div class="flex items-center justify-between mb-1.5">
                         <span class="text-xs font-bold text-indigo-900"><i class="fa-solid fa-building-shield mr-1.5 text-indigo-600"></i>1. Company Admin Portal Link (मालिक/HR के लिए)</span>
                         <button onclick="simulateOpenLink('admin')" class="text-[11px] font-semibold text-indigo-600 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
@@ -490,7 +562,7 @@
                 <!-- Link 2: Worker Portal Link -->
                 <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
                     <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-emerald-900"><i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-600"></i>2. Worker Portal Link (कर्मचारियों के लिए)</span>
+                        <span class="text-xs font-bold text-emerald-900"><i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-600"></i>Worker Portal Link (कर्मचारियों के लिए)</span>
                         <button onclick="simulateOpenLink('worker')" class="text-[11px] font-semibold text-emerald-700 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
                     </div>
                     <p class="text-[11px] text-slate-600 mb-2">सभी वर्कर्स इसी लिंक से अपनी Worker ID और Password डालकर लॉगिन करेंगे।</p>
@@ -560,7 +632,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- JAVASCRIPT LOGIC (Firebase + Multi-Tenant) -->
+    <!-- JAVASCRIPT LOGIC (Firebase + Security)     -->
     <!-- ========================================== -->
     <script>
         // 1. Firebase Configuration & Initialization
@@ -575,19 +647,16 @@
         };
 
         let firestore = null;
-        let isFirebaseLive = false;
-
         try {
             if (!firebase.apps.length) {
                 firebase.initializeApp(firebaseConfig);
             }
             firestore = firebase.firestore();
-            isFirebaseLive = true;
         } catch (err) {
             console.error("Firebase init error:", err);
         }
 
-        // Helper: Get Today's Date in YYYY-MM-DD
+        // Helper: Get Today's Date
         const getToday = () => new Date().toISOString().split('T')[0];
         const getYesterday = () => {
             const d = new Date();
@@ -602,7 +671,7 @@
             'Business': { limit: 500, price: 3999, color: 'bg-purple-50 text-purple-700' }
         };
 
-        // Local State Cache (Synced in Real-Time with Firestore)
+        // Local State Cache
         let db = {
             companies: [],
             workers: [],
@@ -613,13 +682,27 @@
         const today = getToday();
         const yesterday = getYesterday();
 
-        // App State
+        // Security & App State
+        let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
+        let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
         let activeCompanyId = '';
-        let isCompanyAdminLoggedIn = true;
+        let isCompanyAdminLoggedIn = false;
         let loggedInWorkerId = null;
         let sharedPortalMode = null;
         let selectedLinksCompanyId = null;
         let initialRouteHandled = false;
+
+        // Toggle Password Eye Icon
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+            } else {
+                input.type = 'password';
+                btn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            }
+        }
 
         // Update Live DB Badge
         function updateDbStatusBadge(connected, text) {
@@ -634,7 +717,31 @@
             }
         }
 
-        // Seed Initial Sample Data if Firestore is Empty (First Run Only)
+        // Sync Super Admin Password with Firestore
+        async function syncSuperAdminSettings() {
+            if (!firestore) return;
+            try {
+                const docRef = firestore.collection('wt_settings').doc('super_admin');
+                const docSnap = await docRef.get();
+                if (!docSnap.exists) {
+                    await docRef.set({ password: superAdminPassword });
+                } else if (docSnap.data().password) {
+                    superAdminPassword = docSnap.data().password;
+                    localStorage.setItem('wt_sa_pass', superAdminPassword);
+                }
+
+                docRef.onSnapshot((snap) => {
+                    if (snap.exists && snap.data().password) {
+                        superAdminPassword = snap.data().password;
+                        localStorage.setItem('wt_sa_pass', superAdminPassword);
+                    }
+                });
+            } catch (e) {
+                console.error("Settings sync error:", e);
+            }
+        }
+
+        // Seed Initial Sample Data if Firestore is Empty
         async function seedInitialDataIfEmpty() {
             if (!firestore) return;
             try {
@@ -668,7 +775,6 @@
             } catch (e) {
                 console.error("Firestore seed/permission check failed:", e);
                 updateDbStatusBadge(false, 'Check Firestore Rules');
-                showToast('Firestore चालू करें (Test Mode) ताकि डेटा सेव हो सके!', true);
             }
         }
 
@@ -676,7 +782,6 @@
         function startRealtimeSync() {
             if (!firestore) return;
 
-            // 1. Sync Companies
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
                 updateDbStatusBadge(true, 'Firebase Live');
                 db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -685,7 +790,6 @@
                     activeCompanyId = db.companies[0].id;
                 }
 
-                // Handle URL Shared Link Routing once companies load
                 if (!initialRouteHandled) {
                     initialRouteHandled = true;
                     const params = new URLSearchParams(window.location.search);
@@ -706,7 +810,6 @@
                 updateDbStatusBadge(false, 'Firestore Error');
             });
 
-            // 2. Sync Workers
             firestore.collection('wt_workers').onSnapshot((snapshot) => {
                 db.workers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderSuperAdmin();
@@ -715,7 +818,6 @@
                 if (loggedInWorkerId) renderWorkerDashboard();
             });
 
-            // 3. Sync Attendance
             firestore.collection('wt_attendance').onSnapshot((snapshot) => {
                 const attMap = {};
                 snapshot.docs.forEach(doc => {
@@ -726,12 +828,10 @@
                 if (loggedInWorkerId) renderWorkerDashboard();
             });
 
-            // 4. Sync Audit Logs
             firestore.collection('wt_audit_logs').orderBy('createdAt', 'desc').limit(30).onSnapshot((snapshot) => {
                 db.auditLogs = snapshot.docs.map(doc => doc.data());
                 renderCompanyAdmin();
             }, () => {
-                // Fallback if index not ready
                 firestore.collection('wt_audit_logs').limit(30).onSnapshot((snapshot) => {
                     db.auditLogs = snapshot.docs.map(doc => doc.data());
                     renderCompanyAdmin();
@@ -773,9 +873,60 @@
         // Initialize App
         window.onload = async () => {
             document.getElementById('ca-date-picker').value = today;
+            renderSuperAdmin();
+            await syncSuperAdminSettings();
             await seedInitialDataIfEmpty();
             startRealtimeSync();
         };
+
+        // ==========================================
+        // SUPER ADMIN SECURITY (LOGIN & PASSWORD)
+        // ==========================================
+        function handleSuperAdminLogin(e) {
+            e.preventDefault();
+            const enteredPass = document.getElementById('sa-login-pass').value.trim();
+            if (enteredPass === superAdminPassword) {
+                isSuperAdminUnlocked = true;
+                sessionStorage.setItem('wt_sa_unlocked', 'true');
+                document.getElementById('sa-login-pass').value = '';
+                renderSuperAdmin();
+                showToast('Super Admin कंट्रोल सेंटर अनलॉक हो गया!');
+            } else {
+                showToast('गलत पासवर्ड! कृपया सही Super Admin पासवर्ड डालें।', true);
+            }
+        }
+
+        function logoutSuperAdmin() {
+            isSuperAdminUnlocked = false;
+            sessionStorage.removeItem('wt_sa_unlocked');
+            renderSuperAdmin();
+            showToast('Super Admin पैनल सुरक्षित रूप से लॉक कर दिया गया है।');
+        }
+
+        async function handleChangeSuperAdminPassword(e) {
+            e.preventDefault();
+            const oldPass = document.getElementById('sa-old-pass').value.trim();
+            const newPass = document.getElementById('sa-new-pass').value.trim();
+
+            if (oldPass !== superAdminPassword) {
+                showToast('पुराना पासवर्ड गलत है!', true);
+                return;
+            }
+
+            try {
+                superAdminPassword = newPass;
+                localStorage.setItem('wt_sa_pass', newPass);
+                if (firestore) {
+                    await firestore.collection('wt_settings').doc('super_admin').set({ password: newPass });
+                }
+                e.target.reset();
+                closeModal('modal-change-sa-pass');
+                showToast('Super Admin पासवर्ड सफलतापूर्वक बदल दिया गया है!');
+            } catch (err) {
+                console.error(err);
+                showToast('पासवर्ड अपडेट करने में त्रुटि!', true);
+            }
+        }
 
         // ==========================================
         // SHARED LINK SYSTEM (2 Links per Company)
@@ -784,7 +935,7 @@
             return window.location.origin + window.location.pathname;
         }
 
-        function openCompanyLinksModal(compId) {
+        function openCompanyLinksModal(compId, workerOnly = false) {
             const comp = db.companies.find(c => c.id === compId);
             if (!comp) return;
             selectedLinksCompanyId = compId;
@@ -793,9 +944,21 @@
             const adminUrl = `${base}?portal=admin&company=${comp.id}`;
             const workerUrl = `${base}?portal=worker&company=${comp.id}`;
 
-            document.getElementById('links-modal-title').innerText = `${comp.name} — पोर्टल लिंक्स`;
-            document.getElementById('links-admin-creds').innerText = `ID: ${comp.adminId} | Pass: ${comp.adminPass}`;
-            document.getElementById('input-admin-link').value = adminUrl;
+            const adminSection = document.getElementById('admin-link-section');
+            const subtitle = document.getElementById('links-modal-subtitle');
+
+            if (workerOnly) {
+                document.getElementById('links-modal-title').innerText = `${comp.name} — Worker Portal Link`;
+                subtitle.innerText = 'अपने कर्मचारियों (Workers) को नीचे दिया गया लिंक शेयर करें:';
+                adminSection.classList.add('hidden');
+            } else {
+                document.getElementById('links-modal-title').innerText = `${comp.name} — पोर्टल लिंक्स`;
+                subtitle.innerText = 'ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:';
+                adminSection.classList.remove('hidden');
+                document.getElementById('links-admin-creds').innerText = `ID: ${comp.adminId} | Pass: ${comp.adminPass}`;
+                document.getElementById('input-admin-link').value = adminUrl;
+            }
+
             document.getElementById('input-worker-link').value = workerUrl;
 
             openModal('modal-company-links');
@@ -837,7 +1000,7 @@
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
 
             if (role === 'admin') {
-                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-building-shield mr-1.5 text-indigo-400"></i> <strong>${comp.name}</strong> — Company Admin Portal Link`;
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-building-shield mr-1.5 text-indigo-400"></i> <strong>${comp.name}</strong> — Company Admin Portal`;
                 isCompanyAdminLoggedIn = false;
                 document.getElementById('view-company_admin').classList.remove('hidden');
                 document.getElementById('ca-login-comp-badge').innerText = comp.name;
@@ -845,7 +1008,7 @@
                 document.getElementById('ca-demo-selector-box').classList.add('hidden');
                 renderCompanyAdmin();
             } else if (role === 'worker') {
-                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal Link`;
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal`;
                 loggedInWorkerId = null;
                 document.getElementById('view-worker').classList.remove('hidden');
                 document.getElementById('worker-dashboard-box').classList.add('hidden');
@@ -858,7 +1021,7 @@
 
         function exitSharedLinkMode() {
             sharedPortalMode = null;
-            isCompanyAdminLoggedIn = true;
+            isCompanyAdminLoggedIn = false;
             document.getElementById('shared-link-banner').classList.add('hidden');
             document.getElementById('demo-top-bar').classList.remove('hidden');
             document.getElementById('ca-login-comp-badge').classList.add('hidden');
@@ -891,6 +1054,18 @@
         // SUPER ADMIN LOGIC
         // ==========================================
         function renderSuperAdmin() {
+            const loginBox = document.getElementById('sa-login-box');
+            const dashWrapper = document.getElementById('sa-dashboard-wrapper');
+
+            if (!isSuperAdminUnlocked) {
+                loginBox.classList.remove('hidden');
+                dashWrapper.classList.add('hidden');
+                return;
+            } else {
+                loginBox.classList.add('hidden');
+                dashWrapper.classList.remove('hidden');
+            }
+
             const totalCompanies = db.companies.length;
             const totalWorkers = db.workers.length;
             let mrr = 0;
@@ -955,7 +1130,7 @@
                         </span>
                     </td>
                     <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                        <button onclick="openCompanyLinksModal('${comp.id}')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                        <button onclick="openCompanyLinksModal('${comp.id}', false)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition">
                             All Details
                         </button>
                         <button onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition">
@@ -1003,10 +1178,10 @@
                 document.getElementById('new-comp-admin-pass').value = 'admin123';
                 closeModal('modal-add-company');
                 showToast(`कंपनी "${name}" लाइव डेटाबेस में सेव हो गई!`);
-                setTimeout(() => openCompanyLinksModal(newId), 300);
+                setTimeout(() => openCompanyLinksModal(newId, false), 300);
             } catch (err) {
                 console.error(err);
-                showToast('कंपनी सेव करने में त्रुटि! Firestore Database चालू है या नहीं जाँचें।', true);
+                showToast('कंपनी सेव करने में त्रुटि!', true);
             }
         }
 
@@ -1134,18 +1309,18 @@
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (!comp) return;
 
-            // Header Info
             document.getElementById('ca-company-name').innerText = comp.name;
             document.getElementById('ca-plan-badge').innerText = `${comp.plan} Plan`;
             const logo = document.getElementById('ca-company-logo');
             logo.innerText = comp.name.charAt(0).toUpperCase();
             logo.className = `w-12 h-12 rounded-xl ${comp.color} text-white flex items-center justify-center font-bold text-xl shadow-sm`;
 
-            // Suspended Check
+            // Hide company switcher if Super Admin is not unlocked (Client Security)
+            document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
+
             const isSuspended = comp.status === 'Suspended';
             document.getElementById('ca-suspended-banner').classList.toggle('hidden', !isSuspended);
 
-            // Tenant Scoped Workers (Strict Isolation)
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
 
@@ -1208,13 +1383,11 @@
                 attBody.appendChild(tr);
             });
 
-            // Update Stats
             document.getElementById('ca-stat-total').innerText = tenantWorkers.length;
             document.getElementById('ca-stat-present').innerText = presentCount;
             document.getElementById('ca-stat-absent').innerText = absentCount;
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
 
-            // Render Workers Directory Tab
             const wTable = document.getElementById('ca-workers-table');
             wTable.innerHTML = '';
             const workerPortalUrl = `${getBaseUrl()}?portal=worker&company=${activeCompanyId}`;
@@ -1242,7 +1415,6 @@
                 `;
             });
 
-            // Render Audit Logs Tab
             const auditContainer = document.getElementById('ca-audit-list');
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
             auditContainer.innerHTML = compLogs.length ? '' : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
@@ -1394,7 +1566,6 @@
         function renderDemoWorkerCredentials() {
             const container = document.getElementById('demo-worker-credentials');
             container.innerHTML = '';
-            // If opened via a specific Company Worker Link, show only that company's demo workers
             const workersList = (sharedPortalMode && sharedPortalMode.role === 'worker')
                 ? db.workers.filter(w => w.companyId === sharedPortalMode.companyId)
                 : db.workers;
@@ -1419,7 +1590,6 @@
 
             let worker;
             if (sharedPortalMode && sharedPortalMode.role === 'worker') {
-                // Strict Tenant Boundary: Worker can only log into the company whose link they opened
                 worker = db.workers.find(w => w.companyId === sharedPortalMode.companyId && w.id.toUpperCase() === idInput && w.password === passInput);
             } else {
                 worker = db.workers.find(w => w.id.toUpperCase() === idInput && w.password === passInput);
@@ -1456,7 +1626,6 @@
             document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.role} (${worker.dept})`;
             document.getElementById('wd-phone').innerText = worker.phone;
 
-            // Gather Worker's Attendance History (Strictly scoped to this worker)
             const historyContainer = document.getElementById('wd-history-list');
             historyContainer.innerHTML = '';
 
@@ -1504,4 +1673,4 @@
         }
     </script>
 </body>
-          </html>
+    </html>
