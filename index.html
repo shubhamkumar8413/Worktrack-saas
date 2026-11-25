@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTrack - Multi-Company Attendance & OT SaaS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase Compat SDKs (App + Firestore) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+    <!-- Top Role Switcher Banner (For Demo/Testing Purpose) -->
+    <div id="demo-top-bar" class="bg-slate-900 text-white px-4 py-2.5 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span id="db-status-badge" class="bg-amber-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
+                    <i class="fa-solid fa-spinner fa-spin"></i> Connecting DB...
+                </span>
+                <span class="text-sm font-medium text-slate-300">पैनल बदलें:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center">
+                <button onclick="switchRole('super_admin')" id="btn-role-super" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow">
+                    <i class="fa-solid fa-crown"></i> Super Admin (आप)
+                </button>
+                <button onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
+                    <i class="fa-solid fa-building"></i> Company Admin
+                </button>
+                <button onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
+                    <i class="fa-solid fa-helmet-safety"></i> Worker Panel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Portal Mode Banner (Shown when opened via Shared Link) -->
+    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2 text-xs border-b border-indigo-800">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <span id="shared-link-label"><i class="fa-solid fa-link mr-1.5 text-indigo-400"></i> आप Shared Client Link मोड में हैं</span>
+            <button onclick="exitSharedLinkMode()" class="bg-white/10 hover:bg-white/20 text-white px-2.5 py-1 rounded font-semibold transition">
+                <i class="fa-solid fa-arrow-left mr-1"></i> वापस Demo Mode में जाएं
+            </button>
+        </div>
+    </div>
+
+    <!-- Custom Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toast-msg">Action successful!</span>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 1. SUPER ADMIN PANEL VIEW (SAAS OWNER)     -->
+    <!-- ========================================== -->
+    <div id="view-super_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-sm">W</div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
+                        <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i> नई कंपनी (Tenant) जोड़ें
+            </button>
+        </div>
+
+        <!-- SaaS KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">कुल रजिस्टर्ड कंपनियाँ</span>
+                    <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
+                </div>
+                <p id="sa-total-companies" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up"></i> Live Firebase Sync</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">कुल एक्टिव वर्कर्स (All Tenants)</span>
+                    <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
+                </div>
+                <p id="sa-total-workers" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                <p class="text-xs text-slate-500 mt-1">सभी कंपनियों के कर्मचारी मिलाकर</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-slate-500">मासिक सब्सक्रिप्शन आय (MRR)</span>
+                    <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                </div>
+                <p id="sa-mrr" class="text-3xl font-bold text-slate-900 mt-2">₹0</p>
+                <p class="text-xs text-emerald-600 mt-1 font-medium">एक्टिव प्लान्स से अनुमानित आय</p>
+            </div>
+        </div>
+
+        <!-- Companies Table -->
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h2 class="text-base font-bold text-slate-800">क्लाइंट कंपनियाँ (Tenants) और शेयर करने योग्य पोर्टल लिंक्स</h2>
+                <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">प्रत्येक कंपनी के लिए 2 अलग-अलग Share Links उपलब्ध</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
+                            <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
+                            <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
+                            <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
+                            <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
+                            <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
+                        <!-- Rendered dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. COMPANY ADMIN PANEL VIEW                -->
+    <!-- ========================================== -->
+    <div id="view-company_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+        
+        <!-- Company Admin Login Box -->
+        <div id="ca-login-box" class="hidden max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md mb-3">
+                    <i class="fa-solid fa-building-user"></i>
+                </div>
+                <span id="ca-login-comp-badge" class="hidden inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
+                <h2 class="text-xl font-bold text-slate-900">Company Admin लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1">Super Admin द्वारा दी गई Admin ID और Password डालें</p>
+            </div>
+
+            <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin ID / Email</label>
+                    <input type="text" id="ca-login-id" required placeholder="उदा. admin@apex" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
+                    <input type="password" id="ca-login-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                    Admin Panel खोलें <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </form>
+
+            <div class="mt-6 pt-4 border-t border-slate-100">
+                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">डेमो Admin लॉगिन (क्लिक करके भरें):</p>
+                <div id="demo-ca-credentials" class="flex flex-wrap justify-center gap-2"></div>
+            </div>
+        </div>
+
+        <!-- Company Admin Dashboard -->
+        <div id="ca-dashboard-wrapper">
+            <!-- Company Context Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div id="ca-company-logo" class="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl shadow-sm">A</div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 id="ca-company-name" class="text-xl font-bold text-slate-900">Company Name</h1>
+                            <span id="ca-plan-badge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700">Growth Plan</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                        <label class="text-xs font-semibold text-slate-500 pl-1">कंपनी बदलें:</label>
+                        <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </select>
+                    </div>
+                    <button onclick="openCompanyLinksModal(activeCompanyId)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-share-nodes"></i> Worker Link शेयर करें
+                    </button>
+                    <button onclick="logoutCompanyAdmin()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition" title="लॉगआउट करें">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Suspended Warning Banner -->
+            <div id="ca-suspended-banner" class="hidden bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
+                <i class="fa-solid fa-ban text-rose-600 text-lg"></i>
+                <div class="text-sm">
+                    <strong>अकाउंट सस्पेंड है!</strong> Super Admin द्वारा इस कंपनी की सेवा अस्थायी रूप से रोक दी गई है। आप नया डेटा नहीं जोड़ सकते।
+                </div>
+            </div>
+
+            <!-- Today's Overview Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <span class="text-xs font-semibold text-slate-400 uppercase">कुल वर्कर्स</span>
+                    <p id="ca-stat-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <span class="text-xs font-semibold text-emerald-600 uppercase">आज हाज़िर (Present)</span>
+                    <p id="ca-stat-present" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <span class="text-xs font-semibold text-rose-500 uppercase">अनुपस्थित / छुट्टी</span>
+                    <p id="ca-stat-absent" class="text-2xl font-bold text-rose-500 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <span class="text-xs font-semibold text-amber-600 uppercase">आज का कुल OT (घंटे)</span>
+                    <p id="ca-stat-ot" class="text-2xl font-bold text-amber-600 mt-1">0 hrs</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="flex border-b border-slate-200 mb-6 gap-6 overflow-x-auto">
+                <button onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">
+                    <i class="fa-solid fa-calendar-check mr-1.5"></i> दैनिक हाज़िरी और OT
+                </button>
+                <button onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                    <i class="fa-solid fa-id-card mr-1.5"></i> वर्कर्स लिस्ट (Workers)
+                </button>
+                <button onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
+                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i> ऑडिट लॉग (Audit Trail)
+                </button>
+            </div>
+
+            <!-- TAB 1: DAILY ATTENDANCE & OT -->
+            <div id="ca-content-attendance" class="ca-tab-content">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <label class="text-sm font-semibold text-slate-700">तारीख चुनें:</label>
+                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="exportCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-excel"></i> Excel/CSV रिपोर्ट
+                            </button>
+                            <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus"></i> नया Worker जोड़ें
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                    <th class="py-3.5 px-5 font-semibold">वर्कर (Worker)</th>
+                                    <th class="py-3.5 px-5 font-semibold">विभाग / पद</th>
+                                    <th class="py-3.5 px-5 font-semibold">हाज़िरी (Status)</th>
+                                    <th class="py-3.5 px-5 font-semibold">ओवरटाइम (OT घंटे)</th>
+                                    <th class="py-3.5 px-5 font-semibold text-right">सेव करें</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: WORKERS DIRECTORY -->
+            <div id="ca-content-workers" class="ca-tab-content hidden">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800">रजिस्टर्ड कर्मचारियों की सूची और लॉगिन विवरण</h3>
+                        <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm">
+                            + नया Worker जोड़ें
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                    <th class="py-3.5 px-5">नाम व फोटो</th>
+                                    <th class="py-3.5 px-5">Worker ID व Password</th>
+                                    <th class="py-3.5 px-5">विभाग व पद</th>
+                                    <th class="py-3.5 px-5">मोबाइल नंबर</th>
+                                    <th class="py-3.5 px-5 text-right">लॉगिन शेयर करें</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ca-workers-table" class="divide-y divide-slate-100 text-sm">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: AUDIT LOGS -->
+            <div id="ca-content-audit" class="ca-tab-content hidden">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+                    <h3 class="font-bold text-slate-800 mb-1">डेटा सुरक्षा व ऑडिट लॉग (Audit Trail)</h3>
+                    <p class="text-xs text-slate-500 mb-4">हाज़िरी या OT में किए गए हर बदलाव का समय और विवरण यहाँ सुरक्षित रहता है।</p>
+                    <div id="ca-audit-list" class="space-y-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. WORKER PANEL VIEW (MOBILE FIRST)        -->
+    <!-- ========================================== -->
+    <div id="view-worker" class="role-view hidden max-w-md mx-auto p-4 sm:py-8 fade-in">
+        
+        <!-- Worker Login Card -->
+        <div id="worker-login-box" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-md mb-3">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                </div>
+                <span id="w-login-company-badge" class="hidden inline-block bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
+                <h2 class="text-xl font-bold text-slate-900">Worker पोर्टल लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1">अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें</p>
+            </div>
+
+            <form onsubmit="handleWorkerLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Worker ID</label>
+                    <input type="text" id="w-login-id" required placeholder="उदा. W-101" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password / PIN</label>
+                    <input type="password" id="w-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                    लॉगिन करें <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </form>
+
+            <!-- Demo Quick Login Helper -->
+            <div class="mt-6 pt-4 border-t border-slate-100">
+                <p class="text-[11px] font-semibold text-slate-400 uppercase mb-2 text-center">डेमो के लिए उपलब्ध Worker IDs (क्लिक करें):</p>
+                <div id="demo-worker-credentials" class="flex flex-wrap justify-center gap-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- Worker Dashboard Card (Shown after login) -->
+        <div id="worker-dashboard-box" class="hidden space-y-4">
+            <!-- Profile Header -->
+            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Company</span>
+                    <button onclick="logoutWorker()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> लॉगआउट
+                    </button>
+                </div>
+                <div class="flex items-center gap-4">
+                    <img id="wd-photo" src="https://placehold.co/100x100/ffffff/4f46e5?text=W" alt="Worker" class="w-16 h-16 rounded-2xl object-cover border-2 border-white/40 bg-white">
+                    <div>
+                        <h2 id="wd-name" class="text-lg font-bold">Worker Name</h2>
+                        <p id="wd-role" class="text-xs text-indigo-100">ID: W-101 • Welder</p>
+                        <p class="text-xs text-indigo-200 mt-1"><i class="fa-solid fa-phone mr-1"></i> <span id="wd-phone">9876543210</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monthly Summary Cards -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
+                    <span class="text-[11px] font-semibold text-slate-400 block">कुल हाज़िरी</span>
+                    <span id="wd-stat-present" class="text-xl font-bold text-emerald-600 mt-0.5 block">0</span>
+                    <span class="text-[10px] text-slate-400">दिन</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
+                    <span class="text-[11px] font-semibold text-slate-400 block">अनुपस्थित</span>
+                    <span id="wd-stat-absent" class="text-xl font-bold text-rose-500 mt-0.5 block">0</span>
+                    <span class="text-[10px] text-slate-400">दिन</span>
+                </div>
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
+                    <span class="text-[11px] font-semibold text-slate-400 block">कुल ओवरटाइम</span>
+                    <span id="wd-stat-ot" class="text-xl font-bold text-amber-600 mt-0.5 block">0</span>
+                    <span class="text-[10px] text-slate-400">घंटे</span>
+                </div>
+            </div>
+
+            <!-- Read-Only Notice -->
+            <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex items-center gap-2.5 text-xs text-amber-800">
+                <i class="fa-solid fa-lock text-amber-600"></i>
+                <span>यह रिकॉर्ड <strong>Read-Only</strong> है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
+            </div>
+
+            <!-- Attendance History List -->
+            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
+                <h3 class="font-bold text-slate-800 text-sm mb-3">हाल की हाज़िरी और ओवरटाइम रिकॉर्ड</h3>
+                <div id="wd-history-list" class="space-y-2.5">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODALS (ADD COMPANY / ADD WORKER / LINKS)  -->
+    <!-- ========================================== -->
+    
+    <!-- Modal: Add New Company (Super Admin) -->
+    <div id="modal-add-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900">नई क्लाइंट कंपनी जोड़ें</h3>
+                <button onclick="closeModal('modal-add-company')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleAddCompany(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">कंपनी का नाम</label>
+                    <input type="text" id="new-comp-name" required placeholder="उदा. Sharma Engineering Works" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Company Admin ID</label>
+                        <input type="text" id="new-comp-admin-id" required placeholder="admin@sharma" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Admin Password</label>
+                        <input type="text" id="new-comp-admin-pass" required value="admin123" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">सब्सक्रिप्शन प्लान चुनें</label>
+                    <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+                        <option value="Starter">Starter (25 Workers तक) - ₹499/माह</option>
+                        <option value="Growth" selected>Growth (100 Workers तक) - ₹1,499/माह</option>
+                        <option value="Business">Business (500 Workers तक) - ₹3,999/माह</option>
+                    </select>
+                </div>
+                <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-800">
+                    <i class="fa-solid fa-link mr-1"></i> कंपनी बनते ही इसके लिए <strong>2 अलग-अलग Share Links</strong> (1. Admin Link और 2. Worker Link) अपने आप तैयार हो जाएंगे।
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-add-company')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">कंपनी बनाएं</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Company Shareable Links (2 Separate Links) -->
+    <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between mb-2">
+                <h3 id="links-modal-title" class="text-lg font-bold text-slate-900">कंपनी पोर्टल लिंक्स</h3>
+                <button onclick="closeModal('modal-company-links')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:</p>
+
+            <div class="space-y-4">
+                <!-- Link 1: Company Admin Link -->
+                <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-indigo-900"><i class="fa-solid fa-building-shield mr-1.5 text-indigo-600"></i>1. Company Admin Portal Link (मालिक/HR के लिए)</span>
+                        <button onclick="simulateOpenLink('admin')" class="text-[11px] font-semibold text-indigo-600 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
+                    </div>
+                    <p id="links-admin-creds" class="text-[11px] text-slate-600 mb-2 font-mono bg-white px-2.5 py-1 rounded border border-indigo-100"></p>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="input-admin-link" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-600 font-mono">
+                        <button onclick="copyLinkText('input-admin-link')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap shadow-sm">
+                            <i class="fa-regular fa-copy mr-1"></i> Copy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Link 2: Worker Portal Link -->
+                <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-emerald-900"><i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-600"></i>2. Worker Portal Link (कर्मचारियों के लिए)</span>
+                        <button onclick="simulateOpenLink('worker')" class="text-[11px] font-semibold text-emerald-700 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
+                    </div>
+                    <p class="text-[11px] text-slate-600 mb-2">सभी वर्कर्स इसी लिंक से अपनी Worker ID और Password डालकर लॉगिन करेंगे।</p>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="input-worker-link" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-600 font-mono">
+                        <button onclick="copyLinkText('input-worker-link')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap shadow-sm">
+                            <i class="fa-regular fa-copy mr-1"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-5">
+                <button onclick="closeModal('modal-company-links')" class="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-semibold">बंद करें</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Worker (Company Admin) -->
+    <div id="modal-add-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-slate-900">नया वर्कर (Worker) जोड़ें</h3>
+                <button onclick="closeModal('modal-add-worker')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleAddWorker(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">पूरा नाम</label>
+                    <input type="text" id="new-w-name" required placeholder="उदा. राजेश यादव" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">विभाग (Department)</label>
+                        <input type="text" id="new-w-dept" required placeholder="उदा. Production" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">पद (Role)</label>
+                        <input type="text" id="new-w-role" required placeholder="उदा. Helper" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">मोबाइल नंबर</label>
+                    <input type="tel" id="new-w-phone" required placeholder="9876543210" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700">Worker Login ID व Password</span>
+                        <button type="button" onclick="autoGenerateWorkerCreds()" class="text-[11px] font-semibold text-indigo-600 hover:underline"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Auto Generate</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Worker ID</label>
+                            <input type="text" id="new-w-id" required placeholder="W-105" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-sm font-mono font-bold uppercase">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-500 mb-1">Password / PIN</label>
+                            <input type="text" id="new-w-pass" required placeholder="1234" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-sm font-mono font-bold">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-add-worker')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">वर्कर सेव करें</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC (Firebase + Multi-Tenant) -->
+    <!-- ========================================== -->
+    <script>
+        // 1. Firebase Configuration & Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyDjaUQX7cXwMWwscB0Yi1LZeJCbHnhbe6Y",
+            authDomain: "worktrack-saas-b70ae.firebaseapp.com",
+            projectId: "worktrack-saas-b70ae",
+            storageBucket: "worktrack-saas-b70ae.firebasestorage.app",
+            messagingSenderId: "179984418436",
+            appId: "1:179984418436:web:74b2dbf66086e84012e4d1",
+            measurementId: "G-GPNXDKLT3P"
+        };
+
+        let firestore = null;
+        let isFirebaseLive = false;
+
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+            firestore = firebase.firestore();
+            isFirebaseLive = true;
+        } catch (err) {
+            console.error("Firebase init error:", err);
+        }
+
+        // Helper: Get Today's Date in YYYY-MM-DD
+        const getToday = () => new Date().toISOString().split('T')[0];
+        const getYesterday = () => {
+            const d = new Date();
+            d.setDate(d.getDate() - 1);
+            return d.toISOString().split('T')[0];
+        };
+
+        // Plan Configurations
+        const PLANS = {
+            'Starter': { limit: 25, price: 499, color: 'bg-slate-100 text-slate-700' },
+            'Growth': { limit: 100, price: 1499, color: 'bg-indigo-50 text-indigo-700' },
+            'Business': { limit: 500, price: 3999, color: 'bg-purple-50 text-purple-700' }
+        };
+
+        // Local State Cache (Synced in Real-Time with Firestore)
+        let db = {
+            companies: [],
+            workers: [],
+            attendance: {},
+            auditLogs: []
+        };
+
+        const today = getToday();
+        const yesterday = getYesterday();
+
+        // App State
+        let activeCompanyId = '';
+        let isCompanyAdminLoggedIn = true;
+        let loggedInWorkerId = null;
+        let sharedPortalMode = null;
+        let selectedLinksCompanyId = null;
+        let initialRouteHandled = false;
+
+        // Update Live DB Badge
+        function updateDbStatusBadge(connected, text) {
+            const badge = document.getElementById('db-status-badge');
+            if (!badge) return;
+            if (connected) {
+                badge.className = 'bg-emerald-500 text-slate-950 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider flex items-center gap-1';
+                badge.innerHTML = `<i class="fa-solid fa-cloud"></i> ${text || 'Live Firebase'}`;
+            } else {
+                badge.className = 'bg-rose-500 text-white text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider flex items-center gap-1';
+                badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${text || 'DB Offline'}`;
+            }
+        }
+
+        // Seed Initial Sample Data if Firestore is Empty (First Run Only)
+        async function seedInitialDataIfEmpty() {
+            if (!firestore) return;
+            try {
+                const snap = await firestore.collection('wt_companies').limit(1).get();
+                if (snap.empty) {
+                    const batch = firestore.batch();
+
+                    const sampleCompanies = [
+                        { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', status: 'Active', color: 'bg-indigo-600' },
+                        { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', status: 'Active', color: 'bg-emerald-600' }
+                    ];
+                    sampleCompanies.forEach(c => {
+                        batch.set(firestore.collection('wt_companies').doc(c.id), c);
+                    });
+
+                    const sampleWorkers = [
+                        { id: 'W-101', companyId: 'COMP-01', name: 'रमेश कुमार', dept: 'Fabrication', role: 'Senior Welder', phone: '9811223344', password: '123', photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK' },
+                        { id: 'W-102', companyId: 'COMP-01', name: 'सुनील शर्मा', dept: 'Civil', role: 'Site Supervisor', phone: '9822334455', password: '123', photo: 'https://placehold.co/100x100/0284c7/ffffff?text=SS' },
+                        { id: 'W-201', companyId: 'COMP-02', name: 'मनोज सिंह', dept: 'Assembly', role: 'Machine Operator', phone: '9844556677', password: '123', photo: 'https://placehold.co/100x100/059669/ffffff?text=MS' }
+                    ];
+                    sampleWorkers.forEach(w => {
+                        batch.set(firestore.collection('wt_workers').doc(w.id), w);
+                    });
+
+                    batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${today}`), { companyId: 'COMP-01', workerId: 'W-101', date: today, status: 'Present', ot: 2 });
+                    batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-102_${today}`), { companyId: 'COMP-01', workerId: 'W-102', date: today, status: 'Present', ot: 0 });
+                    batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${yesterday}`), { companyId: 'COMP-01', workerId: 'W-101', date: yesterday, status: 'Present', ot: 3.5 });
+
+                    await batch.commit();
+                }
+            } catch (e) {
+                console.error("Firestore seed/permission check failed:", e);
+                updateDbStatusBadge(false, 'Check Firestore Rules');
+                showToast('Firestore चालू करें (Test Mode) ताकि डेटा सेव हो सके!', true);
+            }
+        }
+
+        // Real-Time Listeners for Firestore Collections
+        function startRealtimeSync() {
+            if (!firestore) return;
+
+            // 1. Sync Companies
+            firestore.collection('wt_companies').onSnapshot((snapshot) => {
+                updateDbStatusBadge(true, 'Firebase Live');
+                db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                if (!activeCompanyId && db.companies.length > 0) {
+                    activeCompanyId = db.companies[0].id;
+                }
+
+                // Handle URL Shared Link Routing once companies load
+                if (!initialRouteHandled) {
+                    initialRouteHandled = true;
+                    const params = new URLSearchParams(window.location.search);
+                    const portalType = params.get('portal');
+                    const compParam = params.get('company');
+                    if (portalType && compParam && db.companies.some(c => c.id === compParam)) {
+                        enterSharedLinkMode(portalType, compParam);
+                        return;
+                    }
+                }
+
+                renderSuperAdmin();
+                updateCompanySelector();
+                renderCompanyAdmin();
+                renderDemoWorkerCredentials();
+            }, (err) => {
+                console.error("Companies sync error:", err);
+                updateDbStatusBadge(false, 'Firestore Error');
+            });
+
+            // 2. Sync Workers
+            firestore.collection('wt_workers').onSnapshot((snapshot) => {
+                db.workers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderSuperAdmin();
+                renderCompanyAdmin();
+                renderDemoWorkerCredentials();
+                if (loggedInWorkerId) renderWorkerDashboard();
+            });
+
+            // 3. Sync Attendance
+            firestore.collection('wt_attendance').onSnapshot((snapshot) => {
+                const attMap = {};
+                snapshot.docs.forEach(doc => {
+                    attMap[doc.id] = doc.data();
+                });
+                db.attendance = attMap;
+                renderCompanyAdmin();
+                if (loggedInWorkerId) renderWorkerDashboard();
+            });
+
+            // 4. Sync Audit Logs
+            firestore.collection('wt_audit_logs').orderBy('createdAt', 'desc').limit(30).onSnapshot((snapshot) => {
+                db.auditLogs = snapshot.docs.map(doc => doc.data());
+                renderCompanyAdmin();
+            }, () => {
+                // Fallback if index not ready
+                firestore.collection('wt_audit_logs').limit(30).onSnapshot((snapshot) => {
+                    db.auditLogs = snapshot.docs.map(doc => doc.data());
+                    renderCompanyAdmin();
+                });
+            });
+        }
+
+        // Toast Notification Helper
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').innerText = msg;
+            
+            icon.className = isError 
+                ? 'fa-solid fa-circle-exclamation text-rose-400 text-lg' 
+                : 'fa-solid fa-circle-check text-emerald-400 text-lg';
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3200);
+        }
+
+        // Modal Helpers
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (!m) return;
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (!m) return;
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        // Initialize App
+        window.onload = async () => {
+            document.getElementById('ca-date-picker').value = today;
+            await seedInitialDataIfEmpty();
+            startRealtimeSync();
+        };
+
+        // ==========================================
+        // SHARED LINK SYSTEM (2 Links per Company)
+        // ==========================================
+        function getBaseUrl() {
+            return window.location.origin + window.location.pathname;
+        }
+
+        function openCompanyLinksModal(compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            selectedLinksCompanyId = compId;
+
+            const base = getBaseUrl();
+            const adminUrl = `${base}?portal=admin&company=${comp.id}`;
+            const workerUrl = `${base}?portal=worker&company=${comp.id}`;
+
+            document.getElementById('links-modal-title').innerText = `${comp.name} — पोर्टल लिंक्स`;
+            document.getElementById('links-admin-creds').innerText = `ID: ${comp.adminId} | Pass: ${comp.adminPass}`;
+            document.getElementById('input-admin-link').value = adminUrl;
+            document.getElementById('input-worker-link').value = workerUrl;
+
+            openModal('modal-company-links');
+        }
+
+        function copyLinkText(inputId) {
+            const input = document.getElementById(inputId);
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            showToast('लिंक क्लिपबोर्ड पर कॉपी हो गया! अब आप इसे WhatsApp/Email पर भेज सकते हैं।');
+        }
+
+        function copyRawText(text, label) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast(`${label} कॉपी हो गया!`);
+        }
+
+        function simulateOpenLink(role) {
+            closeModal('modal-company-links');
+            enterSharedLinkMode(role, selectedLinksCompanyId);
+        }
+
+        function enterSharedLinkMode(role, compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+
+            sharedPortalMode = { role, companyId: compId };
+            activeCompanyId = compId;
+
+            document.getElementById('demo-top-bar').classList.add('hidden');
+            document.getElementById('shared-link-banner').classList.remove('hidden');
+
+            document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+
+            if (role === 'admin') {
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-building-shield mr-1.5 text-indigo-400"></i> <strong>${comp.name}</strong> — Company Admin Portal Link`;
+                isCompanyAdminLoggedIn = false;
+                document.getElementById('view-company_admin').classList.remove('hidden');
+                document.getElementById('ca-login-comp-badge').innerText = comp.name;
+                document.getElementById('ca-login-comp-badge').classList.remove('hidden');
+                document.getElementById('ca-demo-selector-box').classList.add('hidden');
+                renderCompanyAdmin();
+            } else if (role === 'worker') {
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal Link`;
+                loggedInWorkerId = null;
+                document.getElementById('view-worker').classList.remove('hidden');
+                document.getElementById('worker-dashboard-box').classList.add('hidden');
+                document.getElementById('worker-login-box').classList.remove('hidden');
+                document.getElementById('w-login-company-badge').innerText = comp.name;
+                document.getElementById('w-login-company-badge').classList.remove('hidden');
+                renderDemoWorkerCredentials();
+            }
+        }
+
+        function exitSharedLinkMode() {
+            sharedPortalMode = null;
+            isCompanyAdminLoggedIn = true;
+            document.getElementById('shared-link-banner').classList.add('hidden');
+            document.getElementById('demo-top-bar').classList.remove('hidden');
+            document.getElementById('ca-login-comp-badge').classList.add('hidden');
+            document.getElementById('ca-demo-selector-box').classList.remove('hidden');
+            document.getElementById('w-login-company-badge').classList.add('hidden');
+            switchRole('super_admin');
+        }
+
+        // Role Switcher (Top Bar)
+        function switchRole(role) {
+            document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${role}`).classList.remove('hidden');
+
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+
+            const activeBtnId = role === 'super_admin' ? 'btn-role-super' : (role === 'company_admin' ? 'btn-role-company' : 'btn-role-worker');
+            const activeBtn = document.getElementById(activeBtnId);
+            activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+
+            if (role === 'super_admin') renderSuperAdmin();
+            if (role === 'company_admin') renderCompanyAdmin();
+            if (role === 'worker') renderDemoWorkerCredentials();
+        }
+
+        // ==========================================
+        // SUPER ADMIN LOGIC
+        // ==========================================
+        function renderSuperAdmin() {
+            const totalCompanies = db.companies.length;
+            const totalWorkers = db.workers.length;
+            let mrr = 0;
+
+            const tbody = document.getElementById('sa-company-list');
+            tbody.innerHTML = '';
+
+            db.companies.forEach(comp => {
+                const planInfo = PLANS[comp.plan];
+                if (comp.status === 'Active') mrr += planInfo.price;
+                
+                const compWorkersCount = db.workers.filter(w => w.companyId === comp.id).length;
+                const usagePercent = Math.min(100, Math.round((compWorkersCount / planInfo.limit) * 100));
+                const base = getBaseUrl();
+                const adminUrl = `${base}?portal=admin&company=${comp.id}`;
+                const workerUrl = `${base}?portal=worker&company=${comp.id}`;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/80 transition';
+                tr.innerHTML = `
+                    <td class="py-4 px-6">
+                        <div class="font-bold text-slate-900">${comp.name}</div>
+                        <div class="text-xs text-slate-400">Tenant ID: ${comp.id} • Admin: <span class="font-mono">${comp.adminId}</span></div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${planInfo.color}">${comp.plan}</span>
+                        <div class="text-xs text-slate-500 mt-1">₹${planInfo.price}/माह</div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center justify-between text-xs font-medium mb-1">
+                            <span>${compWorkersCount} / ${planInfo.limit} Workers</span>
+                            <span>${usagePercent}%</span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-1.5">
+                            <div class="bg-indigo-600 h-1.5 rounded-full" style="width: ${usagePercent}%"></div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex flex-col gap-1.5">
+                            <div class="flex items-center gap-1.5">
+                                <button onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 1. Admin Link
+                                </button>
+                                <button onclick="enterSharedLinkMode('admin', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Admin Link खोलकर देखें">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick='copyRawText(${JSON.stringify(workerUrl)}, "${comp.name} का Worker Link")' class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 2. Worker Link
+                                </button>
+                                <button onclick="enterSharedLinkMode('worker', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Worker Link खोलकर देखें">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${comp.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                            <span class="w-1.5 h-1.5 rounded-full ${comp.status === 'Active' ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+                            ${comp.status}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                        <button onclick="openCompanyLinksModal('${comp.id}')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                            All Details
+                        </button>
+                        <button onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition">
+                            पैनल खोलें
+                        </button>
+                        <button onclick="toggleCompanyStatus('${comp.id}')" class="text-xs border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                            ${comp.status === 'Active' ? 'Suspend' : 'Activate'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('sa-total-companies').innerText = totalCompanies;
+            document.getElementById('sa-total-workers').innerText = totalWorkers;
+            document.getElementById('sa-mrr').innerText = `₹${mrr.toLocaleString('en-IN')}`;
+        }
+
+        async function handleAddCompany(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-comp-name').value.trim();
+            const adminId = document.getElementById('new-comp-admin-id').value.trim();
+            const adminPass = document.getElementById('new-comp-admin-pass').value.trim();
+            const plan = document.getElementById('new-comp-plan').value;
+            const newId = `COMP-${Date.now().toString().slice(-4)}`;
+            const colors = ['bg-blue-600', 'bg-purple-600', 'bg-teal-600', 'bg-rose-600'];
+            
+            const newCompObj = {
+                id: newId,
+                name: name,
+                adminId: adminId,
+                adminPass: adminPass,
+                plan: plan,
+                status: 'Active',
+                color: colors[db.companies.length % colors.length]
+            };
+
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(newId).set(newCompObj);
+                } else {
+                    db.companies.push(newCompObj);
+                }
+                e.target.reset();
+                document.getElementById('new-comp-admin-pass').value = 'admin123';
+                closeModal('modal-add-company');
+                showToast(`कंपनी "${name}" लाइव डेटाबेस में सेव हो गई!`);
+                setTimeout(() => openCompanyLinksModal(newId), 300);
+            } catch (err) {
+                console.error(err);
+                showToast('कंपनी सेव करने में त्रुटि! Firestore Database चालू है या नहीं जाँचें।', true);
+            }
+        }
+
+        async function toggleCompanyStatus(compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            const nextStatus = comp.status === 'Active' ? 'Suspended' : 'Active';
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update({ status: nextStatus });
+                } else {
+                    comp.status = nextStatus;
+                }
+                showToast(`${comp.name} अब ${nextStatus} है।`, nextStatus === 'Suspended');
+            } catch (err) {
+                showToast('स्टेटस अपडेट नहीं हो सका!', true);
+            }
+        }
+
+        function inspectCompany(compId) {
+            activeCompanyId = compId;
+            isCompanyAdminLoggedIn = true;
+            updateCompanySelector();
+            switchRole('company_admin');
+        }
+
+        // ==========================================
+        // COMPANY ADMIN LOGIC
+        // ==========================================
+        function handleCompanyAdminLogin(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('ca-login-id').value.trim();
+            const passInput = document.getElementById('ca-login-pass').value.trim();
+
+            let comp;
+            if (sharedPortalMode && sharedPortalMode.role === 'admin') {
+                comp = db.companies.find(c => c.id === sharedPortalMode.companyId && c.adminId === idInput && c.adminPass === passInput);
+            } else {
+                comp = db.companies.find(c => c.adminId === idInput && c.adminPass === passInput);
+            }
+
+            if (!comp) {
+                showToast('गलत Admin ID या Password!', true);
+                return;
+            }
+
+            activeCompanyId = comp.id;
+            isCompanyAdminLoggedIn = true;
+            updateCompanySelector();
+            renderCompanyAdmin();
+            showToast(`${comp.name} Admin Panel में स्वागत है!`);
+        }
+
+        function logoutCompanyAdmin() {
+            isCompanyAdminLoggedIn = false;
+            document.getElementById('ca-login-pass').value = '';
+            renderCompanyAdmin();
+        }
+
+        function renderCompanyAdminDemoCreds() {
+            const container = document.getElementById('demo-ca-credentials');
+            if (!container) return;
+            container.innerHTML = '';
+            const compsToShow = (sharedPortalMode && sharedPortalMode.role === 'admin')
+                ? db.companies.filter(c => c.id === sharedPortalMode.companyId)
+                : db.companies;
+
+            compsToShow.forEach(c => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 transition font-medium';
+                btn.innerText = `${c.name.split(' ')[0]} (${c.adminId})`;
+                btn.onclick = () => {
+                    document.getElementById('ca-login-id').value = c.adminId;
+                    document.getElementById('ca-login-pass').value = c.adminPass;
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function updateCompanySelector() {
+            const sel = document.getElementById('ca-company-selector');
+            sel.innerHTML = '';
+            db.companies.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = `${c.name} (${c.plan})`;
+                if (c.id === activeCompanyId) opt.selected = true;
+                sel.appendChild(opt);
+            });
+        }
+
+        function changeActiveCompany(compId) {
+            activeCompanyId = compId;
+            renderCompanyAdmin();
+        }
+
+        function switchCaTab(tabName) {
+            document.querySelectorAll('.ca-tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.ca-tab').forEach(btn => {
+                btn.classList.remove('border-indigo-600', 'text-indigo-600');
+                btn.classList.add('border-transparent', 'text-slate-500');
+            });
+            const activeTab = document.getElementById(`tab-ca-${tabName}`);
+            activeTab.classList.remove('border-transparent', 'text-slate-500');
+            activeTab.classList.add('border-indigo-600', 'text-indigo-600');
+        }
+
+        function renderCompanyAdmin() {
+            const loginBox = document.getElementById('ca-login-box');
+            const dashWrapper = document.getElementById('ca-dashboard-wrapper');
+
+            if (!isCompanyAdminLoggedIn) {
+                loginBox.classList.remove('hidden');
+                dashWrapper.classList.add('hidden');
+                renderCompanyAdminDemoCreds();
+                return;
+            } else {
+                loginBox.classList.add('hidden');
+                dashWrapper.classList.remove('hidden');
+            }
+
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (!comp) return;
+
+            // Header Info
+            document.getElementById('ca-company-name').innerText = comp.name;
+            document.getElementById('ca-plan-badge').innerText = `${comp.plan} Plan`;
+            const logo = document.getElementById('ca-company-logo');
+            logo.innerText = comp.name.charAt(0).toUpperCase();
+            logo.className = `w-12 h-12 rounded-xl ${comp.color} text-white flex items-center justify-center font-bold text-xl shadow-sm`;
+
+            // Suspended Check
+            const isSuspended = comp.status === 'Suspended';
+            document.getElementById('ca-suspended-banner').classList.toggle('hidden', !isSuspended);
+
+            // Tenant Scoped Workers (Strict Isolation)
+            const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
+            const selectedDate = document.getElementById('ca-date-picker').value || today;
+
+            let presentCount = 0;
+            let absentCount = 0;
+            let totalOt = 0;
+
+            const attBody = document.getElementById('ca-attendance-list');
+            attBody.innerHTML = '';
+
+            if (tenantWorkers.length === 0) {
+                attBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 text-sm">इस कंपनी में अभी कोई वर्कर नहीं है। "+ नया Worker जोड़ें" पर क्लिक करें।</td></tr>`;
+            }
+
+            tenantWorkers.forEach(w => {
+                const recordKey = `${activeCompanyId}_${w.id}_${selectedDate}`;
+                const record = db.attendance[recordKey] || { status: 'Not Marked', ot: 0 };
+
+                if (record.status === 'Present' || record.status === 'Half Day') presentCount++;
+                if (record.status === 'Absent' || record.status === 'Leave') absentCount++;
+                totalOt += parseFloat(record.ot || 0);
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/70 transition';
+                tr.innerHTML = `
+                    <td class="py-3.5 px-5">
+                        <div class="flex items-center gap-3">
+                            <img src="${w.photo}" class="w-9 h-9 rounded-full object-cover border border-slate-200">
+                            <div>
+                                <div class="font-bold text-slate-800">${w.name}</div>
+                                <div class="text-xs text-slate-400 font-mono">${w.id}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-5">
+                        <div class="text-slate-700 font-medium">${w.role}</div>
+                        <div class="text-xs text-slate-400">${w.dept}</div>
+                    </td>
+                    <td class="py-3.5 px-5">
+                        <select id="att-status-${w.id}" ${isSuspended ? 'disabled' : ''} class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="Not Marked" ${record.status === 'Not Marked' ? 'selected' : ''}>-- चुनें --</option>
+                            <option value="Present" ${record.status === 'Present' ? 'selected' : ''}>✅ Present (हाज़िर)</option>
+                            <option value="Half Day" ${record.status === 'Half Day' ? 'selected' : ''}>🌗 Half Day (आधा दिन)</option>
+                            <option value="Absent" ${record.status === 'Absent' ? 'selected' : ''}>❌ Absent (अनुपस्थित)</option>
+                            <option value="Leave" ${record.status === 'Leave' ? 'selected' : ''}>📅 Leave (छुट्टी)</option>
+                        </select>
+                    </td>
+                    <td class="py-3.5 px-5">
+                        <div class="flex items-center gap-1.5">
+                            <input type="number" step="0.5" min="0" max="16" id="att-ot-${w.id}" value="${record.ot}" ${isSuspended ? 'disabled' : ''} class="w-20 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                            <span class="text-xs text-slate-400">hrs</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 px-5 text-right">
+                        <button onclick="saveWorkerAttendance('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
+                            Save
+                        </button>
+                    </td>
+                `;
+                attBody.appendChild(tr);
+            });
+
+            // Update Stats
+            document.getElementById('ca-stat-total').innerText = tenantWorkers.length;
+            document.getElementById('ca-stat-present').innerText = presentCount;
+            document.getElementById('ca-stat-absent').innerText = absentCount;
+            document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
+
+            // Render Workers Directory Tab
+            const wTable = document.getElementById('ca-workers-table');
+            wTable.innerHTML = '';
+            const workerPortalUrl = `${getBaseUrl()}?portal=worker&company=${activeCompanyId}`;
+
+            tenantWorkers.forEach(w => {
+                const shareMsg = `WorkTrack Login (${comp.name})\nLink: ${workerPortalUrl}\nWorker ID: ${w.id}\nPassword: ${w.password}`;
+                wTable.innerHTML += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-3.5 px-5 flex items-center gap-3">
+                            <img src="${w.photo}" class="w-9 h-9 rounded-full object-cover">
+                            <span class="font-bold text-slate-800">${w.name}</span>
+                        </td>
+                        <td class="py-3.5 px-5">
+                            <span class="bg-slate-100 text-slate-800 font-mono text-xs px-2 py-0.5 rounded font-bold">${w.id}</span>
+                            <span class="text-xs text-slate-500 font-mono ml-2">Pass: <strong>${w.password}</strong></span>
+                        </td>
+                        <td class="py-3.5 px-5 text-xs text-slate-600">${w.dept} • ${w.role}</td>
+                        <td class="py-3.5 px-5 text-xs text-slate-600">${w.phone}</td>
+                        <td class="py-3.5 px-5 text-right">
+                            <button onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} का ID/Pass और Link")' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy ID & Link
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Render Audit Logs Tab
+            const auditContainer = document.getElementById('ca-audit-list');
+            const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
+            auditContainer.innerHTML = compLogs.length ? '' : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
+            compLogs.forEach(log => {
+                auditContainer.innerHTML += `
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                        <i class="fa-solid fa-shield-check text-indigo-600 mt-0.5"></i>
+                        <div class="flex-1">
+                            <p class="text-slate-800 font-medium">${log.text}</p>
+                            <span class="text-[11px] text-slate-400">${log.time}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function saveWorkerAttendance(workerId) {
+            const selectedDate = document.getElementById('ca-date-picker').value || today;
+            const status = document.getElementById(`att-status-${workerId}`).value;
+            const ot = parseFloat(document.getElementById(`att-ot-${workerId}`).value) || 0;
+
+            const recordKey = `${activeCompanyId}_${workerId}_${selectedDate}`;
+            const worker = db.workers.find(w => w.id === workerId);
+            const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const attData = {
+                companyId: activeCompanyId,
+                workerId: workerId,
+                date: selectedDate,
+                status,
+                ot
+            };
+
+            const logData = {
+                companyId: activeCompanyId,
+                time: `${selectedDate} (${nowTime})`,
+                text: `Admin ने ${worker.name} (${worker.id}) का रिकॉर्ड अपडेट किया: Status = ${status}, OT = ${ot} hrs`,
+                createdAt: Date.now()
+            };
+
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_attendance').doc(recordKey).set(attData);
+                    await firestore.collection('wt_audit_logs').add(logData);
+                } else {
+                    db.attendance[recordKey] = attData;
+                    db.auditLogs.unshift(logData);
+                }
+                showToast(`${worker.name} की हाज़िरी और OT लाइव सेव हो गई!`);
+            } catch (err) {
+                console.error(err);
+                showToast('हाज़िरी सेव करने में समस्या आई!', true);
+            }
+        }
+
+        function openAddWorkerModal() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (comp.status === 'Suspended') {
+                showToast('कंपनी Suspended है! नया वर्कर नहीं जोड़ सकते।', true);
+                return;
+            }
+            const currentCount = db.workers.filter(w => w.companyId === activeCompanyId).length;
+            const limit = PLANS[comp.plan].limit;
+            if (currentCount >= limit) {
+                showToast(`आपके ${comp.plan} प्लान की सीमा (${limit} Workers) पूरी हो गई है! प्लान अपग्रेड करें।`, true);
+                return;
+            }
+            autoGenerateWorkerCreds();
+            openModal('modal-add-worker');
+        }
+
+        function autoGenerateWorkerCreds() {
+            const nextNum = 100 + db.workers.length + 1;
+            const randomPin = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('new-w-id').value = `W-${nextNum}`;
+            document.getElementById('new-w-pass').value = `${randomPin}`;
+        }
+
+        async function handleAddWorker(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-w-name').value.trim();
+            const dept = document.getElementById('new-w-dept').value.trim();
+            const role = document.getElementById('new-w-role').value.trim();
+            const phone = document.getElementById('new-w-phone').value.trim();
+            const newWorkerId = document.getElementById('new-w-id').value.trim().toUpperCase();
+            const newWorkerPass = document.getElementById('new-w-pass').value.trim();
+
+            if (db.workers.some(w => w.id.toUpperCase() === newWorkerId)) {
+                showToast(`Worker ID "${newWorkerId}" पहले से मौजूद है! कृपया दूसरा ID चुनें।`, true);
+                return;
+            }
+
+            const initials = name.substring(0, 2).toUpperCase();
+            const workerObj = {
+                id: newWorkerId,
+                companyId: activeCompanyId,
+                name, dept, role, phone,
+                password: newWorkerPass,
+                photo: `https://placehold.co/100x100/4f46e5/ffffff?text=${initials}`
+            };
+
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `नया वर्कर जोड़ा गया: ${name} (ID: ${newWorkerId})`,
+                createdAt: Date.now()
+            };
+
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_workers').doc(newWorkerId).set(workerObj);
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.workers.push(workerObj);
+                    db.auditLogs.unshift(logObj);
+                }
+                e.target.reset();
+                closeModal('modal-add-worker');
+                showToast(`वर्कर ${name} लाइव सेव हो गया! ID: ${newWorkerId}, Pass: ${newWorkerPass}`);
+            } catch (err) {
+                console.error(err);
+                showToast('वर्कर सेव करने में त्रुटि!', true);
+            }
+        }
+
+        function exportCSV() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            const selectedDate = document.getElementById('ca-date-picker').value || today;
+            const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
+
+            let csv = 'Company,Date,Worker ID,Name,Department,Role,Status,OT Hours\n';
+            tenantWorkers.forEach(w => {
+                const rec = db.attendance[`${activeCompanyId}_${w.id}_${selectedDate}`] || { status: 'Not Marked', ot: 0 };
+                csv += `"${comp.name}","${selectedDate}","${w.id}","${w.name}","${w.dept}","${w.role}","${rec.status}","${rec.ot}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WorkTrack_Report_${comp.id}_${selectedDate}.csv`;
+            a.click();
+            showToast('Excel/CSV रिपोर्ट डाउनलोड हो गई!');
+        }
+
+        // ==========================================
+        // WORKER PANEL LOGIC
+        // ==========================================
+        function renderDemoWorkerCredentials() {
+            const container = document.getElementById('demo-worker-credentials');
+            container.innerHTML = '';
+            // If opened via a specific Company Worker Link, show only that company's demo workers
+            const workersList = (sharedPortalMode && sharedPortalMode.role === 'worker')
+                ? db.workers.filter(w => w.companyId === sharedPortalMode.companyId)
+                : db.workers;
+
+            workersList.forEach(w => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 transition font-medium';
+                btn.innerText = `${w.id} (${w.name.split(' ')[0]})`;
+                btn.onclick = () => {
+                    document.getElementById('w-login-id').value = w.id;
+                    document.getElementById('w-login-pass').value = w.password;
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function handleWorkerLogin(e) {
+            e.preventDefault();
+            const idInput = document.getElementById('w-login-id').value.trim().toUpperCase();
+            const passInput = document.getElementById('w-login-pass').value.trim();
+
+            let worker;
+            if (sharedPortalMode && sharedPortalMode.role === 'worker') {
+                // Strict Tenant Boundary: Worker can only log into the company whose link they opened
+                worker = db.workers.find(w => w.companyId === sharedPortalMode.companyId && w.id.toUpperCase() === idInput && w.password === passInput);
+            } else {
+                worker = db.workers.find(w => w.id.toUpperCase() === idInput && w.password === passInput);
+            }
+
+            if (!worker) {
+                showToast('गलत Worker ID या Password (या आप गलत कंपनी के लिंक पर हैं)!', true);
+                return;
+            }
+
+            loggedInWorkerId = worker.id;
+            document.getElementById('worker-login-box').classList.add('hidden');
+            document.getElementById('worker-dashboard-box').classList.remove('hidden');
+            renderWorkerDashboard();
+            showToast(`स्वागत है, ${worker.name}!`);
+        }
+
+        function logoutWorker() {
+            loggedInWorkerId = null;
+            document.getElementById('worker-dashboard-box').classList.add('hidden');
+            document.getElementById('worker-login-box').classList.remove('hidden');
+            document.getElementById('w-login-pass').value = '';
+        }
+
+        function renderWorkerDashboard() {
+            const worker = db.workers.find(w => w.id === loggedInWorkerId);
+            if (!worker) return;
+
+            const comp = db.companies.find(c => c.id === worker.companyId);
+
+            document.getElementById('wd-photo').src = worker.photo;
+            document.getElementById('wd-company').innerText = comp ? comp.name : 'WorkTrack';
+            document.getElementById('wd-name').innerText = worker.name;
+            document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.role} (${worker.dept})`;
+            document.getElementById('wd-phone').innerText = worker.phone;
+
+            // Gather Worker's Attendance History (Strictly scoped to this worker)
+            const historyContainer = document.getElementById('wd-history-list');
+            historyContainer.innerHTML = '';
+
+            let totalPresent = 0;
+            let totalAbsent = 0;
+            let totalOt = 0;
+
+            const prefix = `${worker.companyId}_${worker.id}_`;
+            const records = Object.keys(db.attendance)
+                .filter(k => k.startsWith(prefix))
+                .map(k => ({ date: k.replace(prefix, ''), ...db.attendance[k] }))
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            if (records.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">अभी तक कोई रिकॉर्ड दर्ज नहीं है।</p>`;
+            }
+
+            records.forEach(rec => {
+                if (rec.status === 'Present') totalPresent += 1;
+                if (rec.status === 'Half Day') totalPresent += 0.5;
+                if (rec.status === 'Absent' || rec.status === 'Leave') totalAbsent += 1;
+                totalOt += parseFloat(rec.ot || 0);
+
+                let badgeClass = 'bg-slate-100 text-slate-600';
+                if (rec.status === 'Present') badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                if (rec.status === 'Half Day') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
+                if (rec.status === 'Absent' || rec.status === 'Leave') badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200';
+
+                historyContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50/60">
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">${rec.date}</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">OT: <strong class="text-slate-700">${rec.ot} घंटे</strong></div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${badgeClass}">
+                            ${rec.status}
+                        </span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('wd-stat-present').innerText = totalPresent;
+            document.getElementById('wd-stat-absent').innerText = totalAbsent;
+            document.getElementById('wd-stat-ot').innerText = totalOt;
+        }
+    </script>
+</body>
+          </html>
