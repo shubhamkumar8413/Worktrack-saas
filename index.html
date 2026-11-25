@@ -37,18 +37,47 @@
                 <span id="db-status-badge" class="bg-amber-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
                     <i class="fa-solid fa-spinner fa-spin"></i> Connecting DB...
                 </span>
-                <span class="text-sm font-medium text-slate-300">पैनल बदलें:</span>
+                <span class="text-sm font-medium text-slate-300" data-i18n="switch_panel">पैनल बदलें:</span>
             </div>
             <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center">
                 <button onclick="switchRole('super_admin')" id="btn-role-super" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow">
-                    <i class="fa-solid fa-crown"></i> Super Admin (आप)
+                    <i class="fa-solid fa-crown"></i> <span data-i18n="role_super">Super Admin (आप)</span>
                 </button>
                 <button onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-                    <i class="fa-solid fa-building"></i> Company Admin
+                    <i class="fa-solid fa-building"></i> <span data-i18n="role_company">Company Admin</span>
                 </button>
                 <button onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-                    <i class="fa-solid fa-helmet-safety"></i> Worker Panel
+                    <i class="fa-solid fa-helmet-safety"></i> <span data-i18n="role_worker">Worker Panel</span>
                 </button>
+                <!-- Global Language Selector (Demo Mode) -->
+                <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-2 py-1">
+                    <i class="fa-solid fa-language text-indigo-400 text-sm mr-1.5"></i>
+                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-slate-800 text-white text-xs font-semibold focus:outline-none cursor-pointer">
+                        <option value="hi">हिंदी</option>
+                        <option value="en">English</option>
+                        <option value="gu">ગુજરાતી</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Portal Mode Banner (Clean Company Header + Language Switcher) -->
+    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2.5 text-xs border-b border-indigo-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <span id="shared-link-label"><i class="fa-solid fa-building mr-1.5 text-indigo-400"></i> WorkTrack Client Portal</span>
+            <div class="flex items-center gap-2.5">
+                <div class="flex items-center bg-indigo-900/90 border border-indigo-700 rounded-lg px-2 py-1">
+                    <i class="fa-solid fa-language text-indigo-300 text-sm mr-1"></i>
+                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-indigo-900 text-white text-[11px] font-semibold focus:outline-none cursor-pointer">
+                        <option value="hi">हिंदी</option>
+                        <option value="en">English</option>
+                        <option value="gu">ગુજરાતી</option>
+                    </select>
+                </div>
+                <span class="hidden sm:flex text-[11px] text-indigo-300 font-medium items-center gap-1">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secure
+                </span>
             </div>
         </div>
     </div>
@@ -83,22 +112,22 @@
                 <span class="inline-block bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full mb-2">
                     <i class="fa-solid fa-lock mr-1"></i> OWNER ACCESS ONLY
                 </span>
-                <h2 class="text-xl font-bold text-slate-900">Super Admin सुरक्षा लॉगिन</h2>
-                <p class="text-xs text-slate-500 mt-1">नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें</p>
+                <h2 class="text-xl font-bold text-slate-900" data-i18n="sa_login_title">Super Admin सुरक्षा लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="sa_login_sub">नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें</p>
             </div>
 
             <form onsubmit="handleSuperAdminLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Super Admin Password</label>
                     <div class="relative">
-                        <input type="password" id="sa-login-pass" required placeholder="अपना गुप्त पासवर्ड डालें..." class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
+                        <input type="password" id="sa-login-pass" required placeholder="••••••••" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
                         <button type="button" onclick="togglePasswordVisibility('sa-login-pass', this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
                             <i class="fa-regular fa-eye"></i>
                         </button>
                     </div>
                 </div>
                 <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-unlock-keyhole text-amber-400"></i> कंट्रोल सेंटर अनलॉक करें
+                    <i class="fa-solid fa-unlock-keyhole text-amber-400"></i> <span data-i18n="sa_unlock_btn">कंट्रोल सेंटर अनलॉक करें</span>
                 </button>
             </form>
 
@@ -122,14 +151,42 @@
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
                     <button onclick="openModal('modal-change-sa-pass')" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3.5 py-2.5 rounded-xl font-medium text-xs shadow-sm transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-key text-amber-600"></i> पासवर्ड बदलें
+                        <i class="fa-solid fa-key text-amber-600"></i> <span data-i18n="sa_change_pass">पासवर्ड बदलें</span>
                     </button>
                     <button onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> नई कंपनी (Tenant) जोड़ें
+                        <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी (Tenant) जोड़ें</span>
                     </button>
                     <button onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl font-semibold text-xs transition flex items-center gap-1.5" title="पैनल लॉक करें">
-                        <i class="fa-solid fa-lock"></i> लॉक करें
+                        <i class="fa-solid fa-lock"></i> <span data-i18n="sa_lock_btn">लॉक करें</span>
                     </button>
+                </div>
+            </div>
+
+            <!-- SaaS KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_comp">कुल रजिस्टर्ड कंपनियाँ</span>
+                        <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
+                    </div>
+                    <p id="sa-total-companies" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                    <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up"></i> Live Firebase Sync</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_workers">कुल एक्टिव वर्कर्स (All Tenants)</span>
+                        <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
+                    </div>
+                    <p id="sa-total-workers" class="text-3xl font-bold text-slate-900 mt-2">0</p>
+                    <p class="text-xs text-slate-500 mt-1" data-i18n="sa_kpi_workers_sub">सभी कंपनियों के कर्मचारी मिलाकर</p>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_mrr">मासिक सब्सक्रिप्शन आय (MRR)</span>
+                        <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                    </div>
+                    <p id="sa-mrr" class="text-3xl font-bold text-slate-900 mt-2">₹0</p>
+                    <p class="text-xs text-emerald-600 mt-1 font-medium" data-i18n="sa_kpi_mrr_sub">एक्टिव प्लान्स से अनुमानित आय</p>
                 </div>
             </div>
 
@@ -200,21 +257,21 @@
                     <i class="fa-solid fa-building-user"></i>
                 </div>
                 <span id="ca-login-comp-badge" class="hidden inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
-                <h2 class="text-xl font-bold text-slate-900">Company Admin लॉगिन</h2>
-                <p class="text-xs text-slate-500 mt-1">Super Admin द्वारा दी गई Admin ID और Password डालें</p>
+                <h2 class="text-xl font-bold text-slate-900" data-i18n="ca_login_title">Company Admin लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">Super Admin द्वारा दी गई Admin ID और Password डालें</p>
             </div>
 
             <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin ID / Email</label>
-                    <input type="text" id="ca-login-id" required placeholder="उदा. admin@apex" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="text" id="ca-login-id" required placeholder="admin@company.com" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
                     <input type="password" id="ca-login-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
-                    Admin Panel खोलें <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <span data-i18n="ca_login_btn">Admin Panel खोलें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
         </div>
@@ -241,7 +298,7 @@
                         </select>
                     </div>
                     <button onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-share-nodes"></i> Worker Link शेयर करें
+                        <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
                     </button>
                     <button onclick="logoutCompanyAdmin()" class="bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3 py-2 rounded-xl text-xs font-semibold transition" title="लॉगआउट करें">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -260,50 +317,50 @@
             <!-- Today's Overview Stats -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-slate-400 uppercase">कुल वर्कर्स</span>
+                    <span class="text-xs font-semibold text-slate-400 uppercase" data-i18n="ca_stat_total">कुल वर्कर्स</span>
                     <p id="ca-stat-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-emerald-600 uppercase">आज हाज़िर (Present)</span>
+                    <span class="text-xs font-semibold text-emerald-600 uppercase" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
                     <p id="ca-stat-present" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-rose-500 uppercase">अनुपस्थित / छुट्टी</span>
+                    <span class="text-xs font-semibold text-rose-500 uppercase" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
                     <p id="ca-stat-absent" class="text-2xl font-bold text-rose-500 mt-1">0</p>
                 </div>
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-amber-600 uppercase">आज का कुल OT (घंटे)</span>
+                    <span class="text-xs font-semibold text-amber-600 uppercase" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
                     <p id="ca-stat-ot" class="text-2xl font-bold text-amber-600 mt-1">0 hrs</p>
                 </div>
             </div>
 
-            <!-- Navigation Tabs -->
-            <div class="flex border-b border-slate-200 mb-6 gap-6 overflow-x-auto">
-                <button onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">
-                    <i class="fa-solid fa-calendar-check mr-1.5"></i> दैनिक हाज़िरी और OT
-                </button>
-                <button onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
-                    <i class="fa-solid fa-id-card mr-1.5"></i> वर्कर्स लिस्ट (Workers)
-                </button>
-                <button onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab pb-3 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
-                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i> ऑडिट लॉग (Audit Trail)
-                </button>
-            </div>
+            <!-- Classic Top Navigation Tabs (Clean Grid) -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <div class="grid grid-cols-3 border-b border-slate-200 bg-slate-50/70">
+                    <button onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab py-3.5 px-2 text-xs sm:text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-calendar-check"></i> <span data-i18n="tab_att">हाज़िरी व OT</span>
+                    </button>
+                    <button onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab py-3.5 px-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-users"></i> <span data-i18n="tab_workers">वर्कर्स लिस्ट</span>
+                    </button>
+                    <button onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab py-3.5 px-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center justify-center gap-1.5 transition">
+                        <i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="tab_audit">ऑडिट लॉग</span>
+                    </button>
+                </div>
 
-            <!-- TAB 1: DAILY ATTENDANCE & OT -->
-            <div id="ca-content-attendance" class="ca-tab-content">
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <!-- TAB 1: DAILY ATTENDANCE & OT -->
+                <div id="ca-content-attendance" class="ca-tab-content">
                     <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <label class="text-sm font-semibold text-slate-700">तारीख चुनें:</label>
-                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="exportCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3.5 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-excel"></i> Excel/CSV रिपोर्ट
+                            <label class="text-xs font-semibold text-slate-500" data-i18n="select_date">तारीख चुनें:</label>
+                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 bg-white rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="exportCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-excel"></i> <span data-i18n="btn_export">Excel/CSV रिपोर्ट</span>
                             </button>
-                            <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-plus"></i> नया Worker जोड़ें
+                            <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
                             </button>
                         </div>
                     </div>
@@ -312,11 +369,11 @@
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                    <th class="py-3.5 px-5 font-semibold">वर्कर (Worker)</th>
-                                    <th class="py-3.5 px-5 font-semibold">विभाग / पद</th>
-                                    <th class="py-3.5 px-5 font-semibold">हाज़िरी (Status)</th>
-                                    <th class="py-3.5 px-5 font-semibold">ओवरटाइम (OT घंटे)</th>
-                                    <th class="py-3.5 px-5 font-semibold text-right">सेव करें</th>
+                                    <th class="py-3.5 px-5 font-semibold" data-i18n="th_worker">वर्कर (Worker)</th>
+                                    <th class="py-3.5 px-5 font-semibold" data-i18n="th_dept">विभाग</th>
+                                    <th class="py-3.5 px-5 font-semibold" data-i18n="th_status">हाज़िरी (Status)</th>
+                                    <th class="py-3.5 px-5 font-semibold" data-i18n="th_ot">ओवरटाइम (OT घंटे)</th>
+                                    <th class="py-3.5 px-5 font-semibold text-right" data-i18n="th_save">सेव करें</th>
                                 </tr>
                             </thead>
                             <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm">
@@ -324,26 +381,30 @@
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- TAB 2: WORKERS DIRECTORY -->
-            <div id="ca-content-workers" class="ca-tab-content hidden">
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
-                        <h3 class="font-bold text-slate-800">रजिस्टर्ड कर्मचारियों की सूची और लॉगिन विवरण</h3>
-                        <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm">
-                            + नया Worker जोड़ें
+                <!-- TAB 2: WORKERS DIRECTORY -->
+                <div id="ca-content-workers" class="ca-tab-content hidden">
+                    <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm sm:text-base" data-i18n="workers_dir_title">रजिस्टर्ड कर्मचारियों की सूची</h3>
+                            <p class="text-[11px] text-slate-400" data-i18n="workers_dir_sub">सभी वर्कर्स की लॉगिन ID, पासवर्ड और प्रोफ़ाइल विवरण</p>
+                        </div>
+                        <button onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition whitespace-nowrap flex items-center gap-1.5">
+                            <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
                         </button>
                     </div>
-                    <div class="overflow-x-auto">
+                    <!-- Responsive Mobile Cards + Desktop Clean Table Wrapper -->
+                    <div id="ca-workers-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50">
+                    </div>
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                    <th class="py-3.5 px-5">नाम व फोटो</th>
-                                    <th class="py-3.5 px-5">Worker ID व Password</th>
-                                    <th class="py-3.5 px-5">विभाग व पद</th>
-                                    <th class="py-3.5 px-5">मोबाइल नंबर</th>
-                                    <th class="py-3.5 px-5 text-right">लॉगिन शेयर करें</th>
+                                    <th class="py-3.5 px-5" data-i18n="th_name_photo">नाम व फोटो</th>
+                                    <th class="py-3.5 px-5" data-i18n="th_id_pass">Worker ID व Password</th>
+                                    <th class="py-3.5 px-5" data-i18n="th_dept">विभाग</th>
+                                    <th class="py-3.5 px-5" data-i18n="th_mobile">मोबाइल नंबर</th>
+                                    <th class="py-3.5 px-5 text-right" data-i18n="th_actions">एक्शन</th>
                                 </tr>
                             </thead>
                             <tbody id="ca-workers-table" class="divide-y divide-slate-100 text-sm">
@@ -351,14 +412,11 @@
                         </table>
                     </div>
                 </div>
-            </div>
 
-            <!-- TAB 3: AUDIT LOGS -->
-            <div id="ca-content-audit" class="ca-tab-content hidden">
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
-                    <h3 class="font-bold text-slate-800 mb-1">डेटा सुरक्षा व ऑडिट लॉग (Audit Trail)</h3>
-                    <p class="text-xs text-slate-500 mb-4">हाज़िरी या OT में किए गए हर बदलाव का समय और विवरण यहाँ सुरक्षित रहता है।</p>
-                    <div id="ca-audit-list" class="space-y-3">
+                <!-- TAB 3: AUDIT LOGS -->
+                <div id="ca-content-audit" class="ca-tab-content hidden p-4 sm:p-5">
+                    <h3 class="font-bold text-slate-800 text-sm mb-3">सिस्टम ऑडिट लॉग (किसने और कब बदलाव किया)</h3>
+                    <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto">
                     </div>
                 </div>
             </div>
@@ -377,21 +435,21 @@
                     <i class="fa-solid fa-helmet-safety"></i>
                 </div>
                 <span id="w-login-company-badge" class="hidden inline-block bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
-                <h2 class="text-xl font-bold text-slate-900">Worker पोर्टल लॉगिन</h2>
-                <p class="text-xs text-slate-500 mt-1">अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें</p>
+                <h2 class="text-xl font-bold text-slate-900" data-i18n="w_login_title">Worker पोर्टल लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="w_login_sub">अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें</p>
             </div>
 
             <form onsubmit="handleWorkerLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Worker ID</label>
-                    <input type="text" id="w-login-id" required placeholder="उदा. W-101" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase">
+                    <input type="text" id="w-login-id" required placeholder="W-101" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password / PIN</label>
                     <input type="password" id="w-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
-                    लॉगिन करें <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <span data-i18n="w_login_btn">लॉगिन करें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
         </div>
@@ -403,7 +461,7 @@
                 <div class="flex items-center justify-between mb-4">
                     <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Company</span>
                     <button onclick="logoutWorker()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> लॉगआउट
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="w_logout">लॉगआउट</span>
                     </button>
                 </div>
                 <div class="flex items-center gap-4">
@@ -419,31 +477,31 @@
             <!-- Monthly Summary Cards -->
             <div class="grid grid-cols-3 gap-3">
                 <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block">कुल हाज़िरी</span>
+                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_present">कुल हाज़िरी</span>
                     <span id="wd-stat-present" class="text-xl font-bold text-emerald-600 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400">दिन</span>
+                    <span class="text-[10px] text-slate-400" data-i18n="unit_days">दिन</span>
                 </div>
                 <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block">अनुपस्थित</span>
+                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_absent">अनुपस्थित</span>
                     <span id="wd-stat-absent" class="text-xl font-bold text-rose-500 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400">दिन</span>
+                    <span class="text-[10px] text-slate-400" data-i18n="unit_days">दिन</span>
                 </div>
                 <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block">कुल ओवरटाइम</span>
+                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_ot">कुल ओवरटाइम</span>
                     <span id="wd-stat-ot" class="text-xl font-bold text-amber-600 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400">घंटे</span>
+                    <span class="text-[10px] text-slate-400" data-i18n="unit_hours">घंटे</span>
                 </div>
             </div>
 
             <!-- Read-Only Notice -->
             <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex items-center gap-2.5 text-xs text-amber-800">
                 <i class="fa-solid fa-lock text-amber-600"></i>
-                <span>यह रिकॉर्ड <strong>Read-Only</strong> है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
+                <span data-i18n="w_readonly_note">यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
             </div>
 
             <!-- Attendance History List -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
-                <h3 class="font-bold text-slate-800 text-sm mb-3">हाल की हाज़िरी और ओवरटाइम रिकॉर्ड</h3>
+                <h3 class="font-bold text-slate-800 text-sm mb-3" data-i18n="w_history_title">हाल की हाज़िरी और ओवरटाइम रिकॉर्ड</h3>
                 <div id="wd-history-list" class="space-y-2.5">
                 </div>
             </div>
@@ -573,31 +631,25 @@
     <div id="modal-add-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-slate-900">नया वर्कर (Worker) जोड़ें</h3>
+                <h3 class="text-lg font-bold text-slate-900" data-i18n="modal_add_w_title">नया वर्कर (Worker) जोड़ें</h3>
                 <button onclick="closeModal('modal-add-worker')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddWorker(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">पूरा नाम</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="lbl_full_name">पूरा नाम</label>
                     <input type="text" id="new-w-name" required placeholder="उदा. राजेश यादव" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">विभाग (Department)</label>
-                        <input type="text" id="new-w-dept" required placeholder="उदा. Production" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">पद (Role)</label>
-                        <input type="text" id="new-w-role" required placeholder="उदा. Helper" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
-                    </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="lbl_dept">विभाग (Department)</label>
+                    <input type="text" id="new-w-dept" required placeholder="उदा. Production" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">मोबाइल नंबर</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="lbl_phone">मोबाइल नंबर</label>
                     <input type="tel" id="new-w-phone" required placeholder="9876543210" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
                 <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-700">Worker Login ID व Password</span>
+                        <span class="text-xs font-bold text-slate-700">Worker Login ID & Password</span>
                         <button type="button" onclick="autoGenerateWorkerCreds()" class="text-[11px] font-semibold text-indigo-600 hover:underline"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Auto Generate</button>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
@@ -612,17 +664,242 @@
                     </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal('modal-add-worker')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">वर्कर सेव करें</button>
+                    <button type="button" onclick="closeModal('modal-add-worker')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="btn_save_worker">वर्कर सेव करें</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal: Confirm Delete Worker (Custom Safe Confirmation Modal) -->
+    <div id="modal-delete-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
+            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-rose-100">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900" data-i18n="del_w_title">वर्कर को हटाएं (Delete)?</h3>
+            <p id="del-worker-desc" class="text-xs text-slate-500 mt-1.5 leading-relaxed">क्या आप वाकई इस वर्कर को हटाना चाहते हैं?</p>
+            <div class="flex items-center justify-center gap-2.5 mt-5">
+                <button type="button" onclick="closeModal('modal-delete-worker')" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition" data-i18n="btn_cancel">रद्द करें</button>
+                <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ========================================== -->
-    <!-- JAVASCRIPT LOGIC (Firebase + Security)     -->
+    <!-- JAVASCRIPT LOGIC (Firebase + i18n + Security) -->
     <!-- ========================================== -->
     <script>
+        // ==========================================
+        // MULTI-LANGUAGE DICTIONARY (Hindi, English, Gujarati)
+        // ==========================================
+        const TRANSLATIONS = {
+            hi: {
+                switch_panel: "पैनल बदलें:",
+                role_super: "Super Admin (आप)",
+                role_company: "Company Admin",
+                role_worker: "Worker Panel",
+                sa_login_title: "Super Admin सुरक्षा लॉगिन",
+                sa_login_sub: "नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें",
+                sa_unlock_btn: "कंट्रोल सेंटर अनलॉक करें",
+                sa_change_pass: "पासवर्ड बदलें",
+                sa_add_comp: "नई कंपनी (Tenant) जोड़ें",
+                sa_lock_btn: "लॉक करें",
+                sa_kpi_comp: "कुल रजिस्टर्ड कंपनियाँ",
+                sa_kpi_workers: "कुल एक्टिव वर्कर्स (All Tenants)",
+                sa_kpi_workers_sub: "सभी कंपनियों के कर्मचारी मिलाकर",
+                sa_kpi_mrr: "मासिक सब्सक्रिप्शन आय (MRR)",
+                sa_kpi_mrr_sub: "एक्टिव प्लान्स से अनुमानित आय",
+                ca_login_title: "Company Admin लॉगिन",
+                ca_login_sub: "Super Admin द्वारा दी गई Admin ID और Password डालें",
+                ca_login_btn: "Admin Panel खोलें",
+                ca_share_worker: "Worker Link शेयर करें",
+                ca_stat_total: "कुल वर्कर्स",
+                ca_stat_present: "आज हाज़िर (Present)",
+                ca_stat_absent: "अनुपस्थित / छुट्टी",
+                ca_stat_ot: "आज का कुल OT (घंटे)",
+                tab_att: "हाज़िरी व OT",
+                tab_workers: "वर्कर्स लिस्ट",
+                tab_audit: "ऑडिट लॉग",
+                select_date: "तारीख चुनें:",
+                btn_export: "Excel/CSV रिपोर्ट",
+                btn_add_worker: "नया Worker जोड़ें",
+                th_worker: "वर्कर (Worker)",
+                th_dept: "विभाग",
+                th_status: "हाज़िरी (Status)",
+                th_ot: "ओवरटाइम (OT घंटे)",
+                th_save: "सेव करें",
+                workers_dir_title: "रजिस्टर्ड कर्मचारियों की सूची",
+                workers_dir_sub: "सभी वर्कर्स की लॉगिन ID, पासवर्ड और प्रोफ़ाइल विवरण",
+                th_name_photo: "नाम व फोटो",
+                th_id_pass: "Worker ID व Password",
+                th_mobile: "मोबाइल नंबर",
+                th_actions: "एक्शन",
+                w_login_title: "Worker पोर्टल लॉगिन",
+                w_login_sub: "अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें",
+                w_login_btn: "लॉगिन करें",
+                w_logout: "लॉगआउट",
+                w_stat_present: "कुल हाज़िरी",
+                w_stat_absent: "अनुपस्थित",
+                w_stat_ot: "कुल ओवरटाइम",
+                unit_days: "दिन",
+                unit_hours: "घंटे",
+                w_readonly_note: "यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।",
+                w_history_title: "हाल की हाज़िरी और ओवरटाइम रिकॉर्ड",
+                modal_add_w_title: "नया वर्कर (Worker) जोड़ें",
+                lbl_full_name: "पूरा नाम",
+                lbl_dept: "विभाग (Department)",
+                lbl_phone: "मोबाइल नंबर",
+                btn_cancel: "रद्द करें",
+                btn_save_worker: "वर्कर सेव करें",
+                del_w_title: "वर्कर को हटाएं (Delete)?",
+                btn_confirm_delete: "हाँ, Delete करें"
+            },
+            en: {
+                switch_panel: "Switch Panel:",
+                role_super: "Super Admin (You)",
+                role_company: "Company Admin",
+                role_worker: "Worker Panel",
+                sa_login_title: "Super Admin Security Login",
+                sa_login_sub: "Enter your master password to open control center",
+                sa_unlock_btn: "Unlock Control Center",
+                sa_change_pass: "Change Password",
+                sa_add_comp: "Add New Company (Tenant)",
+                sa_lock_btn: "Lock Panel",
+                sa_kpi_comp: "Total Registered Companies",
+                sa_kpi_workers: "Total Active Workers (All Tenants)",
+                sa_kpi_workers_sub: "Combined workers across all companies",
+                sa_kpi_mrr: "Monthly Subscription Revenue (MRR)",
+                sa_kpi_mrr_sub: "Estimated revenue from active plans",
+                ca_login_title: "Company Admin Login",
+                ca_login_sub: "Enter Admin ID and Password provided by Super Admin",
+                ca_login_btn: "Open Admin Panel",
+                ca_share_worker: "Share Worker Link",
+                ca_stat_total: "Total Workers",
+                ca_stat_present: "Present Today",
+                ca_stat_absent: "Absent / Leave",
+                ca_stat_ot: "Today's Total OT (Hrs)",
+                tab_att: "Attendance & OT",
+                tab_workers: "Workers List",
+                tab_audit: "Audit Log",
+                select_date: "Select Date:",
+                btn_export: "Excel/CSV Report",
+                btn_add_worker: "Add New Worker",
+                th_worker: "Worker",
+                th_dept: "Department",
+                th_status: "Attendance Status",
+                th_ot: "Overtime (OT Hrs)",
+                th_save: "Save",
+                workers_dir_title: "Registered Workers Directory",
+                workers_dir_sub: "Login ID, Password and profile details of all workers",
+                th_name_photo: "Name & Photo",
+                th_id_pass: "Worker ID & Password",
+                th_mobile: "Mobile Number",
+                th_actions: "Actions",
+                w_login_title: "Worker Portal Login",
+                w_login_sub: "Login to view your attendance and overtime records",
+                w_login_btn: "Login",
+                w_logout: "Logout",
+                w_stat_present: "Total Present",
+                w_stat_absent: "Absent",
+                w_stat_ot: "Total Overtime",
+                unit_days: "Days",
+                unit_hours: "Hours",
+                w_readonly_note: "This record is Read-Only. Contact your Company Admin for any corrections.",
+                w_history_title: "Recent Attendance & Overtime History",
+                modal_add_w_title: "Add New Worker",
+                lbl_full_name: "Full Name",
+                lbl_dept: "Department",
+                lbl_phone: "Mobile Number",
+                btn_cancel: "Cancel",
+                btn_save_worker: "Save Worker",
+                del_w_title: "Delete Worker?",
+                btn_confirm_delete: "Yes, Delete"
+            },
+            gu: {
+                switch_panel: "પેનલ બદલો:",
+                role_super: "Super Admin (તમે)",
+                role_company: "Company Admin",
+                role_worker: "Worker Panel",
+                sa_login_title: "Super Admin સુરક્ષા લોગિન",
+                sa_login_sub: "કંટ્રોલ સેન્ટર ખોલવા માટે તમારો માસ્ટર પાસવર્ડ નાખો",
+                sa_unlock_btn: "કંટ્રોલ સેન્ટર અનલોક કરો",
+                sa_change_pass: "પાસવર્ડ બદલો",
+                sa_add_comp: "નવી કંપની (Tenant) ઉમેરો",
+                sa_lock_btn: "લોક કરો",
+                sa_kpi_comp: "કુલ રજિસ્ટર્ડ કંપનીઓ",
+                sa_kpi_workers: "કુલ એક્ટિવ વર્કર્સ (All Tenants)",
+                sa_kpi_workers_sub: "બધી કંપનીઓના કર્મચારીઓ મળીને",
+                sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
+                sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
+                ca_login_title: "Company Admin લોગિન",
+                ca_login_sub: "Super Admin દ્વારા આપવામાં આવેલ Admin ID અને Password નાખો",
+                ca_login_btn: "Admin Panel ખોલો",
+                ca_share_worker: "Worker Link શેર કરો",
+                ca_stat_total: "કુલ વર્કર્સ",
+                ca_stat_present: "આજે હાજર (Present)",
+                ca_stat_absent: "ગેરહાજર / રજા",
+                ca_stat_ot: "આજનો કુલ OT (કલાક)",
+                tab_att: "હાજરી અને OT",
+                tab_workers: "વર્કર્સ લિસ્ટ",
+                tab_audit: "ઓડિટ લોગ",
+                select_date: "તારીખ પસંદ કરો:",
+                btn_export: "Excel/CSV રિપોર્ટ",
+                btn_add_worker: "નવો Worker ઉમેરો",
+                th_worker: "વર્કર (Worker)",
+                th_dept: "વિભાગ",
+                th_status: "હાજરી (Status)",
+                th_ot: "ઓવરટાઇમ (OT કલાક)",
+                th_save: "સેવ કરો",
+                workers_dir_title: "રજિસ્ટર્ડ કર્મચારીઓની યાદી",
+                workers_dir_sub: "બધા વર્કર્સની લોગિન ID, પાસવર્ડ અને પ્રોફાઇલ વિગતો",
+                th_name_photo: "નામ અને ફોટો",
+                th_id_pass: "Worker ID અને Password",
+                th_mobile: "મોબાઇલ નંબર",
+                th_actions: "એક્શન",
+                w_login_title: "Worker પોર્ટલ લોગિન",
+                w_login_sub: "તમારી હાજરી અને ઓવરટાઇમ જોવા માટે લોગિન કરો",
+                w_login_btn: "લોગિન કરો",
+                w_logout: "લોગઆઉટ",
+                w_stat_present: "કુલ હાજરી",
+                w_stat_absent: "ગેરહાજર",
+                w_stat_ot: "કુલ ઓવરટાઇમ",
+                unit_days: "દિવસ",
+                unit_hours: "કલાક",
+                w_readonly_note: "આ રેકોર્ડ Read-Only છે. કોઈ ભૂલ માટે તમારા Company Admin નો સંપર્ક કરો.",
+                w_history_title: "તાજેતરની હાજરી અને ઓવરટાઇમ રેકોર્ડ",
+                modal_add_w_title: "નવો વર્કર (Worker) ઉમેરો",
+                lbl_full_name: "પૂરું નામ",
+                lbl_dept: "વિભાગ (Department)",
+                lbl_phone: "મોબાઇલ નંબર",
+                btn_cancel: "રદ કરો",
+                btn_save_worker: "વર્કર સેવ કરો",
+                del_w_title: "વર્કરને કાઢી નાખો (Delete)?",
+                btn_confirm_delete: "હા, Delete કરો"
+            }
+        };
+
+        let currentLang = localStorage.getItem('wt_lang') || 'hi';
+        let workerIdToDelete = null;
+
+        function setAppLanguage(lang) {
+            if (!TRANSLATIONS[lang]) return;
+            currentLang = lang;
+            localStorage.setItem('wt_lang', lang);
+
+            document.querySelectorAll('.lang-selector').forEach(sel => {
+                sel.value = lang;
+            });
+
+            const dict = TRANSLATIONS[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
+        }
+
         // 1. Firebase Configuration & Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyDjaUQX7cXwMWwscB0Yi1LZeJCbHnhbe6Y",
@@ -861,6 +1138,7 @@
         // Initialize App
         window.onload = async () => {
             document.getElementById('ca-date-picker').value = today;
+            setAppLanguage(currentLang);
             renderSuperAdmin();
             await syncSuperAdminSettings();
             await seedInitialDataIfEmpty();
@@ -1272,12 +1550,13 @@
             document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
 
             document.querySelectorAll('.ca-tab').forEach(btn => {
-                btn.classList.remove('border-indigo-600', 'text-indigo-600');
-                btn.classList.add('border-transparent', 'text-slate-500');
+                btn.classList.remove('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
+                btn.classList.add('text-slate-500', 'border-transparent', 'font-semibold');
             });
+
             const activeTab = document.getElementById(`tab-ca-${tabName}`);
-            activeTab.classList.remove('border-transparent', 'text-slate-500');
-            activeTab.classList.add('border-indigo-600', 'text-indigo-600');
+            activeTab.classList.remove('text-slate-500', 'border-transparent', 'font-semibold');
+            activeTab.classList.add('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
         }
 
         function renderCompanyAdmin() {
@@ -1340,8 +1619,8 @@
                             <div>
                                 <div class="font-bold text-slate-800">${w.name}</div>
                                 <div class="text-xs text-slate-400 font-mono">${w.id}</div>
-                            </div>
-                        </div>
+                    <div class="text-slate-700 font-medium">${w.dept}</div>
+                    ${w.role ? `<div class="text-xs text-slate-400">${w.role}</div>` : ''}
                     </td>
                     <td class="py-3.5 px-5">
                         <div class="text-slate-700 font-medium">${w.role}</div>
@@ -1377,30 +1656,82 @@
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
 
             const wTable = document.getElementById('ca-workers-table');
+            const wCards = document.getElementById('ca-workers-cards');
             wTable.innerHTML = '';
+            if (wCards) wCards.innerHTML = '';
             const workerPortalUrl = `${getBaseUrl()}?portal=worker&company=${activeCompanyId}`;
+
+            if (tenantWorkers.length === 0 && wCards) {
+                wCards.innerHTML = `<div class="text-center py-8 text-xs text-slate-400 bg-white rounded-2xl border border-slate-200/70">अभी कोई वर्कर रजिस्टर्ड नहीं है। ऊपर "+ नया Worker जोड़ें" पर क्लिक करें।</div>`;
+            }
 
             tenantWorkers.forEach(w => {
                 const shareMsg = `WorkTrack Login (${comp.name})\nLink: ${workerPortalUrl}\nWorker ID: ${w.id}\nPassword: ${w.password}`;
+                
+                // Desktop Table Row
                 wTable.innerHTML += `
-                    <tr class="hover:bg-slate-50">
-                        <td class="py-3.5 px-5 flex items-center gap-3">
-                            <img src="${w.photo}" class="w-9 h-9 rounded-full object-cover">
-                            <span class="font-bold text-slate-800">${w.name}</span>
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3.5 px-5">
+                            <div class="flex items-center gap-3">
+                                <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                <span class="font-bold text-slate-800 whitespace-nowrap">${w.name}</span>
+                            </div>
                         </td>
                         <td class="py-3.5 px-5">
-                            <span class="bg-slate-100 text-slate-800 font-mono text-xs px-2 py-0.5 rounded font-bold">${w.id}</span>
-                            <span class="text-xs text-slate-500 font-mono ml-2">Pass: <strong>${w.password}</strong></span>
+                            <div class="inline-flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg whitespace-nowrap">
+                                <span class="bg-indigo-600 text-white font-mono text-xs px-2 py-0.5 rounded font-bold tracking-wide">${w.id}</span>
+                                <span class="text-xs text-slate-500 font-mono">Pass: <strong class="text-slate-800">${w.password}</strong></span>
+                            </div>
                         </td>
-                        <td class="py-3.5 px-5 text-xs text-slate-600">${w.dept} • ${w.role}</td>
-                        <td class="py-3.5 px-5 text-xs text-slate-600">${w.phone}</td>
-                        <td class="py-3.5 px-5 text-right">
-                            <button onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} का ID/Pass और Link")' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
-                                <i class="fa-regular fa-copy mr-1"></i> Copy ID & Link
+                        <td class="py-3.5 px-5 text-xs text-slate-600 whitespace-nowrap">
+                            <span class="font-semibold text-slate-800">${w.dept}</span>${w.role ? ` • ${w.role}` : ''}
+                        </td>
+                        <td class="py-3.5 px-5 text-xs text-slate-600 font-mono whitespace-nowrap">${w.phone}</td>
+                        <td class="py-3.5 px-5 text-right whitespace-nowrap space-x-1.5">
+                            <button onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} का ID/Pass और Link")' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/70 text-xs font-semibold px-3 py-1.5 rounded-xl transition">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy
+                            </button>
+                            <button onclick="openDeleteWorkerModal('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-rose-50 hover:bg-rose-100 disabled:opacity-40 text-rose-600 border border-rose-200/70 text-xs font-semibold px-2.5 py-1.5 rounded-xl transition" title="Delete Worker">
+                                <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </td>
                     </tr>
                 `;
+
+                // Mobile Card View (Zero Horizontal Scroll, Crystal Clear Layout + Delete Button)
+                if (wCards) {
+                    wCards.innerHTML += `
+                        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3 min-w-0">
+                                    <img src="${w.photo}" class="w-11 h-11 rounded-2xl object-cover border border-slate-200 shrink-0">
+                                    <div class="min-w-0">
+                                        <h4 class="font-bold text-slate-900 text-sm truncate">${w.name}</h4>
+                                        <p class="text-xs text-slate-500 truncate">${w.dept}${w.role ? ` • <span class="text-slate-700 font-medium">${w.role}</span>` : ''}</p>
+                                    </div>
+                                </div>
+                                <a href="tel:${w.phone}" class="text-xs font-mono font-semibold text-slate-600 bg-slate-100 px-2.5 py-1.5 rounded-xl shrink-0 flex items-center gap-1">
+                                    <i class="fa-solid fa-phone text-[10px] text-indigo-600"></i> ${w.phone}
+                                </a>
+                            </div>
+
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="bg-indigo-600 text-white font-mono text-xs px-2.5 py-1 rounded-lg font-bold tracking-wide whitespace-nowrap">${w.id}</span>
+                                    <span class="text-xs text-slate-500 font-mono bg-white border border-slate-200 px-2 py-1 rounded-lg whitespace-nowrap">Pass: <strong class="text-slate-900">${w.password}</strong></span>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} का ID/Pass और Link")' class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Copy
+                                    </button>
+                                    <button onclick="openDeleteWorkerModal('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-rose-50 hover:bg-rose-100 disabled:opacity-40 text-rose-600 border border-rose-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="Delete Worker">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
             });
 
             const auditContainer = document.getElementById('ca-audit-list');
@@ -1485,7 +1816,7 @@
             e.preventDefault();
             const name = document.getElementById('new-w-name').value.trim();
             const dept = document.getElementById('new-w-dept').value.trim();
-            const role = document.getElementById('new-w-role').value.trim();
+            const role = '';
             const phone = document.getElementById('new-w-phone').value.trim();
             const newWorkerId = document.getElementById('new-w-id').value.trim().toUpperCase();
             const newWorkerPass = document.getElementById('new-w-pass').value.trim();
@@ -1528,15 +1859,59 @@
             }
         }
 
+        // Delete Worker Handlers
+        function openDeleteWorkerModal(workerId) {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (comp && comp.status === 'Suspended') {
+                showToast('कंपनी Suspended है! वर्कर नहीं हटा सकते।', true);
+                return;
+            }
+            const worker = db.workers.find(w => w.id === workerId);
+            if (!worker) return;
+            workerIdToDelete = workerId;
+            document.getElementById('del-worker-desc').innerHTML = `क्या आप वाकई <strong>${worker.name}</strong> (<span class="font-mono font-bold text-slate-700">${worker.id}</span>) को हटाना चाहते हैं? इसके बाद यह वर्कर लॉगिन नहीं कर पाएगा।`;
+            openModal('modal-delete-worker');
+        }
+
+        async function confirmDeleteWorker() {
+            if (!workerIdToDelete) return;
+            const worker = db.workers.find(w => w.id === workerIdToDelete);
+            const wName = worker ? worker.name : workerIdToDelete;
+            const wId = workerIdToDelete;
+
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `Admin ने वर्कर को हटाया (Deleted): ${wName} (ID: ${wId})`,
+                createdAt: Date.now()
+            };
+
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_workers').doc(wId).delete();
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.workers = db.workers.filter(w => w.id !== wId);
+                    db.auditLogs.unshift(logObj);
+                }
+                workerIdToDelete = null;
+                closeModal('modal-delete-worker');
+                showToast(`वर्कर ${wName} (${wId}) को सफलतापूर्वक हटा दिया गया है!`);
+            } catch (err) {
+                console.error(err);
+                showToast('वर्कर हटाने में त्रुटि!', true);
+            }
+        }
+
         function exportCSV() {
             const comp = db.companies.find(c => c.id === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
 
-            let csv = 'Company,Date,Worker ID,Name,Department,Role,Status,OT Hours\n';
+            let csv = 'Company,Date,Worker ID,Name,Department,Status,OT Hours\n';
             tenantWorkers.forEach(w => {
                 const rec = db.attendance[`${activeCompanyId}_${w.id}_${selectedDate}`] || { status: 'Not Marked', ot: 0 };
-                csv += `"${comp.name}","${selectedDate}","${w.id}","${w.name}","${w.dept}","${w.role}","${rec.status}","${rec.ot}"\n`;
+                csv += `"${comp.name}","${selectedDate}","${w.id}","${w.name}","${w.dept}","${rec.status}","${rec.ot}"\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1611,7 +1986,7 @@
             document.getElementById('wd-photo').src = worker.photo;
             document.getElementById('wd-company').innerText = comp ? comp.name : 'WorkTrack';
             document.getElementById('wd-name').innerText = worker.name;
-            document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.role} (${worker.dept})`;
+            document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.dept}${worker.role ? ` (${worker.role})` : ''}`;
             document.getElementById('wd-phone').innerText = worker.phone;
 
             const historyContainer = document.getElementById('wd-history-list');
@@ -1661,4 +2036,4 @@
         }
     </script>
 </body>
-                            </html>
+        </html>
