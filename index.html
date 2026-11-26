@@ -349,7 +349,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
-                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान बदलें, लिंक कॉपी करें या पैनल खोलें</p>
+                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, लिंक कॉपी करें या पैनल खोलें</p>
                             </div>
                             <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
                                 <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
@@ -376,7 +376,7 @@
                             <thead>
                                 <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                                     <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
-                                    <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
+                                    <th class="py-3.5 px-6 font-semibold">प्लान व एक्सपायरी डेट</th>
                                     <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
                                     <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
                                     <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
@@ -589,13 +589,29 @@
                         </button>
                     </div>
 
-                    <div id="ca-demo-selector-box" class="relative mt-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
+                    <!-- Subscription Expiry Banner inside Hero Card -->
+                    <div id="ca-expiry-box" class="relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span id="ca-expiry-icon-wrap" class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-sm shrink-0">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <span class="text-[10px] text-indigo-200 uppercase font-semibold block">सब्सक्रिप्शन वैधता (Plan Expiry)</span>
+                                <span id="ca-expiry-date-text" class="text-xs sm:text-sm font-extrabold text-white block truncate">31 Dec 2026 (30 दिन शेष)</span>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20Subscription%20Plan%20Renew%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-3 py-1.5 rounded-xl shrink-0 transition shadow-xs">
+                            Renew
+                        </a>
+                    </div>
+
+                    <div id="ca-demo-selector-box" class="relative mt-3 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
                         <label class="text-xs font-semibold text-indigo-200 whitespace-nowrap">कंपनी बदलें:</label>
                         <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full bg-slate-900/90 border border-white/20 text-white text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
                         </select>
                     </div>
 
-                    <div class="relative mt-4 pt-3.5 border-t border-white/10">
+                    <div class="relative mt-3.5 pt-3.5 border-t border-white/10">
                         <div class="flex items-center justify-between text-[11px] mb-1.5">
                             <span class="text-indigo-200/90 font-medium"><i class="fa-solid fa-users-gear mr-1 text-indigo-300"></i> प्लान वर्कर लिमिट उपयोग</span>
                             <span id="ca-home-capacity-text" class="font-bold text-white font-mono">0 / 500 Workers</span>
@@ -960,12 +976,9 @@
         <!-- Worker Premier Dashboard with 4-Tab Bottom Navigation -->
         <div id="worker-dashboard-box" class="hidden pb-24">
 
-            <!-- ========================================== -->
-            <!-- WORKER TAB 1: PREMIER HOME DASHBOARD       -->
-            <!-- ========================================== -->
+            <!-- WORKER TAB 1: PREMIER HOME DASHBOARD -->
             <div id="w-content-home" class="w-tab-content fade-in space-y-4">
                 
-                <!-- 1. Luxury Emerald & Slate Hero Staff Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white p-5 shadow-xl border border-emerald-400/25">
                     <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-emerald-400/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-12 -left-8 w-32 h-32 rounded-full bg-teal-400/15 blur-2xl"></div>
@@ -988,14 +1001,12 @@
                         </div>
                     </div>
 
-                    <!-- Today's Live Status Strip -->
                     <div class="relative mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between text-xs">
                         <span class="text-emerald-200/90 font-medium"><i class="fa-regular fa-calendar-check mr-1"></i> आज की हाज़िरी:</span>
                         <span id="wd-today-status-badge" class="font-extrabold px-2.5 py-0.5 rounded-full bg-white/15 text-white text-[11px]">Not Marked</span>
                     </div>
                 </div>
 
-                <!-- 2. Estimated Net Pay Summary Card (New Feature!) -->
                 <div onclick="switchWTab('kharchi')" class="cursor-pointer bg-white rounded-2xl border border-emerald-200/80 p-4 shadow-sm hover:border-emerald-400 transition">
                     <div class="flex items-center justify-between mb-2.5">
                         <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
@@ -1012,7 +1023,6 @@
                     </div>
                 </div>
 
-                <!-- 3. 2x2 Clickable KPI Cards -->
                 <div class="grid grid-cols-2 gap-3">
                     <div onclick="switchWTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition">
                         <div class="flex items-center justify-between mb-1.5">
@@ -1059,7 +1069,6 @@
                     </div>
                 </div>
 
-                <!-- 4. Quick Actions & Read-Only Security Badge -->
                 <div class="grid grid-cols-2 gap-2.5">
                     <button type="button" onclick="switchWTab('idcard')" class="bg-white hover:bg-slate-50 border border-slate-200/90 p-3 rounded-2xl text-xs font-bold text-slate-800 shadow-sm flex items-center justify-center gap-2 transition">
                         <i class="fa-solid fa-id-card text-emerald-600 text-sm"></i> मेरा ID Card देखें
@@ -1075,9 +1084,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- WORKER TAB 2: ATTENDANCE & OT HISTORY      -->
-            <!-- ========================================== -->
+            <!-- WORKER TAB 2: ATTENDANCE & OT HISTORY -->
             <div id="w-content-attendance" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                     <div class="flex items-center justify-between gap-2 mb-3">
@@ -1094,11 +1101,8 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- WORKER TAB 3: KHARCHI (ADVANCE) & SALARY   -->
-            <!-- ========================================== -->
+            <!-- WORKER TAB 3: KHARCHI (ADVANCE) & SALARY -->
             <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
-                <!-- Salary Calculation Breakdown Card -->
                 <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider">कमाई व खर्ची हिसाब</span>
@@ -1120,7 +1124,6 @@
                     </div>
                 </div>
 
-                <!-- Advance / Kharchi List -->
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                     <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-1.5">
                         <i class="fa-solid fa-hand-holding-dollar text-rose-500"></i> लिया गया एडवांस / खर्ची विवरण
@@ -1129,9 +1132,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- WORKER TAB 4: DIGITAL STAFF ID CARD        -->
-            <!-- ========================================== -->
+            <!-- WORKER TAB 4: DIGITAL STAFF ID CARD -->
             <div id="w-content-idcard" class="w-tab-content hidden fade-in space-y-4">
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-emerald-800 via-teal-900 to-slate-950 text-white p-6 shadow-xl border border-emerald-400/30 text-center">
                     <div class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300 mb-1" id="wd-card-company">WORKTRACK VERIFIED STAFF</div>
@@ -1259,13 +1260,19 @@
                         <input type="text" id="new-comp-admin-pass" required value="admin123" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">सब्सक्रिप्शन प्लान चुनें</label>
-                    <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
-                        <option value="Starter">Starter (25 Workers तक) - ₹499/माह</option>
-                        <option value="Growth" selected>Growth (100 Workers तक - सभी फीचर्स) - ₹999/माह</option>
-                        <option value="Business">Business (500 Workers तक - सभी फीचर्स) - ₹1,999/माह</option>
-                    </select>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">सब्सक्रिप्शन प्लान</label>
+                        <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="Starter">Starter - ₹499/माह</option>
+                            <option value="Growth" selected>Growth - ₹999/माह</option>
+                            <option value="Business">Business - ₹1,999/माह</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">प्लान एक्सपायरी डेट</label>
+                        <input type="date" id="new-comp-expiry" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-company')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
@@ -1687,6 +1694,24 @@
             d.setDate(d.getDate() - 1);
             return d.toISOString().split('T')[0];
         };
+        const getPlusDays = (days) => {
+            const d = new Date();
+            d.setDate(d.getDate() + days);
+            return d.toISOString().split('T')[0];
+        };
+
+        const today = getToday();
+        const yesterday = getYesterday();
+        const defaultExpiry = getPlusDays(30);
+
+        function formatExpiryInfo(expiryDateStr) {
+            const expStr = expiryDateStr || defaultExpiry;
+            const todayDate = new Date(today + 'T00:00:00');
+            const expDate = new Date(expStr + 'T00:00:00');
+            const diffDays = Math.ceil((expDate - todayDate) / (1000 * 60 * 60 * 24));
+            const formattedDate = expDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+            return { expStr, formattedDate, diffDays };
+        }
 
         const PLANS = {
             'Starter': { limit: 25, price: 499, color: 'bg-slate-100 text-slate-700', allFeatures: false },
@@ -1701,9 +1726,6 @@
             advances: [],
             auditLogs: []
         };
-
-        const today = getToday();
-        const yesterday = getYesterday();
 
         let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
         let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
@@ -1755,8 +1777,8 @@
                 if (snap.empty) {
                     const batch = firestore.batch();
                     const sampleCompanies = [
-                        { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', status: 'Active', color: 'bg-indigo-600' },
-                        { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', status: 'Active', color: 'bg-emerald-600' }
+                        { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', expiryDate: defaultExpiry, status: 'Active', color: 'bg-indigo-600' },
+                        { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', expiryDate: defaultExpiry, status: 'Active', color: 'bg-emerald-600' }
                     ];
                     sampleCompanies.forEach(c => batch.set(firestore.collection('wt_companies').doc(c.id), c));
 
@@ -1851,6 +1873,10 @@
         function openModal(id) {
             const m = document.getElementById(id);
             if (!m) return;
+            if (id === 'modal-add-company') {
+                const expInput = document.getElementById('new-comp-expiry');
+                if (expInput && !expInput.value) expInput.value = defaultExpiry;
+            }
             m.classList.remove('hidden');
             m.classList.add('flex');
         }
@@ -1931,6 +1957,8 @@
             document.getElementById('ca-date-picker').value = today;
             document.getElementById('ca-month-picker').value = today.slice(0, 7);
             document.getElementById('adv-date').value = today;
+            const newExp = document.getElementById('new-comp-expiry');
+            if (newExp) newExp.value = defaultExpiry;
             setAppLanguage(currentLang);
             if (!applyDedicatedAppMode()) {
                 switchRole('company_admin');
@@ -2217,11 +2245,12 @@
                 } else {
                     recentEl.innerHTML = recentComps.map(c => {
                         const wCount = db.workers.filter(w => w.companyId === c.id).length;
+                        const exp = formatExpiryInfo(c.expiryDate);
                         return `
                             <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                                 <div class="min-w-0">
                                     <div class="text-xs font-bold text-slate-900 truncate">${c.name}</div>
-                                    <div class="text-[10px] text-slate-500">${c.plan} Plan • ${wCount} Workers</div>
+                                    <div class="text-[10px] text-slate-500">${c.plan} • ${wCount} Workers • Exp: ${exp.formattedDate}</div>
                                 </div>
                                 <button type="button" onclick="inspectCompany('${c.id}')" class="text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg shrink-0">
                                     खोलें →
@@ -2256,6 +2285,7 @@
                 const planInfo = PLANS[comp.plan] || PLANS['Growth'];
                 const compWorkersCount = db.workers.filter(w => w.companyId === comp.id).length;
                 const usagePercent = Math.min(100, Math.round((compWorkersCount / planInfo.limit) * 100));
+                const exp = formatExpiryInfo(comp.expiryDate);
                 const base = getBaseUrl();
                 const adminUrl = `${base}?portal=admin&company=${comp.id}`;
                 const workerUrl = `${base}?portal=worker&company=${comp.id}`;
@@ -2267,12 +2297,16 @@
                         <div class="font-bold text-slate-900">${comp.name}</div>
                         <div class="text-xs text-slate-400">Tenant ID: ${comp.id} • Admin: <span class="font-mono">${comp.adminId}</span></div>
                     </td>
-                    <td class="py-4 px-6">
-                        <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-200 bg-white">
+                    <td class="py-4 px-6 space-y-1.5">
+                        <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-200 bg-white block">
                             <option value="Starter" ${comp.plan === 'Starter' ? 'selected' : ''}>Starter (₹499)</option>
                             <option value="Growth" ${comp.plan === 'Growth' ? 'selected' : ''}>Growth (₹999)</option>
                             <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
                         </select>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[10px] text-slate-500">Exp:</span>
+                            <input type="date" value="${exp.expStr}" onchange="changeCompanyExpiry('${comp.id}', this.value)" class="border border-slate-200 rounded-md px-1.5 py-0.5 text-[11px] font-mono text-slate-700 bg-slate-50">
+                        </div>
                     </td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-between text-xs font-medium mb-1">
@@ -2345,13 +2379,8 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <div class="flex justify-between text-[10px] font-bold text-slate-600 mb-1">
-                                        <span>Workers</span>
-                                        <span>${compWorkersCount}/${planInfo.limit}</span>
-                                    </div>
-                                    <div class="w-full bg-slate-200 rounded-full h-2">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${usagePercent}%"></div>
-                                    </div>
+                                    <span class="text-[10px] text-slate-400 block font-semibold">प्लान एक्सपायरी डेट:</span>
+                                    <input type="date" value="${exp.expStr}" onchange="changeCompanyExpiry('${comp.id}', this.value)" class="mt-0.5 w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
                                 </div>
                             </div>
 
@@ -2393,12 +2422,27 @@
             }
         }
 
+        async function changeCompanyExpiry(compId, newExpiryDate) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp || !newExpiryDate) return;
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update({ expiryDate: newExpiryDate });
+                } else {
+                    comp.expiryDate = newExpiryDate;
+                }
+                showToast(`${comp.name} की एक्सपायरी डेट ${newExpiryDate} सेट कर दी गई है!`);
+            } catch (err) {
+                showToast('एक्सपायरी डेट अपडेट करने में त्रुटि!', true);
+            }
+        }
+
         function exportAllTenantsCSV() {
-            let csv = 'Company ID,Company Name,Admin ID,Plan,Monthly Price,Active Workers,Status\n';
+            let csv = 'Company ID,Company Name,Admin ID,Plan,Expiry Date,Monthly Price,Active Workers,Status\n';
             db.companies.forEach(comp => {
                 const p = PLANS[comp.plan] || PLANS['Growth'];
                 const wCount = db.workers.filter(w => w.companyId === comp.id).length;
-                csv += `"${comp.id}","${comp.name}","${comp.adminId}","${comp.plan}","${p.price}","${wCount}","${comp.status}"\n`;
+                csv += `"${comp.id}","${comp.name}","${comp.adminId}","${comp.plan}","${comp.expiryDate || defaultExpiry}","${p.price}","${wCount}","${comp.status}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -2415,6 +2459,7 @@
             const adminId = document.getElementById('new-comp-admin-id').value.trim();
             const adminPass = document.getElementById('new-comp-admin-pass').value.trim();
             const plan = document.getElementById('new-comp-plan').value;
+            const expiryDate = document.getElementById('new-comp-expiry').value || defaultExpiry;
             const newId = `COMP-${Date.now().toString().slice(-4)}`;
             const colors = ['bg-blue-600', 'bg-purple-600', 'bg-teal-600', 'bg-rose-600'];
             
@@ -2424,6 +2469,7 @@
                 adminId: adminId,
                 adminPass: adminPass,
                 plan: plan,
+                expiryDate: expiryDate,
                 status: 'Active',
                 color: colors[db.companies.length % colors.length]
             };
@@ -2436,6 +2482,7 @@
                 }
                 e.target.reset();
                 document.getElementById('new-comp-admin-pass').value = 'admin123';
+                document.getElementById('new-comp-expiry').value = defaultExpiry;
                 closeModal('modal-add-company');
                 showToast(`कंपनी "${name}" लाइव डेटाबेस में सेव हो गई!`);
                 setTimeout(() => openCompanyLinksModal(newId, false), 300);
@@ -2581,6 +2628,30 @@
             document.getElementById('ca-plan-badge').innerHTML = `<i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> ${comp.plan} Plan`;
             const logo = document.getElementById('ca-company-logo');
             logo.innerText = comp.name.charAt(0).toUpperCase();
+
+            // Render Subscription Expiry Info on Hero Card
+            const expInfo = formatExpiryInfo(comp.expiryDate);
+            const expTextEl = document.getElementById('ca-expiry-date-text');
+            const expIconWrap = document.getElementById('ca-expiry-icon-wrap');
+            const expBox = document.getElementById('ca-expiry-box');
+            if (expTextEl && expIconWrap && expBox) {
+                if (expInfo.diffDays < 0) {
+                    expTextEl.innerText = `${expInfo.formattedDate} (Expired ${Math.abs(expInfo.diffDays)} दिन पहले)`;
+                    expTextEl.className = 'text-xs sm:text-sm font-extrabold text-rose-300 block truncate';
+                    expIconWrap.className = 'w-9 h-9 rounded-xl bg-rose-500/25 text-rose-300 flex items-center justify-center text-sm shrink-0';
+                    expBox.className = 'relative mt-4 bg-rose-950/50 backdrop-blur-sm rounded-2xl p-3 border border-rose-400/35 flex items-center justify-between gap-2';
+                } else if (expInfo.diffDays <= 7) {
+                    expTextEl.innerText = `${expInfo.formattedDate} (केवल ${expInfo.diffDays} दिन शेष!)`;
+                    expTextEl.className = 'text-xs sm:text-sm font-extrabold text-amber-300 block truncate';
+                    expIconWrap.className = 'w-9 h-9 rounded-xl bg-amber-400/25 text-amber-300 flex items-center justify-center text-sm shrink-0';
+                    expBox.className = 'relative mt-4 bg-amber-950/40 backdrop-blur-sm rounded-2xl p-3 border border-amber-400/35 flex items-center justify-between gap-2';
+                } else {
+                    expTextEl.innerText = `${expInfo.formattedDate} (${expInfo.diffDays} दिन शेष)`;
+                    expTextEl.className = 'text-xs sm:text-sm font-extrabold text-emerald-300 block truncate';
+                    expIconWrap.className = 'w-9 h-9 rounded-xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center text-sm shrink-0';
+                    expBox.className = 'relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2';
+                }
+            }
 
             document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
 
@@ -3284,14 +3355,12 @@
             const comp = db.companies.find(c => c.id === worker.companyId);
             const compName = comp ? comp.name : 'WorkTrack';
 
-            // Hero Card Details
             document.getElementById('wd-photo').src = worker.photo;
             document.getElementById('wd-company').innerHTML = `<i class="fa-solid fa-building text-emerald-300"></i> ${compName}`;
             document.getElementById('wd-name').innerText = worker.name;
             document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.dept}${worker.role ? ` (${worker.role})` : ''}`;
             document.getElementById('wd-phone').innerText = worker.phone;
 
-            // Digital ID Card Tab Details
             const cardPhoto = document.getElementById('wd-card-photo');
             if (cardPhoto) cardPhoto.src = worker.photo;
             const cardComp = document.getElementById('wd-card-company');
@@ -3309,7 +3378,6 @@
             const cardRates = document.getElementById('wd-card-rates');
             if (cardRates) cardRates.innerText = `₹${dailyRate}/day • ₹${otRate}/hr`;
 
-            // Today's Status Badge on Hero Card
             const todayRec = db.attendance[`${worker.companyId}_${worker.id}_${today}`];
             const todayBadge = document.getElementById('wd-today-status-badge');
             if (todayBadge) {
@@ -3325,7 +3393,6 @@
                 }
             }
 
-            // Attendance & OT Calculations
             const historyContainer = document.getElementById('wd-history-list');
             historyContainer.innerHTML = '';
 
@@ -3376,7 +3443,6 @@
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
-            // Advances & Net Earnings Calculation
             const workerAdvances = db.advances
                 .filter(a => a.companyId === worker.companyId && a.workerId === worker.id)
                 .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -3426,4 +3492,4 @@
         }
     </script>
 </body>
-                        </html>
+    </html>
