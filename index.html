@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WorkTrack - Multi-Company Attendance & OT SaaS</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="apple-touch-icon" href="https://placehold.co/192x192/4f46e5/ffffff.png?text=WT">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -236,6 +239,14 @@
                     <span data-i18n="ca_login_btn">Admin Panel खोलें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
+
+            <!-- App Download Option (Company Admin Login) -->
+            <div class="mt-5 pt-4 border-t border-slate-100">
+                <button type="button" onclick="triggerInstallApp('Company Admin')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button text-emerald-400 text-sm"></i>
+                    <span data-i18n="btn_download_app">Mobile App डाउनलोड करें (Install App)</span>
+                </button>
+            </div>
         </div>
 
         <!-- Company Admin Dashboard -->
@@ -525,6 +536,14 @@
                     <span data-i18n="w_login_btn">लॉगिन करें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
+
+            <!-- App Download Option (Worker Login) -->
+            <div class="mt-5 pt-4 border-t border-slate-100">
+                <button type="button" onclick="triggerInstallApp('Worker')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button text-emerald-400 text-sm"></i>
+                    <span data-i18n="btn_download_app">Mobile App डाउनलोड करें (Install App)</span>
+                </button>
+            </div>
         </div>
 
         <!-- Worker Dashboard Card (Shown after login) -->
@@ -822,6 +841,41 @@
         </div>
     </div>
 
+    <!-- Modal: Mobile App Install / Download Guide -->
+    <div id="modal-install-app" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">W</div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">WorkTrack Mobile App</h3>
+                        <span id="install-portal-tag" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Android & iPhone App</span>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-install-app')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                अपने मोबाइल में <strong>WorkTrack App</strong> इंस्टॉल करने के लिए नीचे दिए गए आसान स्टेप्स अपनाएं:
+            </p>
+
+            <div class="space-y-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 mb-4">
+                <div class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
+                    <div><strong class="text-slate-800">Android (Chrome):</strong> ऊपर दाईं तरफ <span class="font-bold text-indigo-600">⋮ (3 Dots)</span> दबाएं और <strong>"Install app"</strong> या <strong>"Add to Home screen"</strong> चुनें।</div>
+                </div>
+                <div class="flex items-start gap-2.5">
+                    <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
+                    <div><strong class="text-slate-800">iPhone (Safari):</strong> नीचे <span class="font-bold text-indigo-600">Share (<i class="fa-solid fa-arrow-up-from-bracket"></i>)</span> बटन दबाएं और <strong>"Add to Home Screen"</strong> चुनें।</div>
+                </div>
+            </div>
+
+            <button type="button" onclick="closeModal('modal-install-app')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs shadow-sm transition">
+                ठीक है, समझ गया
+            </button>
+        </div>
+    </div>
+
     <!-- ========================================== -->
     <!-- JAVASCRIPT LOGIC (Firebase + i18n + Security) -->
     <!-- ========================================== -->
@@ -892,7 +946,8 @@
                 btn_cancel: "रद्द करें",
                 btn_save_worker: "वर्कर सेव करें",
                 del_w_title: "वर्कर को हटाएं (Delete)?",
-                btn_confirm_delete: "हाँ, Delete करें"
+                btn_confirm_delete: "हाँ, Delete करें",
+                btn_download_app: "Mobile App डाउनलोड करें (Install App)"
             },
             en: {
                 switch_panel: "Switch Panel:",
@@ -956,7 +1011,8 @@
                 btn_cancel: "Cancel",
                 btn_save_worker: "Save Worker",
                 del_w_title: "Delete Worker?",
-                btn_confirm_delete: "Yes, Delete"
+                btn_confirm_delete: "Yes, Delete",
+                btn_download_app: "Download Mobile App (Install App)"
             },
             gu: {
                 switch_panel: "પેનલ બદલો:",
@@ -1020,7 +1076,8 @@
                 btn_cancel: "રદ કરો",
                 btn_save_worker: "વર્કર સેવ કરો",
                 del_w_title: "વર્કરને કાઢી નાખો (Delete)?",
-                btn_confirm_delete: "હા, Delete કરો"
+                btn_confirm_delete: "હા, Delete કરો",
+                btn_download_app: "Mobile App ડાઉનલોડ કરો (Install App)"
             }
         };
 
@@ -1301,6 +1358,35 @@
             if (!m) return;
             m.classList.add('hidden');
             m.classList.remove('flex');
+        }
+
+        // PWA App Install Prompt & Guide Handler
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
+
+        let deferredInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+        });
+
+        async function triggerInstallApp(portalLabel) {
+            const tag = document.getElementById('install-portal-tag');
+            if (tag) tag.innerText = `${portalLabel} App • Android & iPhone`;
+
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                const { outcome } = await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+                if (outcome === 'accepted') {
+                    showToast('WorkTrack Mobile App इंस्टॉल हो रहा है!');
+                }
+            } else {
+                openModal('modal-install-app');
+            }
         }
         // Initialize App (Instant Route & Fast Parallel Sync)
         window.onload = () => {
