@@ -2,7 +2,7 @@
 "name": "WorkTrack Admin",
 "short_name": "WT Admin",
 "description": "WorkTrack Company Admin Attendance & Payroll App",
-"start_url": "/?app=admin",
+"start_url": "/admin.html",
 "scope": "/",
 "display": "standalone",
 "orientation": "portrait",
