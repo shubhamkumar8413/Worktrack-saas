@@ -1,0 +1,25 @@
+{
+"name": "WorkTrack Admin",
+"short_name": "WT Admin",
+"description": "WorkTrack Company Admin Attendance & Payroll App",
+"start_url": "/?app=admin",
+"scope": "/",
+"display": "standalone",
+"orientation": "portrait",
+"background_color": "#1e3a8a",
+"theme_color": "#1e3a8a",
+"icons": [
+{
+"src": "icon-admin.png",
+"sizes": "192x192",
+"type": "image/png",
+"purpose": "any maskable"
+},
+{
+"src": "icon-admin.png",
+"sizes": "512x512",
+"type": "image/png",
+"purpose": "any maskable"
+}
+]
+}
