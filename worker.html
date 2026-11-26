@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTrack Worker - Attendance Portal</title>
+    <link rel="manifest" href="manifest-worker.json">
+    <meta name="theme-color" content="#059669">
+    <link rel="icon" type="image/png" href="icon-worker.png">
+    <link rel="apple-touch-icon" href="icon-worker.png">
+    <script>
+        if (!window.location.search.includes('app=worker')) {
+            window.location.replace('index.html?app=worker');
+        }
+    </script>
+</head>
+<body style="background:#059669;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p>Loading WorkTrack Worker...</p>
+</body>
+</html>
