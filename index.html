@@ -250,10 +250,10 @@
 
             <!-- Dedicated Company Admin App Download Option -->
             <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100">
-                <a href="WorkTrack-Admin.apk" download="WorkTrack-Admin.apk" onclick="showToast('WorkTrack Admin App (APK) डाउनलोड शुरू हो गया है!')" class="w-full bg-blue-950 hover:bg-blue-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
+                <button type="button" onclick="smartDownloadApk('admin')" class="w-full bg-blue-950 hover:bg-blue-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i>
                     <span data-i18n="btn_download_admin_app">WorkTrack Admin App डाउनलोड करें (APK)</span>
-                </a>
+                </button>
             </div>
         </div>
 
@@ -507,10 +507,10 @@
 
             <!-- Dedicated Worker App Download Option -->
             <div id="w-download-box" class="mt-5 pt-4 border-t border-slate-100">
-                <a href="WorkTrack-Worker.apk" download="WorkTrack-Worker.apk" onclick="showToast('WorkTrack Worker App (APK) डाउनलोड शुरू हो गया है!')" class="w-full bg-emerald-950 hover:bg-emerald-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
+                <button type="button" onclick="smartDownloadApk('worker')" class="w-full bg-emerald-950 hover:bg-emerald-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2 cursor-pointer">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i>
                     <span data-i18n="btn_download_worker_app">WorkTrack Worker App डाउनलोड करें (APK)</span>
-                </a>
+                </button>
             </div>
         </div>
 
@@ -1246,6 +1246,64 @@
             if (!m) return;
             m.classList.add('hidden');
             m.classList.remove('flex');
+        }
+
+        // Smart Auto-Detect APK Downloader (Never Fails on Case or GitHub Raw)
+        async function smartDownloadApk(roleType) {
+            const isOwner = roleType === 'owner';
+            const isWorker = roleType === 'worker';
+            const label = isWorker ? 'WorkTrack Worker App' : (isOwner ? 'WorkTrack Owner App' : 'WorkTrack Admin App');
+            const targetSaveName = isWorker ? 'WorkTrack-Worker.apk' : (isOwner ? 'WorkTrack-Owner.apk' : 'WorkTrack-Admin.apk');
+
+            showToast(`${label} खोजा जा रहा है...`);
+
+            const ghRawBase = 'https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/';
+            const candidates = isWorker ? [
+                'WorkTrack-Worker.apk',
+                'worktrack-worker.apk',
+                'Worktrack-Worker.apk',
+                'worker.apk',
+                'Worker.apk',
+                ghRawBase + 'WorkTrack-Worker.apk',
+                ghRawBase + 'worktrack-worker.apk',
+                'WorkTrack.apk'
+            ] : (isOwner ? [
+                'WorkTrack-Owner.apk',
+                'worktrack-owner.apk',
+                'owner.apk',
+                ghRawBase + 'WorkTrack-Owner.apk'
+            ] : [
+                'WorkTrack-Admin.apk',
+                'worktrack-admin.apk',
+                'Worktrack-Admin.apk',
+                'admin.apk',
+                'Admin.apk',
+                ghRawBase + 'WorkTrack-Admin.apk',
+                ghRawBase + 'worktrack-admin.apk',
+                'WorkTrack.apk'
+            ]);
+
+            for (const url of candidates) {
+                try {
+                    const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+                    if (res.ok) {
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.setAttribute('download', targetSaveName);
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        showToast(`${label} डाउनलोड शुरू हो गया है!`);
+                        return;
+                    }
+                } catch (e) {
+                    // Cross-origin raw GitHub fallback check skipped by CORS, continue
+                }
+            }
+
+            // Direct fallback to GitHub Raw main branch
+            window.location.href = ghRawBase + targetSaveName;
+            showToast(`${label} GitHub से डाउनलोड हो रहा है...`);
         }
 
         if ('serviceWorker' in navigator) {
@@ -2420,4 +2478,4 @@
         }
     </script>
 </body>
-                                                                           </html>
+                        </html>
