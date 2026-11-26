@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkTrack - Attendance & OT Management</title>
+    <title>WorkTrack - Multi-Company Attendance & OT SaaS</title>
     <link id="dynamic-manifest" rel="manifest" href="manifest.json">
     <meta id="dynamic-theme" name="theme-color" content="#4f46e5">
     <link id="dynamic-favicon" rel="icon" type="image/png" href="app-icon.png">
@@ -11,7 +11,9 @@
     <script>
         (function() {
             const p = new URLSearchParams(window.location.search);
-            const appMode = p.get('app');
+            const appMode = p.get('app') || localStorage.getItem('wt_locked_app');
+            if (p.get('app')) localStorage.setItem('wt_locked_app', p.get('app'));
+
             if (appMode === 'owner') {
                 document.title = 'WorkTrack Owner';
                 document.getElementById('dynamic-manifest').setAttribute('href', 'manifest-owner.json');
@@ -36,13 +38,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase Compat SDKs (App + Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; }
+        
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
@@ -52,30 +60,31 @@
 </head>
 <body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800 min-h-screen flex flex-col">
 
-    <!-- Clean App Header -->
-    <header id="app-clean-header" class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-50">
+    <!-- Clean Minimalist Mobile App Top Header -->
+    <header id="demo-top-bar" class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <!-- App Brand Icon & Portal Title -->
             <div class="flex items-center gap-2.5 min-w-0">
-                <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-8 h-8 rounded-xl object-cover shadow-xs border border-slate-200 shrink-0">
-                <div style="display:none" class="w-8 h-8 rounded-xl bg-indigo-600 text-white items-center justify-center font-bold text-sm shrink-0">W</div>
+                <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.src='icon-admin.png'" class="w-8 h-8 rounded-xl object-cover shadow-xs border border-slate-200 shrink-0">
                 <div class="truncate">
                     <span id="header-brand-title" class="font-extrabold text-sm text-slate-900 tracking-tight block truncate">WorkTrack</span>
                     <span id="header-portal-subtitle" class="text-[10px] text-slate-400 font-medium block truncate">Attendance & Payroll App</span>
                 </div>
             </div>
 
+            <!-- Right Controls: Quick Portal Switch + Language -->
             <div class="flex items-center gap-2 shrink-0">
                 <div id="portal-quick-tabs" class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80">
-                    <button type="button" onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition bg-white text-indigo-600 shadow-xs">
+                    <button type="button" onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition flex items-center gap-1 bg-white text-indigo-600 shadow-xs">
                         <span data-i18n="role_company">Company Admin</span>
                     </button>
-                    <button type="button" onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold transition text-slate-600 hover:text-slate-900">
+                    <button type="button" onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 text-slate-600 hover:text-slate-900">
                         <span data-i18n="role_worker">Worker</span>
                     </button>
                 </div>
 
+                <!-- Language Switcher -->
                 <div class="flex items-center bg-slate-100 border border-slate-200/80 rounded-xl px-2 py-1">
-                    <i class="fa-solid fa-language text-indigo-600 text-xs mr-1"></i>
                     <select onchange="setAppLanguage(this.value)" class="lang-selector bg-transparent text-slate-700 text-[11px] font-bold focus:outline-none cursor-pointer">
                         <option value="hi">हिंदी</option>
                         <option value="en">EN</option>
@@ -86,6 +95,26 @@
         </div>
     </header>
 
+    <!-- Client Portal Mode Banner (Clean Company Header + Language Switcher) -->
+    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2.5 text-xs border-b border-indigo-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <span id="shared-link-label"><i class="fa-solid fa-building mr-1.5 text-indigo-400"></i> WorkTrack Client Portal</span>
+            <div class="flex items-center gap-2.5">
+                <div class="flex items-center bg-indigo-900/90 border border-indigo-700 rounded-lg px-2 py-1">
+                    <i class="fa-solid fa-language text-indigo-300 text-sm mr-1"></i>
+                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-indigo-900 text-white text-[11px] font-semibold focus:outline-none cursor-pointer">
+                        <option value="hi">हिंदी</option>
+                        <option value="en">English</option>
+                        <option value="gu">ગુજરાતી</option>
+                    </select>
+                </div>
+                <span class="hidden sm:flex text-[11px] text-indigo-300 font-medium items-center gap-1">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secure
+                </span>
+            </div>
+        </div>
+    </div>
+
     <!-- Custom Notification Toast -->
     <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium">
         <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
@@ -94,9 +123,11 @@
 
     <main class="flex-1">
     <!-- ========================================== -->
-    <!-- 1. SUPER ADMIN PANEL VIEW                  -->
+    <!-- 1. SUPER ADMIN PANEL VIEW (PASSWORD PROTECTED) -->
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+        
+        <!-- Super Admin Password Lock Screen -->
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-6">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -129,13 +160,17 @@
             </div>
         </div>
 
+        <!-- Super Admin Main Dashboard (Unlocked) -->
         <div id="sa-dashboard-wrapper" class="hidden">
+            <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div class="flex items-center gap-2.5">
-                    <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
-                    <div>
-                        <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
-                        <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
+                            <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+                        </div>
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-2">
@@ -145,12 +180,13 @@
                     <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी (Tenant) जोड़ें</span>
                     </button>
-                    <button type="button" onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl font-semibold text-xs transition flex items-center gap-1.5">
+                    <button type="button" onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl font-semibold text-xs transition flex items-center gap-1.5" title="पैनल लॉक करें">
                         <i class="fa-solid fa-lock"></i> <span data-i18n="sa_lock_btn">लॉक करें</span>
                     </button>
                 </div>
             </div>
 
+            <!-- SaaS KPI Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
                     <div class="flex items-center justify-between">
@@ -178,6 +214,7 @@
                 </div>
             </div>
 
+            <!-- Companies Table -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
                 <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <h2 class="text-base font-bold text-slate-800">क्लाइंट कंपनियाँ (Tenants) और शेयर करने योग्य पोर्टल लिंक्स</h2>
@@ -195,7 +232,8 @@
                                 <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
                             </tr>
                         </thead>
-                        <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -206,6 +244,8 @@
     <!-- 2. COMPANY ADMIN PANEL VIEW                -->
     <!-- ========================================== -->
     <div id="view-company_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+        
+        <!-- Company Admin Login Box -->
         <div id="ca-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-admin.png" alt="WorkTrack Admin" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -228,18 +268,20 @@
                 </button>
             </form>
 
-            <!-- Direct Company Admin App Download Option -->
+            <!-- Company Admin APK Download Button -->
             <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WorkTrack-Admin.apk" download="WorkTrack-Admin.apk" onclick="showToast('WorkTrack Admin App डाउनलोड शुरू हो गया है!')" class="w-full bg-blue-950 hover:bg-blue-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-android text-emerald-400 text-base"></i>
-                    <span data-i18n="btn_download_admin_app">WorkTrack Admin App डाउनलोड करें (APK)</span>
+                    <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Admin App डाउनलोड करें (APK)
                 </a>
             </div>
         </div>
 
+        <!-- Company Admin Dashboard -->
         <div id="ca-dashboard-wrapper" class="hidden">
+            <!-- Company Context Bar (Premium SaaS Header Card) -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
                 <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
+                
                 <div class="p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div class="flex items-start sm:items-center gap-3.5 min-w-0">
                         <div id="ca-company-logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50">A</div>
@@ -258,25 +300,30 @@
                     </div>
 
                     <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
-                        <div id="ca-demo-selector-box" class="hidden flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
+                        <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
                             <label class="text-xs font-semibold text-slate-500 whitespace-nowrap">कंपनी बदलें:</label>
-                            <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500"></select>
+                            <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </select>
                         </div>
                         <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="flex-1 sm:flex-initial justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-2 whitespace-nowrap">
                             <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
                         </button>
-                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0" title="लॉगआउट करें">
                             <i class="fa-solid fa-right-from-bracket"></i> <span class="sm:hidden" data-i18n="w_logout">लॉगआउट</span>
                         </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Suspended Warning Banner -->
             <div id="ca-suspended-banner" class="hidden bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
                 <i class="fa-solid fa-ban text-rose-600 text-lg"></i>
-                <div class="text-sm"><strong>अकाउंट सस्पेंड है!</strong> Super Admin द्वारा इस कंपनी की सेवा अस्थायी रूप से रोक दी गई है।</div>
+                <div class="text-sm">
+                    <strong>अकाउंट सस्पेंड है!</strong> Super Admin द्वारा इस कंपनी की सेवा अस्थायी रूप से रोक दी गई है। आप नया डेटा नहीं जोड़ सकते।
+                </div>
             </div>
 
+            <!-- Today's Overview Stats -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
                     <span class="text-xs font-semibold text-slate-400 uppercase" data-i18n="ca_stat_total">कुल वर्कर्स</span>
@@ -296,6 +343,7 @@
                 </div>
             </div>
 
+            <!-- Classic Top Navigation Tabs -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
                 <div class="grid grid-cols-2 sm:grid-cols-4 border-b border-slate-200 bg-slate-50/70">
                     <button type="button" onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab py-3 px-2 text-xs sm:text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white flex items-center justify-center gap-1.5 transition">
@@ -312,12 +360,12 @@
                     </button>
                 </div>
 
-                <!-- TAB 1: ATTENDANCE -->
+                <!-- TAB 1: DAILY ATTENDANCE & OT -->
                 <div id="ca-content-attendance" class="ca-tab-content">
                     <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div class="flex items-center gap-2">
                             <label class="text-xs font-semibold text-slate-500" data-i18n="select_date">तारीख चुनें:</label>
-                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 bg-white rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700">
+                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 bg-white rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
                             <button type="button" onclick="markAllPresent()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
@@ -337,7 +385,7 @@
                             <thead>
                                 <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
                                     <th class="py-3.5 px-3 w-10 text-center">
-                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600">
+                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="सभी को चुनें">
                                     </th>
                                     <th class="py-3.5 px-4 font-semibold" data-i18n="th_worker">वर्कर (Worker)</th>
                                     <th class="py-3.5 px-4 font-semibold" data-i18n="th_dept">विभाग</th>
@@ -346,7 +394,8 @@
                                     <th class="py-3.5 px-4 font-semibold text-right" data-i18n="th_save">एक्शन</th>
                                 </tr>
                             </thead>
-                            <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                            <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm">
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -379,19 +428,26 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: PAYROLL -->
+                <!-- TAB 3: PAYROLL & ADVANCE (KHARCHI) TRACKER -->
                 <div id="ca-content-payroll" class="ca-tab-content hidden">
                     <div id="payroll-plan-lock" class="hidden p-5 sm:p-8">
-                        <div class="max-w-lg mx-auto rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-amber-400/30 text-center">
-                            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 to-amber-600 text-slate-950 text-2xl shadow-lg mb-4">
+                        <div class="max-w-lg mx-auto relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-amber-400/30 text-center">
+                            <div class="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-slate-950 text-2xl shadow-lg shadow-amber-500/25 mb-4 ring-4 ring-amber-400/20">
                                 <i class="fa-solid fa-crown"></i>
                             </div>
-                            <h3 class="text-lg sm:text-xl font-extrabold text-white">Growth (₹999) या Business (₹1,999) प्लान में अपग्रेड करें</h3>
-                            <p class="text-xs text-slate-300 mt-2">ऑटो सैलरी, खर्ची/एडवांस और WhatsApp Slip सुविधा के लिए प्लान अपग्रेड करें।</p>
-                            <div class="mt-5">
-                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="inline-flex items-center gap-2 bg-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl">
+                            <h3 class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-2">
+                                Growth (₹999) या Business (₹1,999) प्लान में अपग्रेड करें
+                            </h3>
+                            <p class="text-xs text-slate-300 max-w-md mx-auto mt-2 leading-relaxed">
+                                अपनी कंपनी का हिसाब-किताब 100% ऑटोमैटिक बनाएं। ऑटो सैलरी, एडवांस/खर्ची और 1-क्लिक WhatsApp Slip पाएं।
+                            </p>
+                            <div class="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3">
+                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Growth%20(%E2%82%B9999)%20%E0%A4%AF%E0%A4%BE%20Business%20(%E2%82%B91%2C999)%20%E0%A4%AE%E0%A5%87%E0%A4%82%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
                                     <i class="fa-brands fa-whatsapp text-base"></i> अभी प्लान अपग्रेड करें
                                 </a>
+                                <span class="text-[11px] text-slate-400 font-medium">
+                                    <i class="fa-solid fa-headset text-amber-400 mr-1"></i> 24x7 Support: 6200889059
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -427,9 +483,9 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: AUDIT -->
+                <!-- TAB 4: AUDIT LOGS -->
                 <div id="ca-content-audit" class="ca-tab-content hidden p-4 sm:p-5">
-                    <h3 class="font-bold text-slate-800 text-sm mb-3">सिस्टम ऑडिट लॉग</h3>
+                    <h3 class="font-bold text-slate-800 text-sm mb-3">सिस्टम ऑडिट लॉग (किसने और कब बदलाव किया)</h3>
                     <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
                 </div>
             </div>
@@ -440,6 +496,8 @@
     <!-- 3. WORKER PANEL VIEW (MOBILE FIRST)        -->
     <!-- ========================================== -->
     <div id="view-worker" class="role-view hidden max-w-md mx-auto p-4 sm:py-8 fade-in">
+        
+        <!-- Worker Login Card -->
         <div id="worker-login-box" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <div class="text-center mb-6">
                 <img src="icon-worker.png" alt="WorkTrack Worker" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -462,19 +520,19 @@
                 </button>
             </form>
 
-            <!-- Direct Worker App Download Option -->
+            <!-- Worker APK Download Button -->
             <div id="w-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WorkTrack-Worker.apk" download="WorkTrack-Worker.apk" onclick="showToast('WorkTrack Worker App डाउनलोड शुरू हो गया है!')" class="w-full bg-emerald-950 hover:bg-emerald-900 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-android text-emerald-400 text-base"></i>
-                    <span data-i18n="btn_download_worker_app">WorkTrack Worker App डाउनलोड करें (APK)</span>
+                    <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Worker App डाउनलोड करें (APK)
                 </a>
             </div>
         </div>
 
+        <!-- Worker Dashboard Card (Shown after login) -->
         <div id="worker-dashboard-box" class="hidden space-y-4">
-            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md">
+            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
                 <div class="flex items-center justify-between mb-4">
-                    <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full">Company</span>
+                    <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Company</span>
                     <button type="button" onclick="logoutWorker()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition">
                         <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="w_logout">लॉगआउट</span>
                     </button>
@@ -532,16 +590,18 @@
     </div>
     </main>
 
-    <!-- Subtle Footer -->
+    <!-- Subtle App Footer with Owner Access -->
     <footer id="app-footer" class="py-4 px-4 text-center text-[11px] text-slate-400">
         <span>© 2026 WorkTrack SaaS</span>
         <span id="footer-owner-sep" class="mx-1.5">•</span>
-        <button id="footer-owner-btn" type="button" onclick="openOwnerPanel()" class="hover:text-slate-600 transition font-medium">Owner Login</button>
+        <button id="footer-owner-btn" type="button" onclick="switchRole('super_admin')" class="hover:text-slate-600 font-medium transition">Owner Login</button>
     </footer>
 
     <!-- ========================================== -->
     <!-- MODALS                                     -->
     <!-- ========================================== -->
+
+    <!-- Modal: Change Super Admin Password -->
     <div id="modal-change-sa-pass" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-4">
@@ -550,21 +610,22 @@
             </div>
             <form onsubmit="handleChangeSuperAdminPassword(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">पुराना पासवर्ड</label>
-                    <input type="password" id="sa-old-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">पुराना पासवर्ड (Current Password)</label>
+                    <input type="password" id="sa-old-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">नया पासवर्ड</label>
-                    <input type="text" id="sa-new-pass" required minlength="4" placeholder="कम से कम 4 अक्षर/अंक" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">नया पासवर्ड (New Password)</label>
+                    <input type="text" id="sa-new-pass" required minlength="4" placeholder="कम से कम 4 अक्षर/अंक" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-change-sa-pass')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-semibold">सेव करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">नया पासवर्ड सेव करें</button>
                 </div>
             </form>
         </div>
     </div>
-
+    
+    <!-- Modal: Add New Company (Super Admin) -->
     <div id="modal-add-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
@@ -574,21 +635,21 @@
             <form onsubmit="handleAddCompany(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">कंपनी का नाम</label>
-                    <input type="text" id="new-comp-name" required placeholder="उदा. Sharma Engineering Works" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    <input type="text" id="new-comp-name" required placeholder="उदा. Sharma Engineering Works" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Company Admin ID</label>
-                        <input type="text" id="new-comp-admin-id" required placeholder="admin@sharma" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                        <input type="text" id="new-comp-admin-id" required placeholder="admin@sharma" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Admin Password</label>
-                        <input type="text" id="new-comp-admin-pass" required value="admin123" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                        <input type="text" id="new-comp-admin-pass" required value="admin123" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">सब्सक्रिप्शन प्लान चुनें</label>
-                    <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white">
+                    <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
                         <option value="Starter">Starter (25 Workers तक) - ₹499/माह</option>
                         <option value="Growth" selected>Growth (100 Workers तक - सभी फीचर्स) - ₹999/माह</option>
                         <option value="Business">Business (500 Workers तक - सभी फीचर्स) - ₹1,999/माह</option>
@@ -596,48 +657,57 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-company')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-semibold">कंपनी बनाएं</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">कंपनी बनाएं</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal: Company Shareable Links -->
     <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-2">
                 <h3 id="links-modal-title" class="text-lg font-bold text-slate-900">कंपनी पोर्टल लिंक्स</h3>
                 <button type="button" onclick="closeModal('modal-company-links')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <p id="links-modal-subtitle" class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए लिंक भेजें:</p>
+            <p id="links-modal-subtitle" class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:</p>
+
             <div class="space-y-4">
                 <div id="admin-link-section" class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
                     <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-indigo-900">1. Company Admin Portal Link</span>
-                        <button type="button" onclick="simulateOpenLink('admin')" class="text-[11px] font-semibold text-indigo-600 hover:underline">खोलकर देखें</button>
+                        <span class="text-xs font-bold text-indigo-900"><i class="fa-solid fa-building-shield mr-1.5 text-indigo-600"></i>1. Company Admin Portal Link (मालिक/HR के लिए)</span>
+                        <button type="button" onclick="simulateOpenLink('admin')" class="text-[11px] font-semibold text-indigo-600 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
                     </div>
                     <p id="links-admin-creds" class="text-[11px] text-slate-600 mb-2 font-mono bg-white px-2.5 py-1 rounded border border-indigo-100"></p>
                     <div class="flex items-center gap-2">
                         <input type="text" id="input-admin-link" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-600 font-mono">
-                        <button type="button" onclick="copyLinkText('input-admin-link')" class="bg-indigo-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold">Copy</button>
+                        <button type="button" onclick="copyLinkText('input-admin-link')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap shadow-sm">
+                            <i class="fa-regular fa-copy mr-1"></i> Copy
+                        </button>
                     </div>
                 </div>
+
                 <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
                     <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-bold text-emerald-900">Worker Portal Link</span>
-                        <button type="button" onclick="simulateOpenLink('worker')" class="text-[11px] font-semibold text-emerald-700 hover:underline">खोलकर देखें</button>
+                        <span class="text-xs font-bold text-emerald-900"><i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-600"></i>Worker Portal Link (कर्मचारियों के लिए)</span>
+                        <button type="button" onclick="simulateOpenLink('worker')" class="text-[11px] font-semibold text-emerald-700 hover:underline">खोलकर देखें <i class="fa-solid fa-arrow-up-right-from-square ml-0.5"></i></button>
                     </div>
                     <div class="flex items-center gap-2">
                         <input type="text" id="input-worker-link" readonly class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-600 font-mono">
-                        <button type="button" onclick="copyLinkText('input-worker-link')" class="bg-emerald-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold">Copy</button>
+                        <button type="button" onclick="copyLinkText('input-worker-link')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap shadow-sm">
+                            <i class="fa-regular fa-copy mr-1"></i> Copy
+                        </button>
                     </div>
                 </div>
             </div>
+
             <div class="flex justify-end mt-5">
                 <button type="button" onclick="closeModal('modal-company-links')" class="bg-slate-900 text-white px-5 py-2 rounded-xl text-xs font-semibold">बंद करें</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal: Add New Worker (Company Admin) -->
     <div id="modal-add-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
@@ -656,11 +726,11 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">दैनिक मज़दूरी (₹ / दिन)</label>
-                        <input type="number" id="new-w-daily-rate" required min="0" value="500" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
+                        <input type="number" id="new-w-daily-rate" required min="0" value="500" placeholder="500" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">OT दर (₹ / घंटा)</label>
-                        <input type="number" id="new-w-ot-rate" required min="0" value="75" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
+                        <input type="number" id="new-w-ot-rate" required min="0" value="75" placeholder="75" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
                     </div>
                 </div>
                 <div>
@@ -673,7 +743,9 @@
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-xs font-bold text-slate-700">Worker Login ID व Password</span>
-                        <button type="button" onclick="autoGenerateWorkerCreds()" class="text-xs text-indigo-600 font-semibold">Auto Generate</button>
+                        <button type="button" onclick="autoGenerateWorkerCreds()" class="text-xs text-indigo-600 hover:underline font-semibold">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-0.5"></i> Auto Generate
+                        </button>
                     </div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div>
@@ -688,16 +760,17 @@
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-worker')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
-                    <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-xl text-sm font-semibold" data-i18n="btn_save_worker">वर्कर सेव करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="btn_save_worker">वर्कर सेव करें</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal: Add Worker Advance / Kharchi -->
     <div id="modal-add-advance" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-slate-900">एडवांस / खर्ची दर्ज करें</h3>
+                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-amber-600 mr-1.5"></i>एडवांस / खर्ची दर्ज करें</h3>
                 <button type="button" onclick="closeModal('modal-add-advance')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddAdvance(event)" class="space-y-4">
@@ -716,17 +789,18 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">विवरण</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">विवरण (वैकल्पिक)</label>
                     <input type="text" id="adv-note" placeholder="उदा. साप्ताहिक खर्ची" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" class="bg-amber-600 text-white px-5 py-2 rounded-xl text-sm font-semibold">एडवांस सेव करें</button>
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">एडवांस सेव करें</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal: Confirm Delete Worker -->
     <div id="modal-delete-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
             <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-rose-100">
@@ -735,18 +809,19 @@
             <h3 class="text-lg font-bold text-slate-900" data-i18n="del_w_title">वर्कर को हटाएं (Delete)?</h3>
             <p id="del-worker-desc" class="text-xs text-slate-500 mt-1.5 leading-relaxed">क्या आप वाकई इस वर्कर को हटाना चाहते हैं?</p>
             <div class="flex items-center justify-center gap-2.5 mt-5">
-                <button type="button" onclick="closeModal('modal-delete-worker')" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
-                <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
+                <button type="button" onclick="closeModal('modal-delete-worker')" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition" data-i18n="btn_cancel">रद्द करें</button>
+                <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
             </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- CLEAN BUG-FREE JAVASCRIPT LOGIC            -->
+    <!-- JAVASCRIPT LOGIC (Firebase + i18n + 3 Apps) -->
     <!-- ========================================== -->
     <script>
         const TRANSLATIONS = {
             hi: {
+                role_super: "Super Admin (आप)",
                 role_company: "Company Admin",
                 role_worker: "Worker",
                 sa_login_title: "Super Admin सुरक्षा लॉगिन",
@@ -781,7 +856,7 @@
                 th_dept: "विभाग",
                 th_status: "हाज़िरी (Status)",
                 th_ot: "ओवरटाइम (OT घंटे)",
-                th_save: "सेव / WhatsApp",
+                th_save: "एक्शन",
                 workers_dir_title: "रजिस्टर्ड कर्मचारियों की सूची",
                 workers_dir_sub: "सभी वर्कर्स की लॉगिन ID, पासवर्ड और प्रोफ़ाइल विवरण",
                 th_name_photo: "नाम व फोटो",
@@ -806,11 +881,10 @@
                 btn_cancel: "रद्द करें",
                 btn_save_worker: "वर्कर सेव करें",
                 del_w_title: "वर्कर को हटाएं (Delete)?",
-                btn_confirm_delete: "हाँ, Delete करें",
-                btn_download_admin_app: "WorkTrack Admin App डाउनलोड करें (APK)",
-                btn_download_worker_app: "WorkTrack Worker App डाउनलोड करें (APK)"
+                btn_confirm_delete: "हाँ, Delete करें"
             },
             en: {
+                role_super: "Super Admin",
                 role_company: "Company Admin",
                 role_worker: "Worker",
                 sa_login_title: "Super Admin Security Login",
@@ -845,7 +919,7 @@
                 th_dept: "Department",
                 th_status: "Attendance Status",
                 th_ot: "Overtime (OT Hrs)",
-                th_save: "Save / WhatsApp",
+                th_save: "Action",
                 workers_dir_title: "Registered Workers Directory",
                 workers_dir_sub: "Login ID, Password and profile details of all workers",
                 th_name_photo: "Name & Photo",
@@ -870,11 +944,10 @@
                 btn_cancel: "Cancel",
                 btn_save_worker: "Save Worker",
                 del_w_title: "Delete Worker?",
-                btn_confirm_delete: "Yes, Delete",
-                btn_download_admin_app: "Download WorkTrack Admin App (APK)",
-                btn_download_worker_app: "Download WorkTrack Worker App (APK)"
+                btn_confirm_delete: "Yes, Delete"
             },
             gu: {
+                role_super: "Super Admin",
                 role_company: "Company Admin",
                 role_worker: "Worker",
                 sa_login_title: "Super Admin સુરક્ષા લોગિન",
@@ -889,7 +962,7 @@
                 sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
                 sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
                 ca_login_title: "Company Admin લોગિન",
-                ca_login_sub: "તમારી Admin ID અને Password નાખો",
+                ca_login_sub: "Admin ID અને Password નાખીને ડેશબોર્ડ ખોલો",
                 ca_login_btn: "Admin Panel ખોલો",
                 ca_header_sub: "Company Admin Dashboard • હાજરી અને ઓવરટાઇમ મેનેજમેન્ટ",
                 ca_share_worker: "Worker Link શેર કરો",
@@ -909,7 +982,7 @@
                 th_dept: "વિભાગ",
                 th_status: "હાજરી (Status)",
                 th_ot: "ઓવરટાઇમ (OT કલાક)",
-                th_save: "સેવ / WhatsApp",
+                th_save: "એક્શન",
                 workers_dir_title: "રજિસ્ટર્ડ કર્મચારીઓની યાદી",
                 workers_dir_sub: "બધા વર્કર્સની લોગિન ID, પાસવર્ડ અને પ્રોફાઇલ વિગતો",
                 th_name_photo: "નામ અને ફોટો",
@@ -934,30 +1007,36 @@
                 btn_cancel: "રદ કરો",
                 btn_save_worker: "વર્કર સેવ કરો",
                 del_w_title: "વર્કરને કાઢી નાખો (Delete)?",
-                btn_confirm_delete: "હા, Delete કરો",
-                btn_download_admin_app: "WorkTrack Admin App ડાઉનલોડ કરો (APK)",
-                btn_download_worker_app: "WorkTrack Worker App ડાઉનલોડ કરો (APK)"
+                btn_confirm_delete: "હા, Delete કરો"
             }
         };
 
         let currentLang = localStorage.getItem('wt_lang') || 'hi';
         let workerIdToDelete = null;
+        let dedicatedAppMode = null;
 
         function setAppLanguage(lang) {
             if (!TRANSLATIONS[lang]) return;
             currentLang = lang;
             localStorage.setItem('wt_lang', lang);
-            document.querySelectorAll('.lang-selector').forEach(sel => sel.value = lang);
+
+            document.querySelectorAll('.lang-selector').forEach(sel => {
+                sel.value = lang;
+            });
+
             const dict = TRANSLATIONS[lang];
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (dict[key]) el.innerText = dict[key];
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
             });
         }
 
         function enforceTenDigitPhone(input) {
             let cleaned = input.value.replace(/\D/g, '').slice(0, 10);
             input.value = cleaned;
+
             const counter = document.getElementById('phone-digit-counter');
             if (counter) {
                 counter.innerText = `${cleaned.length}/10`;
@@ -979,7 +1058,9 @@
 
         let firestore = null;
         try {
-            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
             firestore = firebase.firestore();
         } catch (err) {
             console.error("Firebase init error:", err);
@@ -1015,7 +1096,6 @@
         let isCompanyAdminLoggedIn = false;
         let loggedInWorkerId = null;
         let sharedPortalMode = null;
-        let dedicatedAppMode = null;
         let selectedLinksCompanyId = null;
         let initialRouteHandled = false;
 
@@ -1041,13 +1121,16 @@
                     superAdminPassword = docSnap.data().password;
                     localStorage.setItem('wt_sa_pass', superAdminPassword);
                 }
+
                 docRef.onSnapshot((snap) => {
                     if (snap.exists && snap.data().password) {
                         superAdminPassword = snap.data().password;
                         localStorage.setItem('wt_sa_pass', superAdminPassword);
                     }
                 });
-            } catch (e) {}
+            } catch (e) {
+                console.error("Settings sync error:", e);
+            }
         }
 
         async function seedInitialDataIfEmpty() {
@@ -1072,9 +1155,12 @@
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${today}`), { companyId: 'COMP-01', workerId: 'W-101', date: today, status: 'Present', ot: 2 });
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-102_${today}`), { companyId: 'COMP-01', workerId: 'W-102', date: today, status: 'Present', ot: 0 });
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${yesterday}`), { companyId: 'COMP-01', workerId: 'W-101', date: yesterday, status: 'Present', ot: 3.5 });
+
                     await batch.commit();
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error("Firestore seed check failed:", e);
+            }
         }
 
         function startRealtimeSync() {
@@ -1082,22 +1168,21 @@
 
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
                 db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                if (!activeCompanyId && db.companies.length > 0) activeCompanyId = db.companies[0].id;
+                if (!activeCompanyId && db.companies.length > 0) {
+                    activeCompanyId = db.companies[0].id;
+                }
 
                 if (!initialRouteHandled) {
                     initialRouteHandled = true;
                     const params = new URLSearchParams(window.location.search);
                     const portalType = params.get('portal');
                     const compParam = params.get('company');
-                    if (portalType === 'owner') {
-                        openOwnerPanel();
-                        return;
-                    }
                     if (portalType && compParam && db.companies.some(c => c.id === compParam)) {
                         enterSharedLinkMode(portalType, compParam);
                         return;
                     }
                 }
+
                 renderSuperAdmin();
                 updateCompanySelector();
                 renderCompanyAdmin();
@@ -1139,7 +1224,11 @@
             const toast = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
             document.getElementById('toast-msg').innerText = msg;
-            icon.className = isError ? 'fa-solid fa-circle-exclamation text-rose-400 text-lg' : 'fa-solid fa-circle-check text-emerald-400 text-lg';
+            
+            icon.className = isError 
+                ? 'fa-solid fa-circle-exclamation text-rose-400 text-lg' 
+                : 'fa-solid fa-circle-check text-emerald-400 text-lg';
+
             toast.classList.remove('translate-y-20', 'opacity-0');
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3200);
         }
@@ -1158,15 +1247,9 @@
             m.classList.remove('flex');
         }
 
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(() => {});
-            });
-        }
-
         function applyDedicatedAppMode() {
             const params = new URLSearchParams(window.location.search);
-            const appMode = params.get('app');
+            const appMode = params.get('app') || localStorage.getItem('wt_locked_app');
             if (!appMode) return false;
 
             dedicatedAppMode = appMode;
@@ -1224,11 +1307,9 @@
             startRealtimeSync();
         };
 
-        // SUPER ADMIN
-        function openOwnerPanel() {
-            switchRole('super_admin');
-        }
-
+        // ==========================================
+        // SUPER ADMIN SECURITY (LOGIN & PASSWORD)
+        // ==========================================
         function handleSuperAdminLogin(e) {
             e.preventDefault();
             const enteredPass = document.getElementById('sa-login-pass').value.trim();
@@ -1247,31 +1328,40 @@
             isSuperAdminUnlocked = false;
             sessionStorage.removeItem('wt_sa_unlocked');
             renderSuperAdmin();
-            if (dedicatedAppMode !== 'owner') switchRole('company_admin');
-            showToast('Super Admin पैनल लॉक कर दिया गया है।');
+            if (dedicatedAppMode !== 'owner') {
+                switchRole('company_admin');
+            }
+            showToast('Super Admin पैनल सुरक्षित रूप से लॉक कर दिया गया है।');
         }
 
         async function handleChangeSuperAdminPassword(e) {
             e.preventDefault();
             const oldPass = document.getElementById('sa-old-pass').value.trim();
             const newPass = document.getElementById('sa-new-pass').value.trim();
+
             if (oldPass !== superAdminPassword) {
                 showToast('पुराना पासवर्ड गलत है!', true);
                 return;
             }
+
             try {
                 superAdminPassword = newPass;
                 localStorage.setItem('wt_sa_pass', newPass);
-                if (firestore) await firestore.collection('wt_settings').doc('super_admin').set({ password: newPass });
+                if (firestore) {
+                    await firestore.collection('wt_settings').doc('super_admin').set({ password: newPass });
+                }
                 e.target.reset();
                 closeModal('modal-change-sa-pass');
-                showToast('Super Admin पासवर्ड बदल दिया गया है!');
+                showToast('Super Admin पासवर्ड सफलतापूर्वक बदल दिया गया है!');
             } catch (err) {
+                console.error(err);
                 showToast('पासवर्ड अपडेट करने में त्रुटि!', true);
             }
         }
 
-        // SHARED LINKS
+        // ==========================================
+        // SHARED LINK SYSTEM (2 Links per Company)
+        // ==========================================
         function getBaseUrl() {
             return window.location.origin + window.location.pathname;
         }
@@ -1280,9 +1370,11 @@
             const comp = db.companies.find(c => c.id === compId);
             if (!comp) return;
             selectedLinksCompanyId = compId;
+
             const base = getBaseUrl();
             const adminUrl = `${base}?portal=admin&company=${comp.id}`;
             const workerUrl = `${base}?portal=worker&company=${comp.id}`;
+
             const adminSection = document.getElementById('admin-link-section');
             const subtitle = document.getElementById('links-modal-subtitle');
 
@@ -1297,6 +1389,7 @@
                 document.getElementById('links-admin-creds').innerText = `ID: ${comp.adminId} | Pass: ${comp.adminPass}`;
                 document.getElementById('input-admin-link').value = adminUrl;
             }
+
             document.getElementById('input-worker-link').value = workerUrl;
             openModal('modal-company-links');
         }
@@ -1306,7 +1399,7 @@
             input.select();
             input.setSelectionRange(0, 99999);
             document.execCommand('copy');
-            showToast('लिंक कॉपी हो गया!');
+            showToast('लिंक क्लिपबोर्ड पर कॉपी हो गया! अब आप इसे WhatsApp/Email पर भेज सकते हैं।');
         }
 
         function copyRawText(text, label) {
@@ -1327,16 +1420,16 @@
         function enterSharedLinkMode(role, compId) {
             const comp = db.companies.find(c => c.id === compId);
             if (!comp) return;
+
             sharedPortalMode = { role, companyId: compId };
             activeCompanyId = compId;
 
-            document.getElementById('header-brand-title').innerText = comp.name;
-            document.getElementById('portal-quick-tabs').classList.add('hidden');
+            document.getElementById('demo-top-bar').classList.add('hidden');
+            document.getElementById('shared-link-banner').classList.remove('hidden');
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
 
             if (role === 'admin') {
-                document.getElementById('header-brand-icon').src = 'icon-admin.png';
-                document.getElementById('header-portal-subtitle').innerText = 'Company Admin Portal';
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-building-shield mr-1.5 text-indigo-400"></i> <strong>${comp.name}</strong> — Company Admin Portal`;
                 isCompanyAdminLoggedIn = false;
                 document.getElementById('view-company_admin').classList.remove('hidden');
                 document.getElementById('ca-login-comp-badge').innerText = comp.name;
@@ -1344,8 +1437,7 @@
                 document.getElementById('ca-demo-selector-box').classList.add('hidden');
                 renderCompanyAdmin();
             } else if (role === 'worker') {
-                document.getElementById('header-brand-icon').src = 'icon-worker.png';
-                document.getElementById('header-portal-subtitle').innerText = 'Worker Attendance Portal';
+                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal`;
                 loggedInWorkerId = null;
                 document.getElementById('view-worker').classList.remove('hidden');
                 document.getElementById('worker-dashboard-box').classList.add('hidden');
@@ -1357,12 +1449,10 @@
 
         function switchRole(role) {
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
-            const viewEl = document.getElementById(`view-${role}`);
-            if (viewEl) viewEl.classList.remove('hidden');
+            document.getElementById(`view-${role}`).classList.remove('hidden');
 
             const btnCompany = document.getElementById('btn-role-company');
             const btnWorker = document.getElementById('btn-role-worker');
-
             if (btnCompany && btnWorker) {
                 [btnCompany, btnWorker].forEach(b => {
                     b.classList.remove('bg-white', 'text-indigo-600', 'shadow-xs', 'font-bold');
@@ -1377,17 +1467,21 @@
             if (role === 'company_admin') renderCompanyAdmin();
         }
 
-        // SUPER ADMIN RENDER & ACTIONS
+        // ==========================================
+        // SUPER ADMIN LOGIC
+        // ==========================================
         function renderSuperAdmin() {
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
+
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
                 return;
+            } else {
+                loginBox.classList.add('hidden');
+                dashWrapper.classList.remove('hidden');
             }
-            loginBox.classList.add('hidden');
-            dashWrapper.classList.remove('hidden');
 
             const totalCompanies = db.companies.length;
             const totalWorkers = db.workers.length;
@@ -1399,6 +1493,7 @@
             db.companies.forEach(comp => {
                 const planInfo = PLANS[comp.plan] || PLANS['Growth'];
                 if (comp.status === 'Active') mrr += planInfo.price;
+                
                 const compWorkersCount = db.workers.filter(w => w.companyId === comp.id).length;
                 const usagePercent = Math.min(100, Math.round((compWorkersCount / planInfo.limit) * 100));
                 const base = getBaseUrl();
@@ -1428,22 +1523,39 @@
                     <td class="py-4 px-6">
                         <div class="flex flex-col gap-1.5">
                             <div class="flex items-center gap-1.5">
-                                <button type="button" onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="text-[11px] bg-indigo-50 text-indigo-700 border border-indigo-200 font-semibold px-2.5 py-1 rounded-lg">1. Admin Link</button>
-                                <button type="button" onclick="enterSharedLinkMode('admin', '${comp.id}')" class="text-[11px] bg-white text-slate-600 border border-slate-200 px-2 py-1 rounded-lg"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                <button type="button" onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 1. Admin Link
+                                </button>
+                                <button type="button" onclick="enterSharedLinkMode('admin', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Admin Link खोलकर देखें">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
                             </div>
                             <div class="flex items-center gap-1.5">
-                                <button type="button" onclick='copyRawText(${JSON.stringify(workerUrl)}, "${comp.name} का Worker Link")' class="text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold px-2.5 py-1 rounded-lg">2. Worker Link</button>
-                                <button type="button" onclick="enterSharedLinkMode('worker', '${comp.id}')" class="text-[11px] bg-white text-slate-600 border border-slate-200 px-2 py-1 rounded-lg"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                                <button type="button" onclick='copyRawText(${JSON.stringify(workerUrl)}, "${comp.name} का Worker Link")' class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> 2. Worker Link
+                                </button>
+                                <button type="button" onclick="enterSharedLinkMode('worker', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Worker Link खोलकर देखें">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </button>
                             </div>
                         </div>
                     </td>
                     <td class="py-4 px-6">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${comp.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">${comp.status}</span>
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${comp.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                            <span class="w-1.5 h-1.5 rounded-full ${comp.status === 'Active' ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
+                            ${comp.status}
+                        </span>
                     </td>
                     <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                        <button type="button" onclick="openCompanyLinksModal('${comp.id}', false)" class="text-xs bg-slate-100 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg">Details</button>
-                        <button type="button" onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 text-white font-semibold px-3 py-1.5 rounded-lg">पैनल खोलें</button>
-                        <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="text-xs border border-slate-200 text-slate-600 font-semibold px-2.5 py-1.5 rounded-lg">${comp.status === 'Active' ? 'Suspend' : 'Activate'}</button>
+                        <button type="button" onclick="openCompanyLinksModal('${comp.id}', false)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                            All Details
+                        </button>
+                        <button type="button" onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition">
+                            पैनल खोलें
+                        </button>
+                        <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="text-xs border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                            ${comp.status === 'Active' ? 'Suspend' : 'Activate'}
+                        </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1462,17 +1574,30 @@
             const plan = document.getElementById('new-comp-plan').value;
             const newId = `COMP-${Date.now().toString().slice(-4)}`;
             const colors = ['bg-blue-600', 'bg-purple-600', 'bg-teal-600', 'bg-rose-600'];
-            const newCompObj = { id: newId, name, adminId, adminPass, plan, status: 'Active', color: colors[db.companies.length % colors.length] };
+            
+            const newCompObj = {
+                id: newId,
+                name: name,
+                adminId: adminId,
+                adminPass: adminPass,
+                plan: plan,
+                status: 'Active',
+                color: colors[db.companies.length % colors.length]
+            };
 
             try {
-                if (firestore) await firestore.collection('wt_companies').doc(newId).set(newCompObj);
-                else db.companies.push(newCompObj);
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(newId).set(newCompObj);
+                } else {
+                    db.companies.push(newCompObj);
+                }
                 e.target.reset();
                 document.getElementById('new-comp-admin-pass').value = 'admin123';
                 closeModal('modal-add-company');
-                showToast(`कंपनी "${name}" सेव हो गई!`);
+                showToast(`कंपनी "${name}" लाइव डेटाबेस में सेव हो गई!`);
                 setTimeout(() => openCompanyLinksModal(newId, false), 300);
             } catch (err) {
+                console.error(err);
                 showToast('कंपनी सेव करने में त्रुटि!', true);
             }
         }
@@ -1482,8 +1607,11 @@
             if (!comp) return;
             const nextStatus = comp.status === 'Active' ? 'Suspended' : 'Active';
             try {
-                if (firestore) await firestore.collection('wt_companies').doc(compId).update({ status: nextStatus });
-                else comp.status = nextStatus;
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update({ status: nextStatus });
+                } else {
+                    comp.status = nextStatus;
+                }
                 showToast(`${comp.name} अब ${nextStatus} है।`, nextStatus === 'Suspended');
             } catch (err) {
                 showToast('स्टेटस अपडेट नहीं हो सका!', true);
@@ -1497,7 +1625,9 @@
             switchRole('company_admin');
         }
 
-        // COMPANY ADMIN
+        // ==========================================
+        // COMPANY ADMIN LOGIC
+        // ==========================================
         function handleCompanyAdminLogin(e) {
             e.preventDefault();
             const idInput = document.getElementById('ca-login-id').value.trim();
@@ -1514,6 +1644,7 @@
                 showToast('गलत Admin ID या Password!', true);
                 return;
             }
+
             activeCompanyId = comp.id;
             isCompanyAdminLoggedIn = true;
             updateCompanySelector();
@@ -1548,10 +1679,12 @@
         function switchCaTab(tabName) {
             document.querySelectorAll('.ca-tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
+
             document.querySelectorAll('.ca-tab').forEach(btn => {
                 btn.classList.remove('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
                 btn.classList.add('text-slate-500', 'border-transparent', 'font-semibold');
             });
+
             const activeTab = document.getElementById(`tab-ca-${tabName}`);
             activeTab.classList.remove('text-slate-500', 'border-transparent', 'font-semibold');
             activeTab.classList.add('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
@@ -1560,13 +1693,15 @@
         function renderCompanyAdmin() {
             const loginBox = document.getElementById('ca-login-box');
             const dashWrapper = document.getElementById('ca-dashboard-wrapper');
+
             if (!isCompanyAdminLoggedIn) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
                 return;
+            } else {
+                loginBox.classList.add('hidden');
+                dashWrapper.classList.remove('hidden');
             }
-            loginBox.classList.add('hidden');
-            dashWrapper.classList.remove('hidden');
 
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (!comp) return;
@@ -1578,23 +1713,30 @@
             logo.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${comp.color} text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50`;
 
             document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
+
             const isSuspended = comp.status === 'Suspended';
             document.getElementById('ca-suspended-banner').classList.toggle('hidden', !isSuspended);
 
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
 
-            let presentCount = 0, absentCount = 0, totalOt = 0;
+            let presentCount = 0;
+            let absentCount = 0;
+            let totalOt = 0;
+
             const attBody = document.getElementById('ca-attendance-list');
             attBody.innerHTML = '';
+            const selectAllCb = document.getElementById('ca-select-all-workers');
+            if (selectAllCb) selectAllCb.checked = false;
 
             if (tenantWorkers.length === 0) {
-                attBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400 text-sm">इस कंपनी में अभी कोई वर्कर नहीं है।</td></tr>`;
+                attBody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400 text-sm">इस कंपनी में अभी कोई वर्कर नहीं है। "+ नया Worker जोड़ें" पर क्लिक करें।</td></tr>`;
             }
 
             tenantWorkers.forEach(w => {
                 const recordKey = `${activeCompanyId}_${w.id}_${selectedDate}`;
                 const record = db.attendance[recordKey] || { status: 'Not Marked', ot: 0 };
+
                 if (record.status === 'Present' || record.status === 'Half Day') presentCount++;
                 if (record.status === 'Absent' || record.status === 'Leave') absentCount++;
                 totalOt += parseFloat(record.ot || 0);
@@ -1603,7 +1745,7 @@
                 tr.className = 'hover:bg-slate-50/70 transition';
                 tr.innerHTML = `
                     <td class="py-3.5 px-3 text-center">
-                        <input type="checkbox" value="${w.id}" class="ca-worker-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600" ${isSuspended ? 'disabled' : ''}>
+                        <input type="checkbox" value="${w.id}" class="ca-worker-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" ${isSuspended ? 'disabled' : ''}>
                     </td>
                     <td class="py-3.5 px-4">
                         <div class="flex items-center gap-3">
@@ -1614,23 +1756,35 @@
                             </div>
                         </div>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-700 font-medium">${w.dept}</td>
                     <td class="py-3.5 px-4">
-                        <select id="att-status-${w.id}" ${isSuspended ? 'disabled' : ''} class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white">
+                        <div class="text-slate-700 font-medium">${w.dept}</div>
+                        ${w.role ? `<div class="text-xs text-slate-400">${w.role}</div>` : ''}
+                    </td>
+                    <td class="py-3.5 px-4">
+                        <select id="att-status-${w.id}" ${isSuspended ? 'disabled' : ''} class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-indigo-500">
                             <option value="Not Marked" ${record.status === 'Not Marked' ? 'selected' : ''}>-- चुनें --</option>
-                            <option value="Present" ${record.status === 'Present' ? 'selected' : ''}>✅ Present</option>
-                            <option value="Half Day" ${record.status === 'Half Day' ? 'selected' : ''}>🌗 Half Day</option>
-                            <option value="Absent" ${record.status === 'Absent' ? 'selected' : ''}>❌ Absent</option>
-                            <option value="Leave" ${record.status === 'Leave' ? 'selected' : ''}>📅 Leave</option>
+                            <option value="Present" ${record.status === 'Present' ? 'selected' : ''}>✅ Present (हाज़िर)</option>
+                            <option value="Half Day" ${record.status === 'Half Day' ? 'selected' : ''}>🌗 Half Day (आधा दिन)</option>
+                            <option value="Absent" ${record.status === 'Absent' ? 'selected' : ''}>❌ Absent (अनुपस्थित)</option>
+                            <option value="Leave" ${record.status === 'Leave' ? 'selected' : ''}>📅 Leave (छुट्टी)</option>
                         </select>
                     </td>
                     <td class="py-3.5 px-4">
-                        <input type="number" step="0.5" min="0" max="16" id="att-ot-${w.id}" value="${record.ot}" ${isSuspended ? 'disabled' : ''} class="w-20 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold">
+                        <div class="flex items-center gap-1.5">
+                            <input type="number" step="0.5" min="0" max="16" id="att-ot-${w.id}" value="${record.ot}" ${isSuspended ? 'disabled' : ''} class="w-20 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                            <span class="text-xs text-slate-400">hrs</span>
+                        </div>
                     </td>
                     <td class="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
-                        <button type="button" onclick="saveWorkerAttendance('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-indigo-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Save</button>
-                        <button type="button" onclick="sendWhatsAppAttendance('${w.id}')" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button type="button" onclick="openDeleteWorkerModal('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-rose-50 text-rose-600 border border-rose-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                        <button type="button" onclick="saveWorkerAttendance('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
+                            Save
+                        </button>
+                        <button type="button" onclick="sendWhatsAppAttendance('${w.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="WhatsApp पर हाज़िरी भेजें">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </button>
+                        <button type="button" onclick="openDeleteWorkerModal('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="वर्कर हटाएं (Delete)">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
                     </td>
                 `;
                 attBody.appendChild(tr);
@@ -1641,51 +1795,92 @@
             document.getElementById('ca-stat-absent').innerText = absentCount;
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
 
+            // Render Workers Directory
             const wTable = document.getElementById('ca-workers-table');
             const wCards = document.getElementById('ca-workers-cards');
             wTable.innerHTML = '';
             if (wCards) wCards.innerHTML = '';
             const workerPortalUrl = `${getBaseUrl()}?portal=worker&company=${comp.id}`;
 
+            if (tenantWorkers.length === 0 && wCards) {
+                wCards.innerHTML = `<div class="py-6 text-center text-slate-400 text-xs">इस कंपनी में अभी कोई वर्कर नहीं है।</div>`;
+            }
+
             tenantWorkers.forEach(w => {
                 const shareMsg = `WorkTrack Login (${comp.name})\nLink: ${workerPortalUrl}\nWorker ID: ${w.id}\nPassword: ${w.password}`;
+                
                 wTable.innerHTML += `
-                    <tr>
-                        <td class="py-3.5 px-5"><div class="flex items-center gap-3"><img src="${w.photo}" class="w-10 h-10 rounded-full"><strong>${w.name}</strong></div></td>
-                        <td class="py-3.5 px-5 font-mono text-xs">${w.id} | Pass: <strong>${w.password}</strong></td>
-                        <td class="py-3.5 px-5 text-xs">${w.dept} (₹${w.dailyRate || 500}/दिन)</td>
-                        <td class="py-3.5 px-5 font-mono text-xs">${w.phone}</td>
-                        <td class="py-3.5 px-5 text-right space-x-1">
-                            <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} Login")' class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg font-semibold">Copy</button>
-                            <button type="button" onclick="openDeleteWorkerModal('${w.id}')" class="text-xs bg-rose-50 text-rose-600 px-2.5 py-1.5 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3.5 px-5">
+                            <div class="flex items-center gap-3">
+                                <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                <span class="font-bold text-slate-800 whitespace-nowrap">${w.name}</span>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-5 whitespace-nowrap">
+                            <div class="inline-flex items-center gap-2 bg-slate-50 border border-slate-200/80 px-2.5 py-1 rounded-lg">
+                                <span class="font-mono font-bold text-indigo-700 text-xs">${w.id}</span>
+                                <span class="text-slate-300">|</span>
+                                <span class="text-xs text-slate-600 font-mono">Pass: <strong>${w.password}</strong></span>
+                            </div>
+                        </td>
+                        <td class="py-3.5 px-5 text-slate-700 font-medium whitespace-nowrap">
+                            <div>${w.dept}</div>
+                            <div class="text-[11px] text-slate-400">₹${w.dailyRate || 500}/दिन • OT ₹${w.otRate || 75}/hr</div>
+                        </td>
+                        <td class="py-3.5 px-5 text-slate-600 font-mono text-xs whitespace-nowrap">${w.phone}</td>
+                        <td class="py-3.5 px-5 text-right whitespace-nowrap space-x-1.5">
+                            <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} की Login डिटेल्स")' class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1.5">
+                                <i class="fa-regular fa-copy"></i> Copy Login
+                            </button>
+                            <button type="button" onclick="openDeleteWorkerModal('${w.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold px-2.5 py-1.5 rounded-lg transition inline-flex items-center gap-1" title="वर्कर हटाएं">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
+
                 if (wCards) {
                     wCards.innerHTML += `
-                        <div class="bg-white rounded-2xl border border-slate-200 p-3.5 shadow-sm">
-                            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                                <div class="font-bold text-sm">${w.name} <span class="text-xs font-normal text-slate-400">(${w.dept})</span></div>
-                                <div class="flex gap-1">
-                                    <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} Login")' class="text-[11px] bg-indigo-600 text-white px-2.5 py-1 rounded-lg">Copy</button>
-                                    <button type="button" onclick="openDeleteWorkerModal('${w.id}')" class="text-[11px] bg-rose-50 text-rose-600 px-2 py-1 rounded-lg"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-sm">
+                            <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                    <div class="min-w-0">
+                                        <div class="font-bold text-slate-900 text-sm truncate">${w.name}</div>
+                                        <div class="text-[11px] text-slate-500 truncate">${w.dept} • ₹${w.dailyRate || 500}/दिन</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} की Login डिटेल्स")' class="text-[11px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-2.5 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
+                                        <i class="fa-regular fa-copy"></i> Copy
+                                    </button>
+                                    <button type="button" onclick="openDeleteWorkerModal('${w.id}')" class="text-[11px] bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold px-2.5 py-1.5 rounded-xl transition flex items-center justify-center" title="Delete">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
                                 </div>
                             </div>
-                            <div class="pt-2 text-xs font-mono text-slate-600 flex justify-between">
-                                <span>ID: <strong>${w.id}</strong> | Pass: <strong>${w.password}</strong></span>
-                                <span>${w.phone}</span>
+                            <div class="flex items-center justify-between gap-2 pt-2.5 text-xs">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 font-mono font-bold px-2 py-0.5 rounded-md whitespace-nowrap">${w.id}</span>
+                                    <span class="bg-slate-100 text-slate-700 font-mono px-2 py-0.5 rounded-md whitespace-nowrap">Pass: <strong>${w.password}</strong></span>
+                                </div>
+                                <span class="text-slate-500 font-mono text-[11px] whitespace-nowrap"><i class="fa-solid fa-phone text-[10px] mr-1 text-slate-400"></i>${w.phone}</span>
                             </div>
                         </div>
                     `;
                 }
             });
 
+            // Render Payroll & Advance Tab
             const isFullPlan = PLANS[comp.plan] && PLANS[comp.plan].allFeatures;
             document.getElementById('payroll-plan-lock').classList.toggle('hidden', isFullPlan);
             document.getElementById('payroll-main-area').classList.toggle('hidden', !isFullPlan);
 
             const advSelect = document.getElementById('adv-worker-select');
-            if (advSelect) advSelect.innerHTML = tenantWorkers.map(w => `<option value="${w.id}">${w.name} (${w.id})</option>`).join('');
+            if (advSelect) {
+                advSelect.innerHTML = tenantWorkers.map(w => `<option value="${w.id}">${w.name} (${w.id})</option>`).join('');
+            }
 
             const payrollTable = document.getElementById('ca-payroll-table');
             const payrollCards = document.getElementById('ca-payroll-cards');
@@ -1693,10 +1888,17 @@
             if (payrollTable && isFullPlan) {
                 payrollTable.innerHTML = '';
                 if (payrollCards) payrollCards.innerHTML = '';
+
+                if (tenantWorkers.length === 0 && payrollCards) {
+                    payrollCards.innerHTML = `<div class="py-6 text-center text-slate-400 text-xs">इस कंपनी में अभी कोई वर्कर नहीं है।</div>`;
+                }
+
                 tenantWorkers.forEach(w => {
                     const dailyRate = parseFloat(w.dailyRate || 500);
                     const otRate = parseFloat(w.otRate || 75);
-                    let mPresent = 0, mOt = 0;
+                    let mPresent = 0;
+                    let mOt = 0;
+
                     Object.keys(db.attendance).forEach(k => {
                         const rec = db.attendance[k];
                         if (rec.companyId === activeCompanyId && rec.workerId === w.id && rec.date.startsWith(selectedMonth)) {
@@ -1705,31 +1907,77 @@
                             mOt += parseFloat(rec.ot || 0);
                         }
                     });
-                    const mAdvance = db.advances.filter(a => a.companyId === activeCompanyId && a.workerId === w.id && a.date.startsWith(selectedMonth)).reduce((s, a) => s + parseFloat(a.amount || 0), 0);
+
+                    const mAdvance = db.advances
+                        .filter(a => a.companyId === activeCompanyId && a.workerId === w.id && a.date.startsWith(selectedMonth))
+                        .reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+
                     const grossPay = Math.round((mPresent * dailyRate) + (mOt * otRate));
                     const netPay = grossPay - mAdvance;
-                    const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nहाज़िरी: ${mPresent} दिन | OT: ${mOt} hrs\nकुल कमाई: ₹${grossPay}\nएडवांस कटौती: -₹${mAdvance}\n*नेट देय सैलरी: ₹${netPay}*`;
+                    const netBadgeClass = netPay < 0 ? 'text-rose-600 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
+                    const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nकुल हाज़िरी: ${mPresent} दिन (₹${dailyRate}/दिन)\nकुल OT: ${mOt} घंटे (₹${otRate}/hr)\nकुल कमाई: ₹${grossPay}\nएडवांस/खर्ची कटौती: -₹${mAdvance}\n*नेट देय सैलरी: ₹${netPay}*`;
 
                     payrollTable.innerHTML += `
-                        <tr>
-                            <td class="py-3.5 px-5 font-bold">${w.name}</td>
-                            <td class="py-3.5 px-5 text-xs">${mPresent} दिन • ${mOt} hrs</td>
-                            <td class="py-3.5 px-5 text-xs font-bold">₹${grossPay}</td>
-                            <td class="py-3.5 px-5 text-xs font-bold text-rose-600">- ₹${mAdvance}</td>
-                            <td class="py-3.5 px-5 text-xs font-extrabold text-emerald-700">₹${netPay}</td>
-                            <td class="py-3.5 px-5 text-right"><a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" class="bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg">Slip भेजें</a></td>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-3.5 px-5 whitespace-nowrap">
+                                <div class="flex items-center gap-3">
+                                    <img src="${w.photo}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0">
+                                    <div>
+                                        <div class="font-bold text-slate-800">${w.name}</div>
+                                        <div class="text-[11px] text-slate-400">₹${dailyRate}/दिन • OT ₹${otRate}/hr</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-3.5 px-5 text-xs font-semibold text-slate-700 whitespace-nowrap">${mPresent} दिन • ${mOt} hrs</td>
+                            <td class="py-3.5 px-5 text-xs font-bold text-slate-800 whitespace-nowrap">₹${grossPay.toLocaleString('en-IN')}</td>
+                            <td class="py-3.5 px-5 text-xs font-bold text-rose-600 whitespace-nowrap">- ₹${mAdvance.toLocaleString('en-IN')}</td>
+                            <td class="py-3.5 px-5 whitespace-nowrap">
+                                <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${netBadgeClass}">₹${netPay.toLocaleString('en-IN')}</span>
+                            </td>
+                            <td class="py-3.5 px-5 text-right whitespace-nowrap">
+                                <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
+                                    <i class="fa-brands fa-whatsapp"></i> Slip भेजें
+                                </a>
+                            </td>
                         </tr>
                     `;
+
                     if (payrollCards) {
                         payrollCards.innerHTML += `
-                            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
-                                <div class="flex justify-between items-center pb-2 border-b border-slate-100">
-                                    <strong>${w.name}</strong>
-                                    <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-xl font-semibold">WhatsApp Slip</a>
+                            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
+                                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                                    <div class="flex items-center gap-2.5 min-w-0">
+                                        <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
+                                        <div class="min-w-0">
+                                            <div class="font-bold text-slate-900 text-sm truncate">${w.name}</div>
+                                            <div class="text-[11px] text-slate-500">₹${dailyRate}/दिन • OT ₹${otRate}/hr</div>
+                                        </div>
+                                    </div>
+                                    <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" class="shrink-0 inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-sm transition">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i> Slip
+                                    </a>
                                 </div>
-                                <div class="pt-2 text-xs flex justify-between">
-                                    <span>कमाई: ₹${grossPay} | खर्ची: -₹${mAdvance}</span>
-                                    <strong class="text-emerald-700">नेट: ₹${netPay}</strong>
+
+                                <div class="grid grid-cols-3 gap-2 py-3 text-center">
+                                    <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
+                                        <span class="text-[10px] font-semibold text-slate-400 block">हाज़िरी / OT</span>
+                                        <span class="text-xs font-bold text-slate-800 mt-0.5 block">${mPresent} दिन • ${mOt}h</span>
+                                    </div>
+                                    <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
+                                        <span class="text-[10px] font-semibold text-slate-400 block">कुल कमाई</span>
+                                        <span class="text-xs font-bold text-slate-800 mt-0.5 block">₹${grossPay.toLocaleString('en-IN')}</span>
+                                    </div>
+                                    <div class="bg-rose-50/70 rounded-xl p-2 border border-rose-100">
+                                        <span class="text-[10px] font-semibold text-rose-500 block">एडवांस</span>
+                                        <span class="text-xs font-bold text-rose-600 mt-0.5 block">- ₹${mAdvance.toLocaleString('en-IN')}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-2.5 border-t border-slate-100">
+                                    <span class="text-xs font-semibold text-slate-500">नेट देय सैलरी (${selectedMonth}):</span>
+                                    <span class="px-3 py-1 rounded-xl border text-sm font-extrabold ${netBadgeClass}">
+                                        ₹${netPay.toLocaleString('en-IN')}
+                                    </span>
                                 </div>
                             </div>
                         `;
@@ -1739,46 +1987,85 @@
 
             const auditContainer = document.getElementById('ca-audit-list');
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
-            auditContainer.innerHTML = compLogs.length ? compLogs.map(l => `<div class="p-3 rounded-xl bg-slate-50 border text-xs"><strong>${l.text}</strong><div class="text-[10px] text-slate-400 mt-0.5">${l.time}</div></div>`).join('') : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
+            auditContainer.innerHTML = compLogs.length ? '' : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
+            compLogs.forEach(log => {
+                auditContainer.innerHTML += `
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                        <i class="fa-solid fa-shield-check text-indigo-600 mt-0.5"></i>
+                        <div class="flex-1">
+                            <p class="text-slate-800 font-medium">${log.text}</p>
+                            <span class="text-[11px] text-slate-400">${log.time}</span>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
         function toggleSelectAllWorkers(checked) {
-            document.querySelectorAll('.ca-worker-checkbox').forEach(cb => { if (!cb.disabled) cb.checked = checked; });
+            document.querySelectorAll('.ca-worker-checkbox').forEach(cb => {
+                if (!cb.disabled) cb.checked = checked;
+            });
         }
 
         async function saveWorkerAttendance(workerId) {
             const selectedDate = document.getElementById('ca-date-picker').value || today;
             const status = document.getElementById(`att-status-${workerId}`).value;
             const ot = parseFloat(document.getElementById(`att-ot-${workerId}`).value) || 0;
+
             const recordKey = `${activeCompanyId}_${workerId}_${selectedDate}`;
             const worker = db.workers.find(w => w.id === workerId);
+            const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
             const attData = { companyId: activeCompanyId, workerId, date: selectedDate, status, ot };
-            const logData = { companyId: activeCompanyId, time: `${selectedDate}`, text: `Admin ने ${worker.name} का रिकॉर्ड अपडेट किया: ${status}, OT: ${ot}h`, createdAt: Date.now() };
+            const logData = {
+                companyId: activeCompanyId,
+                time: `${selectedDate} (${nowTime})`,
+                text: `Admin ने ${worker.name} (${worker.id}) का रिकॉर्ड अपडेट किया: Status = ${status}, OT = ${ot} hrs`,
+                createdAt: Date.now()
+            };
+
             try {
                 if (firestore) {
                     await firestore.collection('wt_attendance').doc(recordKey).set(attData);
                     await firestore.collection('wt_audit_logs').add(logData);
                 } else {
                     db.attendance[recordKey] = attData;
+                    db.auditLogs.unshift(logData);
                 }
-                showToast(`${worker.name} की हाज़िरी सेव हो गई!`);
+                showToast(`${worker.name} की हाज़िरी और OT लाइव सेव हो गई!`);
             } catch (err) {
+                console.error(err);
                 showToast('हाज़िरी सेव करने में समस्या आई!', true);
             }
         }
 
         function openAddWorkerModal() {
             const comp = db.companies.find(c => c.id === activeCompanyId);
-            if (!comp || comp.status === 'Suspended') return;
+            if (!comp) return;
+            if (comp.status === 'Suspended') {
+                showToast('कंपनी Suspended है! नया वर्कर नहीं जोड़ सकते।', true);
+                return;
+            }
+            const currentCount = db.workers.filter(w => w.companyId === activeCompanyId).length;
+            const limit = (PLANS[comp.plan] || PLANS['Growth']).limit;
+            if (currentCount >= limit) {
+                showToast(`आपके ${comp.plan} प्लान की सीमा (${limit} Workers) पूरी हो गई है! प्लान अपग्रेड करें।`, true);
+                return;
+            }
             const phoneInput = document.getElementById('new-w-phone');
-            if (phoneInput) { phoneInput.value = ''; enforceTenDigitPhone(phoneInput); }
+            if (phoneInput) {
+                phoneInput.value = '';
+                enforceTenDigitPhone(phoneInput);
+            }
             autoGenerateWorkerCreds();
             openModal('modal-add-worker');
         }
 
         function autoGenerateWorkerCreds() {
-            document.getElementById('new-w-id').value = `W-${100 + db.workers.length + 1}`;
-            document.getElementById('new-w-pass').value = `${Math.floor(1000 + Math.random() * 9000)}`;
+            const nextNum = 100 + db.workers.length + 1;
+            const randomPin = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('new-w-id').value = `W-${nextNum}`;
+            document.getElementById('new-w-pass').value = `${randomPin}`;
         }
 
         async function handleAddWorker(e) {
@@ -1792,43 +2079,90 @@
             const newWorkerPass = document.getElementById('new-w-pass').value.trim();
 
             if (!/^\d{10}$/.test(phone)) {
-                showToast('कृपया 10 अंकों का मोबाइल नंबर डालें!', true);
+                showToast('कृपया ठीक 10 अंकों का सही मोबाइल नंबर डालें!', true);
+                document.getElementById('new-w-phone').focus();
                 return;
             }
+
+            if (db.workers.some(w => w.id.toUpperCase() === newWorkerId)) {
+                showToast(`Worker ID "${newWorkerId}" पहले से मौजूद है! कृपया दूसरा ID चुनें।`, true);
+                return;
+            }
+
+            const initials = name.substring(0, 2).toUpperCase();
             const workerObj = {
-                id: newWorkerId, companyId: activeCompanyId, name, dept, phone, dailyRate, otRate,
-                password: newWorkerPass, photo: `https://placehold.co/100x100/4f46e5/ffffff?text=${name.substring(0,2).toUpperCase()}`
+                id: newWorkerId,
+                companyId: activeCompanyId,
+                name, dept, role: '', phone, dailyRate, otRate,
+                password: newWorkerPass,
+                photo: `https://placehold.co/100x100/4f46e5/ffffff?text=${initials}`
             };
+
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `नया वर्कर जोड़ा गया: ${name} (ID: ${newWorkerId})`,
+                createdAt: Date.now()
+            };
+
             try {
-                if (firestore) await firestore.collection('wt_workers').doc(newWorkerId).set(workerObj);
-                else db.workers.push(workerObj);
+                if (firestore) {
+                    await firestore.collection('wt_workers').doc(newWorkerId).set(workerObj);
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.workers.push(workerObj);
+                    db.auditLogs.unshift(logObj);
+                }
                 e.target.reset();
+                enforceTenDigitPhone(document.getElementById('new-w-phone'));
                 closeModal('modal-add-worker');
-                showToast(`वर्कर ${name} सेव हो गया!`);
+                showToast(`वर्कर ${name} लाइव सेव हो गया! ID: ${newWorkerId}, Pass: ${newWorkerPass}`);
             } catch (err) {
+                console.error(err);
                 showToast('वर्कर सेव करने में त्रुटि!', true);
             }
         }
 
         function openDeleteWorkerModal(workerId) {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (comp && comp.status === 'Suspended') {
+                showToast('कंपनी Suspended है! वर्कर नहीं हटा सकते।', true);
+                return;
+            }
             const worker = db.workers.find(w => w.id === workerId);
             if (!worker) return;
             workerIdToDelete = workerId;
-            document.getElementById('del-worker-desc').innerHTML = `क्या आप वाकई <strong>${worker.name}</strong> (${worker.id}) को हटाना चाहते हैं?`;
+            document.getElementById('del-worker-desc').innerHTML = `क्या आप वाकई <strong>${worker.name}</strong> (<span class="font-mono font-bold text-slate-700">${worker.id}</span>) को हटाना चाहते हैं? इसके बाद यह वर्कर लॉगिन नहीं कर पाएगा।`;
             openModal('modal-delete-worker');
         }
 
         async function confirmDeleteWorker() {
             if (!workerIdToDelete) return;
+            const worker = db.workers.find(w => w.id === workerIdToDelete);
+            const wName = worker ? worker.name : workerIdToDelete;
             const wId = workerIdToDelete;
+
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `Admin ने वर्कर को हटाया (Deleted): ${wName} (ID: ${wId})`,
+                createdAt: Date.now()
+            };
+
             try {
-                if (firestore) await firestore.collection('wt_workers').doc(wId).delete();
-                else db.workers = db.workers.filter(w => w.id !== wId);
+                if (firestore) {
+                    await firestore.collection('wt_workers').doc(wId).delete();
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.workers = db.workers.filter(w => w.id !== wId);
+                    db.auditLogs.unshift(logObj);
+                }
                 workerIdToDelete = null;
                 closeModal('modal-delete-worker');
-                showToast('वर्कर हटा दिया गया है!');
+                showToast(`वर्कर ${wName} (${wId}) को सफलतापूर्वक हटा दिया गया है!`);
             } catch (err) {
-                showToast('त्रुटि हुई!', true);
+                console.error(err);
+                showToast('वर्कर हटाने में त्रुटि!', true);
             }
         }
 
@@ -1836,44 +2170,81 @@
             const comp = db.companies.find(c => c.id === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
+
             let csv = 'Company,Date,Worker ID,Name,Department,Status,OT Hours\n';
             tenantWorkers.forEach(w => {
                 const rec = db.attendance[`${activeCompanyId}_${w.id}_${selectedDate}`] || { status: 'Not Marked', ot: 0 };
                 csv += `"${comp.name}","${selectedDate}","${w.id}","${w.name}","${w.dept}","${rec.status}","${rec.ot}"\n`;
             });
+
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `WorkTrack_${comp.id}_${selectedDate}.csv`;
+            a.href = url;
+            a.download = `WorkTrack_Report_${comp.id}_${selectedDate}.csv`;
             a.click();
-            showToast('CSV रिपोर्ट डाउनलोड हो गई!');
+            showToast('Excel/CSV रिपोर्ट डाउनलोड हो गई!');
         }
 
         async function markAllPresent() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (!comp || comp.status === 'Suspended') return;
+            if (!PLANS[comp.plan].allFeatures) {
+                showToast('Bulk Attendance केवल Growth (₹999) और Business (₹1,999) प्लान में उपलब्ध है!', true);
+                return;
+            }
             const checkedBoxes = Array.from(document.querySelectorAll('.ca-worker-checkbox:checked'));
             if (checkedBoxes.length === 0) {
-                showToast('पहले वर्कर्स को चुनें!', true);
+                showToast('कृपया पहले बाईं तरफ बॉक्स (☑️) में उन वर्कर्स को चुनें जिन्हें Present करना है!', true);
                 return;
             }
             const selectedDate = document.getElementById('ca-date-picker').value || today;
+            const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const selectedNames = [];
+
             for (const cb of checkedBoxes) {
                 const wId = cb.value;
+                const worker = db.workers.find(w => w.id === wId);
+                if (worker) selectedNames.push(`${worker.name} (${wId})`);
+
                 const recordKey = `${activeCompanyId}_${wId}_${selectedDate}`;
-                const attData = { companyId: activeCompanyId, workerId: wId, date: selectedDate, status: 'Present', ot: 0 };
+                const existing = db.attendance[recordKey] || { ot: 0 };
+                const attData = { companyId: activeCompanyId, workerId: wId, date: selectedDate, status: 'Present', ot: existing.ot || 0 };
                 db.attendance[recordKey] = attData;
-                if (firestore) await firestore.collection('wt_attendance').doc(recordKey).set(attData);
+
+                if (firestore) {
+                    await firestore.collection('wt_attendance').doc(recordKey).set(attData);
+                }
             }
+
+            const logData = {
+                companyId: activeCompanyId,
+                time: `${selectedDate} (${nowTime})`,
+                text: `Admin ने चुने हुए ${checkedBoxes.length} वर्कर्स को Present मार्क किया: ${selectedNames.join(', ')}`,
+                createdAt: Date.now()
+            };
+
+            if (firestore) {
+                await firestore.collection('wt_audit_logs').add(logData);
+            } else {
+                db.auditLogs.unshift(logData);
+            }
+
             renderCompanyAdmin();
-            showToast(`${checkedBoxes.length} वर्कर्स Present हो गए!`);
+            showToast(`चुने गए ${checkedBoxes.length} वर्कर्स की हाज़िरी Present सेव हो गई!`);
         }
 
         function sendWhatsAppAttendance(workerId) {
             const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (!PLANS[comp.plan].allFeatures) {
+                showToast('WhatsApp शेयर फीचर Growth (₹999) और Business (₹1,999) प्लान में उपलब्ध है!', true);
+                return;
+            }
             const w = db.workers.find(x => x.id === workerId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
             const status = document.getElementById(`att-status-${workerId}`).value;
             const ot = document.getElementById(`att-ot-${workerId}`).value || 0;
-            const msg = `नमस्ते ${w.name} (${w.id}),\n*${comp.name}* में आपकी ${selectedDate} की हाज़िरी:\n• Status: *${status}*\n• OT: *${ot} घंटे*`;
+            const msg = `नमस्ते ${w.name} (${w.id}),\n*${comp.name}* में आपकी तारीख ${selectedDate} की हाज़िरी दर्ज हुई है:\n• Status: *${status}*\n• Overtime: *${ot} घंटे*`;
             window.open(`https://wa.me/91${w.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
@@ -1883,31 +2254,53 @@
             const amount = parseFloat(document.getElementById('adv-amount').value) || 0;
             const date = document.getElementById('adv-date').value || today;
             const note = document.getElementById('adv-note').value.trim();
+            const w = db.workers.find(x => x.id === workerId);
+
             const advObj = { companyId: activeCompanyId, workerId, amount, date, note, createdAt: Date.now() };
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${date} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `${w.name} (${w.id}) को ₹${amount} एडवांस (खर्ची) दिया गया${note ? ` (${note})` : ''}`,
+                createdAt: Date.now()
+            };
+
             try {
-                if (firestore) await firestore.collection('wt_advances').add(advObj);
-                else db.advances.push(advObj);
+                if (firestore) {
+                    await firestore.collection('wt_advances').add(advObj);
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.advances.push(advObj);
+                    db.auditLogs.unshift(logObj);
+                }
                 e.target.reset();
+                document.getElementById('adv-date').value = today;
                 closeModal('modal-add-advance');
-                showToast(`₹${amount} एडवांस दर्ज हो गया!`);
+                showToast(`${w.name} के खाते में ₹${amount} एडवांस दर्ज हो गया!`);
             } catch (err) {
-                showToast('त्रुटि हुई!', true);
+                showToast('एडवांस सेव करने में त्रुटि!', true);
             }
         }
 
-        // WORKER PANEL
+        // ==========================================
+        // WORKER PANEL LOGIC
+        // ==========================================
         function handleWorkerLogin(e) {
             e.preventDefault();
             const idInput = document.getElementById('w-login-id').value.trim().toUpperCase();
             const passInput = document.getElementById('w-login-pass').value.trim();
-            let worker = (sharedPortalMode && sharedPortalMode.role === 'worker')
-                ? db.workers.find(w => w.companyId === sharedPortalMode.companyId && w.id.toUpperCase() === idInput && w.password === passInput)
-                : db.workers.find(w => w.id.toUpperCase() === idInput && w.password === passInput);
+
+            let worker;
+            if (sharedPortalMode && sharedPortalMode.role === 'worker') {
+                worker = db.workers.find(w => w.companyId === sharedPortalMode.companyId && w.id.toUpperCase() === idInput && w.password === passInput);
+            } else {
+                worker = db.workers.find(w => w.id.toUpperCase() === idInput && w.password === passInput);
+            }
 
             if (!worker) {
-                showToast('गलत Worker ID या Password!', true);
+                showToast('गलत Worker ID या Password (या आप गलत कंपनी के लिंक पर हैं)!', true);
                 return;
             }
+
             loggedInWorkerId = worker.id;
             document.getElementById('worker-login-box').classList.add('hidden');
             document.getElementById('worker-dashboard-box').classList.remove('hidden');
@@ -1925,40 +2318,87 @@
         function renderWorkerDashboard() {
             const worker = db.workers.find(w => w.id === loggedInWorkerId);
             if (!worker) return;
+
             const comp = db.companies.find(c => c.id === worker.companyId);
 
             document.getElementById('wd-photo').src = worker.photo;
             document.getElementById('wd-company').innerText = comp ? comp.name : 'WorkTrack';
             document.getElementById('wd-name').innerText = worker.name;
-            document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.dept}`;
+            document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.dept}${worker.role ? ` (${worker.role})` : ''}`;
             document.getElementById('wd-phone').innerText = worker.phone;
 
             const historyContainer = document.getElementById('wd-history-list');
             historyContainer.innerHTML = '';
-            let totalPresent = 0, totalAbsent = 0, totalOt = 0;
+
+            let totalPresent = 0;
+            let totalAbsent = 0;
+            let totalOt = 0;
 
             const prefix = `${worker.companyId}_${worker.id}_`;
-            const records = Object.keys(db.attendance).filter(k => k.startsWith(prefix)).map(k => ({ date: k.replace(prefix, ''), ...db.attendance[k] })).sort((a, b) => b.date.localeCompare(a.date));
+            const records = Object.keys(db.attendance)
+                .filter(k => k.startsWith(prefix))
+                .map(k => ({ date: k.replace(prefix, ''), ...db.attendance[k] }))
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            if (records.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">अभी तक कोई रिकॉर्ड दर्ज नहीं है।</p>`;
+            }
 
             records.forEach(rec => {
                 if (rec.status === 'Present') totalPresent += 1;
                 if (rec.status === 'Half Day') totalPresent += 0.5;
                 if (rec.status === 'Absent' || rec.status === 'Leave') totalAbsent += 1;
                 totalOt += parseFloat(rec.ot || 0);
-                historyContainer.innerHTML += `<div class="flex justify-between p-3 rounded-xl border bg-slate-50 text-xs"><div><strong>${rec.date}</strong> • OT: ${rec.ot}h</div><span class="font-bold">${rec.status}</span></div>`;
+
+                let badgeClass = 'bg-slate-100 text-slate-600';
+                if (rec.status === 'Present') badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+                if (rec.status === 'Half Day') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
+                if (rec.status === 'Absent' || rec.status === 'Leave') badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200';
+
+                historyContainer.innerHTML += `
+                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50/60">
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">${rec.date}</div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">OT: <strong class="text-slate-700">${rec.ot} घंटे</strong></div>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${badgeClass}">
+                            ${rec.status}
+                        </span>
+                    </div>
+                `;
             });
 
             document.getElementById('wd-stat-present').innerText = totalPresent;
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
-            const workerAdvances = db.advances.filter(a => a.companyId === worker.companyId && a.workerId === worker.id);
-            const totalAdvance = workerAdvances.reduce((s, a) => s + parseFloat(a.amount || 0), 0);
-            document.getElementById('wd-stat-advance').innerText = `₹${totalAdvance.toLocaleString('en-IN')}`;
-            document.getElementById('wd-advance-list').innerHTML = workerAdvances.length
-                ? workerAdvances.map(a => `<div class="flex justify-between p-2.5 rounded-xl bg-rose-50 text-xs"><span>${a.date} (${a.note || 'खर्ची'})</span><strong class="text-rose-600">₹${a.amount}</strong></div>`).join('')
-                : '<p class="text-xs text-slate-400 text-center">कोई एडवांस दर्ज नहीं है।</p>';
+            const workerAdvances = db.advances
+                .filter(a => a.companyId === worker.companyId && a.workerId === worker.id)
+                .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+            const totalAdvance = workerAdvances.reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+            const advStatEl = document.getElementById('wd-stat-advance');
+            if (advStatEl) advStatEl.innerText = `₹${totalAdvance.toLocaleString('en-IN')}`;
+
+            const advListEl = document.getElementById('wd-advance-list');
+            if (advListEl) {
+                if (workerAdvances.length === 0) {
+                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">कोई एडवांस / खर्ची दर्ज नहीं है।</p>`;
+                } else {
+                    advListEl.innerHTML = workerAdvances.map(a => `
+                        <div class="flex items-center justify-between p-2.5 rounded-xl border border-rose-100 bg-rose-50/40">
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">${a.date}</div>
+                                <div class="text-[11px] text-slate-500">${a.note || 'एडवांस / खर्ची'}</div>
+                            </div>
+                            <span class="text-xs font-extrabold text-rose-600 bg-white px-2.5 py-1 rounded-lg border border-rose-200">
+                                ₹${parseFloat(a.amount || 0).toLocaleString('en-IN')}
+                            </span>
+                        </div>
+                    `).join('');
+                }
+            }
         }
     </script>
 </body>
-                    </html>
+                            </html>
