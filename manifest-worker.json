@@ -1,0 +1,25 @@
+{
+"name": "WorkTrack Worker",
+"short_name": "WT Worker",
+"description": "WorkTrack Employee Attendance & Overtime App",
+"start_url": "/?app=worker",
+"scope": "/",
+"display": "standalone",
+"orientation": "portrait",
+"background_color": "#059669",
+"theme_color": "#059669",
+"icons": [
+{
+"src": "icon-worker.png",
+"sizes": "192x192",
+"type": "image/png",
+"purpose": "any maskable"
+},
+{
+"src": "icon-worker.png",
+"sizes": "512x512",
+"type": "image/png",
+"purpose": "any maskable"
+}
+]
+}
