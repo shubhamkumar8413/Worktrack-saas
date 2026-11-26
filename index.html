@@ -36,7 +36,7 @@
         })();
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Firebase Compat SDKs (App + Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -60,35 +60,48 @@
 </head>
 <body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800 min-h-screen flex flex-col">
 
-    <!-- Clean Minimalist Mobile App Top Header -->
-    <header id="demo-top-bar" class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
-            <!-- App Brand Icon & Portal Title -->
-            <div class="flex items-center gap-2.5 min-w-0">
-                <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.src='icon-admin.png'" class="w-8 h-8 rounded-xl object-cover shadow-xs border border-slate-200 shrink-0">
+    <!-- Premium Rich Branded App Top Header -->
+    <header id="demo-top-bar" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2.5">
+            <!-- Left: App Brand Icon, Name & Live Status Pill -->
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="relative shrink-0">
+                    <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.src='icon-admin.png'" class="w-10 h-10 rounded-xl object-cover shadow-md ring-2 ring-white/20">
+                    <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-slate-900" title="Cloud Sync Active"></span>
+                </div>
                 <div class="truncate">
-                    <span id="header-brand-title" class="font-extrabold text-sm text-slate-900 tracking-tight block truncate">WorkTrack</span>
-                    <span id="header-portal-subtitle" class="text-[10px] text-slate-400 font-medium block truncate">Attendance & Payroll App</span>
+                    <div class="flex items-center gap-1.5">
+                        <span id="header-brand-title" class="font-extrabold text-sm sm:text-base text-white tracking-tight truncate">WorkTrack</span>
+                        <span id="header-role-pill" class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 border border-indigo-400/30 shrink-0">PRO</span>
+                    </div>
+                    <span id="header-portal-subtitle" class="text-[11px] text-slate-300/90 font-medium block truncate">Attendance & Payroll App</span>
                 </div>
             </div>
 
-            <!-- Right Controls: Quick Portal Switch + Language -->
+            <!-- Right Controls: Quick Portal Switch + Support + Language -->
             <div class="flex items-center gap-2 shrink-0">
-                <div id="portal-quick-tabs" class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80">
-                    <button type="button" onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition flex items-center gap-1 bg-white text-indigo-600 shadow-xs">
+                <div id="portal-quick-tabs" class="flex items-center bg-white/10 backdrop-blur-sm p-0.5 rounded-xl border border-white/15">
+                    <button type="button" onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-xs">
                         <span data-i18n="role_company">Company Admin</span>
                     </button>
-                    <button type="button" onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 text-slate-600 hover:text-slate-900">
+                    <button type="button" onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-2.5 py-1.5 rounded-lg text-[11px] font-semibold transition flex items-center gap-1 text-slate-200 hover:text-white">
                         <span data-i18n="role_worker">Worker</span>
                     </button>
                 </div>
 
+                <!-- 24x7 Support Quick Help Icon (Fills empty space usefully in dedicated apps) -->
+                <a id="header-support-btn" href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="hidden items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 rounded-xl px-2.5 py-1.5 text-[11px] font-semibold transition" title="WhatsApp Support">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span class="hidden xs:inline">Help</span>
+                </a>
+
                 <!-- Language Switcher -->
-                <div class="flex items-center bg-slate-100 border border-slate-200/80 rounded-xl px-2 py-1">
-                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-transparent text-slate-700 text-[11px] font-bold focus:outline-none cursor-pointer">
-                        <option value="hi">हिंदी</option>
-                        <option value="en">EN</option>
-                        <option value="gu">ગુજરાતી</option>
+                <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl px-2.5 py-1.5">
+                    <i class="fa-solid fa-globe text-indigo-300 text-xs mr-1.5"></i>
+                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-transparent text-white text-[11px] font-bold focus:outline-none cursor-pointer">
+                        <option value="hi" class="text-slate-900">हिंदी</option>
+                        <option value="en" class="text-slate-900">EN</option>
+                        <option value="gu" class="text-slate-900">ગુજરાતી</option>
                     </select>
                 </div>
             </div>
@@ -128,7 +141,7 @@
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
         <!-- Super Admin Password Lock Screen -->
-        <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-6">
+        <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
                 <span class="inline-block bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full mb-2">
@@ -1257,34 +1270,56 @@
 
             dedicatedAppMode = appMode;
             const quickTabs = document.getElementById('portal-quick-tabs');
+            const supportBtn = document.getElementById('header-support-btn');
+            const headerBar = document.getElementById('demo-top-bar');
             const headerIcon = document.getElementById('header-brand-icon');
             const headerTitle = document.getElementById('header-brand-title');
             const headerSub = document.getElementById('header-portal-subtitle');
+            const rolePill = document.getElementById('header-role-pill');
             const footerSep = document.getElementById('footer-owner-sep');
             const footerOwnerBtn = document.getElementById('footer-owner-btn');
 
             if (quickTabs) quickTabs.classList.add('hidden');
+            if (supportBtn) {
+                supportBtn.classList.remove('hidden');
+                supportBtn.classList.add('inline-flex');
+            }
 
             if (appMode === 'owner') {
+                if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-amber-500/20';
                 if (headerIcon) headerIcon.src = 'icon-owner.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Owner';
                 if (headerSub) headerSub.innerText = 'SaaS Control Center';
+                if (rolePill) {
+                    rolePill.innerText = 'OWNER';
+                    rolePill.className = 'text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 shrink-0';
+                }
                 const backBtn = document.getElementById('sa-back-btn-box');
                 if (backBtn) backBtn.classList.add('hidden');
                 switchRole('super_admin');
                 return true;
             } else if (appMode === 'admin') {
+                if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-indigo-400/20';
                 if (headerIcon) headerIcon.src = 'icon-admin.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Admin';
                 if (headerSub) headerSub.innerText = 'Company Management Portal';
+                if (rolePill) {
+                    rolePill.innerText = 'ADMIN';
+                    rolePill.className = 'text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-400/20 text-indigo-200 border border-indigo-400/30 shrink-0';
+                }
                 if (footerSep) footerSep.classList.add('hidden');
                 if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
                 switchRole('company_admin');
                 return true;
             } else if (appMode === 'worker') {
+                if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-emerald-400/20';
                 if (headerIcon) headerIcon.src = 'icon-worker.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Worker';
                 if (headerSub) headerSub.innerText = 'Employee Attendance Portal';
+                if (rolePill) {
+                    rolePill.innerText = 'STAFF';
+                    rolePill.className = 'text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/30 shrink-0';
+                }
                 if (footerSep) footerSep.classList.add('hidden');
                 if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
                 switchRole('worker');
@@ -1454,12 +1489,12 @@
             const btnWorker = document.getElementById('btn-role-worker');
             if (btnCompany && btnWorker) {
                 [btnCompany, btnWorker].forEach(b => {
-                    b.classList.remove('bg-white', 'text-indigo-600', 'shadow-xs', 'font-bold');
-                    b.classList.add('text-slate-600', 'font-semibold');
+                    b.classList.remove('bg-white', 'text-indigo-950', 'shadow-xs', 'font-bold');
+                    b.classList.add('text-slate-200', 'font-semibold');
                 });
                 const activeBtn = role === 'worker' ? btnWorker : btnCompany;
-                activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-xs', 'font-bold');
-                activeBtn.classList.remove('text-slate-600', 'font-semibold');
+                activeBtn.classList.add('bg-white', 'text-indigo-950', 'shadow-xs', 'font-bold');
+                activeBtn.classList.remove('text-slate-200', 'font-semibold');
             }
 
             if (role === 'super_admin') renderSuperAdmin();
@@ -2400,4 +2435,4 @@
         }
     </script>
 </body>
-    </html>
+                                    </html>
