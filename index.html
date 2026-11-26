@@ -156,7 +156,7 @@
                                     <h3 class="font-extrabold text-sm text-white">WorkTrack Super Admin</h3>
                                 </div>
                             </div>
-                            <button onclick="showUiToast('नया Tenant जोड़ने का फॉर्म खुलेगा!')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow">
+                            <button onclick="openAppModal('app-modal-company')" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow transition">
                                 + कंपनी
                             </button>
                         </div>
@@ -166,81 +166,32 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block">मासिक सब्सक्रिप्शन आय (MRR)</span>
-                                    <span class="text-2xl font-extrabold text-amber-400">₹28,470</span>
+                                    <span id="sa-ui-mrr" class="text-2xl font-extrabold text-amber-400">₹2,998</span>
                                 </div>
                                 <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2.5 py-1 rounded-full">
-                                    <i class="fa-solid fa-arrow-trend-up mr-1"></i>+18% माह
+                                    <i class="fa-solid fa-arrow-trend-up mr-1"></i>Live Sync
                                 </span>
                             </div>
                             <div class="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-white/10 text-center">
                                 <div class="bg-black/30 rounded-xl p-2">
-                                    <span class="text-sm font-extrabold text-white block">18</span>
+                                    <span id="sa-ui-comp-count" class="text-sm font-extrabold text-white block">2</span>
                                     <span class="text-[10px] text-slate-400">कुल कंपनियाँ (Tenants)</span>
                                 </div>
                                 <div class="bg-black/30 rounded-xl p-2">
-                                    <span class="text-sm font-extrabold text-indigo-300 block">640</span>
+                                    <span id="sa-ui-worker-count" class="text-sm font-extrabold text-indigo-300 block">4</span>
                                     <span class="text-[10px] text-slate-400">कुल एक्टिव वर्कर्स</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Client Companies List -->
+                    <!-- Client Companies List (Dynamic) -->
                     <div class="p-4 space-y-3">
                         <div class="flex items-center justify-between">
                             <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">क्लाइंट कंपनियाँ व पोर्टल लिंक्स</h4>
-                            <span class="text-[10px] font-bold text-indigo-600">Live Sync</span>
+                            <span class="text-[10px] font-bold text-indigo-600">Interactive</span>
                         </div>
-
-                        <!-- Tenant 1 -->
-                        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
-                            <div class="flex items-center justify-between mb-2">
-                                <div>
-                                    <div class="font-bold text-slate-900 text-xs">Omkar Galvanized</div>
-                                    <div class="text-[10px] text-slate-400">Business Plan • ₹1,999/माह</div>
-                                </div>
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-2.5">
-                                <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 48%"></div>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <button onclick="showUiToast('Admin Link कॉपी हो गया!')" class="flex-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold py-1.5 rounded-xl">
-                                    <i class="fa-regular fa-copy mr-1"></i>Admin Link
-                                </button>
-                                <button onclick="showUiToast('Worker Link कॉपी हो गया!')" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold py-1.5 rounded-xl">
-                                    <i class="fa-regular fa-copy mr-1"></i>Worker Link
-                                </button>
-                                <button onclick="switchAppScreen('home')" class="bg-slate-900 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-xl">
-                                    खोलें
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Tenant 2 -->
-                        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
-                            <div class="flex items-center justify-between mb-2">
-                                <div>
-                                    <div class="font-bold text-slate-900 text-xs">Apex Construction Ltd</div>
-                                    <div class="text-[10px] text-slate-400">Growth Plan • ₹999/माह</div>
-                                </div>
-                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
-                            </div>
-                            <div class="w-full bg-slate-100 h-1.5 rounded-full mb-2.5">
-                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 72%"></div>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <button onclick="showUiToast('Admin Link कॉपी हो गया!')" class="flex-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold py-1.5 rounded-xl">
-                                    <i class="fa-regular fa-copy mr-1"></i>Admin Link
-                                </button>
-                                <button onclick="showUiToast('Worker Link कॉपी हो गया!')" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold py-1.5 rounded-xl">
-                                    <i class="fa-regular fa-copy mr-1"></i>Worker Link
-                                </button>
-                                <button onclick="switchAppScreen('home')" class="bg-slate-900 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-xl">
-                                    खोलें
-                                </button>
-                            </div>
-                        </div>
+                        <div id="sa-ui-tenants-list" class="space-y-3"></div>
                     </div>
                 </div>
 
@@ -252,15 +203,15 @@
                     <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white px-5 pt-4 pb-8 rounded-b-[32px] shadow-md">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 text-slate-950 font-extrabold text-lg flex items-center justify-center shadow">
+                                <div id="admin-ui-logo" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-400 to-teal-500 text-slate-950 font-extrabold text-lg flex items-center justify-center shadow">
                                     O
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-1.5">
-                                        <h3 class="font-bold text-sm text-white">Omkar Galvanized</h3>
+                                        <h3 id="admin-ui-comp-name" class="font-bold text-sm text-white">Omkar Galvanized</h3>
                                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                                     </div>
-                                    <span class="text-[10px] text-indigo-200 font-medium">Business Plan • Active</span>
+                                    <span id="admin-ui-plan" class="text-[10px] text-indigo-200 font-medium">Business Plan • Active</span>
                                 </div>
                             </div>
                             <div class="flex items-center gap-1.5">
@@ -270,6 +221,22 @@
                                 <button onclick="switchAppScreen('worker')" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-emerald-300 transition" title="Worker App View">
                                     <i class="fa-solid fa-helmet-safety text-sm"></i>
                                 </button>
+                            </div>
+                        </div>
+
+                        <!-- Live Today Stats Strip -->
+                        <div class="grid grid-cols-3 gap-2 bg-white/10 border border-white/10 rounded-2xl p-2.5 text-center backdrop-blur-sm">
+                            <div>
+                                <span id="home-stat-present" class="text-base font-extrabold text-emerald-300 block">2</span>
+                                <span class="text-[10px] text-indigo-100">आज हाज़िर</span>
+                            </div>
+                            <div class="border-x border-white/15">
+                                <span id="home-stat-absent" class="text-base font-extrabold text-rose-300 block">1</span>
+                                <span class="text-[10px] text-indigo-100">अनुपस्थित</span>
+                            </div>
+                            <div>
+                                <span id="home-stat-ot" class="text-base font-extrabold text-amber-300 block">2h</span>
+                                <span class="text-[10px] text-indigo-100">कुल OT</span>
                             </div>
                         </div>
                     </div>
@@ -283,19 +250,19 @@
                                 </div>
                                 <span class="text-[10px] font-bold text-slate-700">हाज़िरी</span>
                             </button>
-                            <button onclick="switchAppScreen('payroll')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-amber-50 transition">
+                            <button onclick="openAppModal('app-modal-advance')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-amber-50 transition">
                                 <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-sm">
                                     <i class="fa-solid fa-hand-holding-dollar"></i>
                                 </div>
                                 <span class="text-[10px] font-bold text-slate-700">खर्ची दें</span>
                             </button>
-                            <button onclick="switchAppScreen('payroll')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-emerald-50 transition">
-                                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm">
-                                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <button onclick="openAppModal('app-modal-worker')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-purple-50 transition">
+                                <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-user-plus"></i>
                                 </div>
-                                <span class="text-[10px] font-bold text-slate-700">सैलरी Slip</span>
+                                <span class="text-[10px] font-bold text-slate-700">+ वर्कर</span>
                             </button>
-                            <button onclick="showUiToast('Worker Portal लिंक कॉपी हो गया!')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-blue-50 transition">
+                            <button onclick="copyAppShareLink('Worker Portal Link')" class="flex flex-col items-center gap-1 p-1.5 rounded-xl hover:bg-blue-50 transition">
                                 <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm">
                                     <i class="fa-solid fa-share-nodes"></i>
                                 </div>
@@ -304,65 +271,13 @@
                         </div>
                     </div>
 
-                    <!-- Recent Workers List Section -->
+                    <!-- Dynamic Workers List Section -->
                     <div class="px-4 mt-5">
                         <div class="flex items-center justify-between mb-2.5">
                             <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wider">रजिस्टर्ड वर्कर्स (Directory)</h4>
-                            <button onclick="switchAppScreen('attendance')" class="text-[11px] font-bold text-indigo-600">सभी देखें →</button>
+                            <button onclick="switchAppScreen('attendance')" class="text-[11px] font-bold text-indigo-600">हाज़िरी लगाएं →</button>
                         </div>
-
-                        <div class="space-y-2.5">
-                            <!-- Worker Card 1 -->
-                            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">PR</div>
-                                    <div>
-                                        <div class="font-bold text-slate-900 text-xs">Pradip Yadav</div>
-                                        <div class="flex items-center gap-1.5 mt-1">
-                                            <span class="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">OMKAR-101</span>
-                                            <span class="text-[10px] text-slate-400">Bhatti</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    Present • 2h OT
-                                </span>
-                            </div>
-
-                            <!-- Worker Card 2 -->
-                            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-2xl bg-blue-600 text-white font-bold text-xs flex items-center justify-center">RR</div>
-                                    <div>
-                                        <div class="font-bold text-slate-900 text-xs">Ravi Ray</div>
-                                        <div class="flex items-center gap-1.5 mt-1">
-                                            <span class="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">OMKAR-102</span>
-                                            <span class="text-[10px] text-slate-400">Finishing</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">
-                                    Absent
-                                </span>
-                            </div>
-
-                            <!-- Worker Card 3 -->
-                            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">RK</div>
-                                    <div>
-                                        <div class="font-bold text-slate-900 text-xs">Rajesh Kumar</div>
-                                        <div class="flex items-center gap-1.5 mt-1">
-                                            <span class="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">W-106</span>
-                                            <span class="text-[10px] text-slate-400">Packing</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    Present • 0h OT
-                                </span>
-                            </div>
-                        </div>
+                        <div id="home-workers-list" class="space-y-2.5"></div>
                     </div>
                 </div>
 
@@ -372,73 +287,20 @@
                 <div id="screen-attendance" class="app-screen hidden flex-1 overflow-y-auto no-scrollbar pb-20 screen-anim">
                     <div class="bg-white px-5 pt-4 pb-3 border-b border-slate-200 sticky top-0 z-10">
                         <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-base font-extrabold text-slate-900">दैनिक हाज़िरी व OT</h3>
-                                <p class="text-[11px] text-slate-500">26 नवंबर 2026 • 1-टैप सेव</p>
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" id="att-select-all" onchange="toggleAllAppWorkers(this.checked)" class="w-4 h-4 rounded text-indigo-600 cursor-pointer" title="सभी को चुनें">
+                                <div>
+                                    <h3 class="text-sm font-extrabold text-slate-900">दैनिक हाज़िरी व OT</h3>
+                                    <p class="text-[10px] text-slate-500">26 नवंबर 2026 • बॉक्स चुनें</p>
+                                </div>
                             </div>
-                            <button onclick="showUiToast('चुने गए सभी वर्कर्स Present हो गए!')" class="bg-indigo-600 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm">
+                            <button onclick="markSelectedAppWorkersPresent()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm transition">
                                 <i class="fa-solid fa-check-double mr-1"></i> Mark Selected
                             </button>
                         </div>
                     </div>
 
-                    <div class="p-4 space-y-3">
-                        <!-- Interactive Attendance Card 1 -->
-                        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2.5">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded text-indigo-600">
-                                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">PR</div>
-                                    <div>
-                                        <div class="font-bold text-slate-900 text-xs">Pradip Yadav</div>
-                                        <div class="text-[10px] text-slate-400">OMKAR-101 • Bhatti</div>
-                                    </div>
-                                </div>
-                                <button onclick="showUiToast('WhatsApp अलर्ट भेजा गया!')" class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </button>
-                            </div>
-                            <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
-                                <div class="flex gap-1.5">
-                                    <button onclick="togglePill(this)" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-emerald-600 text-white shadow-sm">Present</button>
-                                    <button onclick="togglePill(this)" class="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 text-slate-600">Absent</button>
-                                </div>
-                                <div class="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
-                                    <span class="text-[10px] font-bold text-amber-700">OT:</span>
-                                    <input type="number" value="2" class="w-8 bg-transparent text-xs font-extrabold text-slate-900 text-center focus:outline-none">
-                                    <span class="text-[10px] text-amber-700">hr</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Interactive Attendance Card 2 -->
-                        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-2.5">
-                                    <input type="checkbox" class="w-4 h-4 rounded text-indigo-600">
-                                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center">RR</div>
-                                    <div>
-                                        <div class="font-bold text-slate-900 text-xs">Ravi Ray</div>
-                                        <div class="text-[10px] text-slate-400">OMKAR-102 • Finishing</div>
-                                    </div>
-                                </div>
-                                <button onclick="showUiToast('WhatsApp अलर्ट भेजा गया!')" class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                    <i class="fa-brands fa-whatsapp"></i>
-                                </button>
-                            </div>
-                            <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
-                                <div class="flex gap-1.5">
-                                    <button onclick="togglePill(this)" class="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 text-slate-600">Present</button>
-                                    <button onclick="togglePill(this)" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-rose-600 text-white shadow-sm">Absent</button>
-                                </div>
-                                <div class="flex items-center gap-1 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl">
-                                    <span class="text-[10px] font-bold text-slate-500">OT:</span>
-                                    <input type="number" value="0" class="w-8 bg-transparent text-xs font-extrabold text-slate-900 text-center focus:outline-none">
-                                    <span class="text-[10px] text-slate-500">hr</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="att-cards-container" class="p-4 space-y-3"></div>
                 </div>
 
                 <!-- ========================================== -->
@@ -448,45 +310,21 @@
                     <div class="bg-slate-900 text-white px-5 pt-4 pb-6 rounded-b-[28px]">
                         <div class="flex items-center justify-between mb-3">
                             <h3 class="text-base font-extrabold">मासिक सैलरी व खर्ची</h3>
-                            <span class="text-[11px] bg-white/10 px-2.5 py-1 rounded-lg font-semibold">Nov 2026</span>
+                            <button onclick="openAppModal('app-modal-advance')" class="text-[11px] bg-amber-400 text-slate-950 px-2.5 py-1 rounded-lg font-extrabold shadow">
+                                + खर्ची लिखें
+                            </button>
                         </div>
                         <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-4 shadow-lg">
                             <span class="text-[11px] text-indigo-100 block">कुल मासिक देय सैलरी (Net Payable)</span>
-                            <div class="text-2xl font-extrabold text-white mt-0.5">₹1,42,500</div>
+                            <div id="pay-total-net" class="text-2xl font-extrabold text-white mt-0.5">₹0</div>
                             <div class="flex items-center justify-between text-[11px] text-indigo-100 mt-2 pt-2 border-t border-white/15">
-                                <span>कुल कमाई: ₹1,58,000</span>
-                                <span class="text-amber-300 font-bold">खर्ची: -₹15,500</span>
+                                <span id="pay-total-gross">कुल कमाई: ₹0</span>
+                                <span id="pay-total-adv" class="text-amber-300 font-bold">खर्ची: -₹0</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-4 space-y-3">
-                        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm">
-                            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-                                <div>
-                                    <div class="font-bold text-slate-900 text-sm">Rajesh Kumar</div>
-                                    <div class="text-[11px] text-slate-400">22 दिन • 14h OT • ₹500/दिन</div>
-                                </div>
-                                <button onclick="showUiToast('WhatsApp Salary Slip खुल रही है!')" class="bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
-                                    <i class="fa-brands fa-whatsapp"></i> Slip
-                                </button>
-                            </div>
-                            <div class="grid grid-cols-3 gap-2 py-2.5 text-center">
-                                <div class="bg-slate-50 rounded-xl p-2">
-                                    <span class="text-[10px] text-slate-400 block">कुल कमाई</span>
-                                    <span class="text-xs font-extrabold text-slate-800">₹12,050</span>
-                                </div>
-                                <div class="bg-rose-50 rounded-xl p-2">
-                                    <span class="text-[10px] text-rose-500 block">एडवांस</span>
-                                    <span class="text-xs font-extrabold text-rose-600">-₹1,000</span>
-                                </div>
-                                <div class="bg-emerald-50 rounded-xl p-2">
-                                    <span class="text-[10px] text-emerald-600 block">देय सैलरी</span>
-                                    <span class="text-xs font-extrabold text-emerald-700">₹11,050</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="payroll-cards-container" class="p-4 space-y-3"></div>
                 </div>
 
                 <!-- ========================================== -->
@@ -494,15 +332,16 @@
                 <!-- ========================================== -->
                 <div id="screen-worker" class="app-screen hidden flex-1 overflow-y-auto no-scrollbar pb-20 screen-anim">
                     <div class="bg-gradient-to-br from-indigo-600 to-blue-700 text-white px-5 pt-4 pb-7 rounded-b-[32px]">
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="text-[10px] font-bold bg-white/20 px-2.5 py-1 rounded-full">Omkar Galvanized</span>
-                            <span class="text-[10px] font-bold text-emerald-300"><i class="fa-solid fa-shield-check mr-1"></i>Verified Worker</span>
+                        <div class="flex items-center justify-between mb-3">
+                            <span id="worker-ui-comp" class="text-[10px] font-bold bg-white/20 px-2.5 py-1 rounded-full">Omkar Galvanized</span>
+                            <select id="worker-ui-switcher" onchange="selectPreviewWorker(this.value)" class="bg-white/15 text-white text-[10px] font-bold px-2 py-1 rounded-lg border border-white/20 focus:outline-none">
+                            </select>
                         </div>
                         <div class="flex items-center gap-3.5">
-                            <div class="w-14 h-14 rounded-2xl bg-white text-indigo-700 font-extrabold text-lg flex items-center justify-center shadow-md">PR</div>
+                            <div id="worker-ui-avatar" class="w-14 h-14 rounded-2xl bg-white text-indigo-700 font-extrabold text-lg flex items-center justify-center shadow-md">PR</div>
                             <div>
-                                <h3 class="font-extrabold text-base">Pradip Yadav</h3>
-                                <p class="text-xs text-indigo-100">ID: OMKAR-101 • Bhatti</p>
+                                <h3 id="worker-ui-name" class="font-extrabold text-base">Pradip Yadav</h3>
+                                <p id="worker-ui-meta" class="text-xs text-indigo-100">ID: OMKAR-101 • Bhatti</p>
                             </div>
                         </div>
                     </div>
@@ -511,45 +350,83 @@
                         <div class="grid grid-cols-2 gap-2.5">
                             <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-center">
                                 <span class="text-[10px] font-bold text-slate-400 block">कुल हाज़िरी</span>
-                                <span class="text-xl font-extrabold text-emerald-600">22 दिन</span>
+                                <span id="worker-ui-present" class="text-xl font-extrabold text-emerald-600">22 दिन</span>
                             </div>
                             <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm text-center">
                                 <span class="text-[10px] font-bold text-slate-400 block">कुल ओवरटाइम</span>
-                                <span class="text-xl font-extrabold text-amber-600">18 hrs</span>
+                                <span id="worker-ui-ot" class="text-xl font-extrabold text-amber-600">18 hrs</span>
                             </div>
                             <div class="bg-white p-3 rounded-2xl border border-rose-200/80 shadow-sm text-center col-span-2 flex items-center justify-between px-4">
                                 <div class="text-left">
                                     <span class="text-[10px] font-bold text-rose-500 block">लिया गया कुल एडवांस (खर्ची)</span>
                                     <span class="text-[11px] text-slate-400">इस महीने तक</span>
                                 </div>
-                                <span class="text-lg font-extrabold text-rose-600">₹1,500</span>
+                                <span id="worker-ui-advance" class="text-lg font-extrabold text-rose-600">₹0</span>
                             </div>
                         </div>
 
                         <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-sm">
-                            <h4 class="text-xs font-extrabold text-slate-800 mb-2.5">हाल की हाज़िरी व एडवांस</h4>
-                            <div class="space-y-2 text-xs">
-                                <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50">
-                                    <div>
-                                        <span class="font-bold text-slate-800 block">26 Nov 2026</span>
-                                        <span class="text-[10px] text-slate-500">OT: 2.0 hrs</span>
-                                    </div>
-                                    <span class="px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-[10px]">Present</span>
-                                </div>
-                                <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/60 border border-rose-100">
-                                    <div>
-                                        <span class="font-bold text-slate-800 block">साप्ताहिक खर्ची (Advance)</span>
-                                        <span class="text-[10px] text-slate-500">22 Nov 2026</span>
-                                    </div>
-                                    <span class="font-extrabold text-rose-600 text-xs">₹500</span>
-                                </div>
-                            </div>
+                            <h4 class="text-xs font-extrabold text-slate-800 mb-2.5">हाल की हाज़िरी व एडवांस रिकॉर्ड</h4>
+                            <div id="worker-ui-history" class="space-y-2 text-xs"></div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Inside-Phone Interactive Modals -->
+                <!-- 1. Add Company Modal -->
+                <div id="app-modal-company" class="app-modal hidden absolute inset-0 bg-slate-900/60 backdrop-blur-xs z-40 items-end p-3">
+                    <div class="bg-white w-full rounded-3xl p-4 shadow-xl screen-anim">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-extrabold text-sm text-slate-900">नई कंपनी जोड़ें</h4>
+                            <button onclick="closeAppModal('app-modal-company')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form onsubmit="submitNewAppCompany(event)" class="space-y-2.5">
+                            <input type="text" id="inp-app-comp-name" required placeholder="कंपनी का नाम (उदा. Tata Steel Works)" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">
+                            <select id="inp-app-comp-plan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-white">
+                                <option value="Growth">Growth Plan - ₹999/माह</option>
+                                <option value="Business">Business Plan - ₹1,999/माह</option>
+                            </select>
+                            <button type="submit" class="w-full bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl">कंपनी बनाएं</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 2. Add Worker Modal -->
+                <div id="app-modal-worker" class="app-modal hidden absolute inset-0 bg-slate-900/60 backdrop-blur-xs z-40 items-end p-3">
+                    <div class="bg-white w-full rounded-3xl p-4 shadow-xl screen-anim">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-extrabold text-sm text-slate-900">नया वर्कर जोड़ें</h4>
+                            <button onclick="closeAppModal('app-modal-worker')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form onsubmit="submitNewAppWorker(event)" class="space-y-2.5">
+                            <input type="text" id="inp-app-w-name" required placeholder="वर्कर का नाम" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="text" id="inp-app-w-dept" required placeholder="विभाग (Welding)" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">
+                                <input type="number" id="inp-app-w-rate" required value="500" placeholder="₹/दिन" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl">वर्कर सेव करें</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 3. Add Advance (Kharchi) Modal -->
+                <div id="app-modal-advance" class="app-modal hidden absolute inset-0 bg-slate-900/60 backdrop-blur-xs z-40 items-end p-3">
+                    <div class="bg-white w-full rounded-3xl p-4 shadow-xl screen-anim">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-extrabold text-sm text-slate-900">एडवांस / खर्ची दर्ज करें</h4>
+                            <button onclick="closeAppModal('app-modal-advance')" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form onsubmit="submitNewAppAdvance(event)" class="space-y-2.5">
+                            <select id="inp-app-adv-worker" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs bg-white"></select>
+                            <input type="number" id="inp-app-adv-amount" required min="1" placeholder="राशि (₹ में, उदा. 500)" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold">
+                            <input type="text" id="inp-app-adv-note" placeholder="विवरण (उदा. साप्ताहिक खर्ची)" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-xs">
+                            <button type="submit" class="w-full bg-amber-500 text-slate-950 font-extrabold text-xs py-2.5 rounded-xl">खर्ची सेव करें</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- Mini Toast inside Phone -->
-                <div id="phone-toast" class="absolute bottom-20 left-4 right-4 bg-slate-900 text-white text-[11px] font-semibold px-3.5 py-2.5 rounded-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 z-30">
+                <div id="phone-toast" class="absolute bottom-16 left-4 right-4 bg-slate-900 text-white text-[11px] font-semibold px-3.5 py-2.5 rounded-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 z-50">
                     <i class="fa-solid fa-circle-check text-emerald-400"></i>
                     <span id="phone-toast-msg">Updated!</span>
                 </div>
@@ -583,12 +460,234 @@
     </main>
 
     <script>
+        // Interactive Prototype State
+        const appState = {
+            activeCompanyId: 'C1',
+            selectedWorkerId: 'OMKAR-101',
+            companies: [
+                { id: 'C1', name: 'Omkar Galvanized', plan: 'Business', price: 1999, status: 'Active', color: 'from-emerald-400 to-teal-500' },
+                { id: 'C2', name: 'Apex Construction Ltd', plan: 'Growth', price: 999, status: 'Active', color: 'from-indigo-400 to-blue-500' }
+            ],
+            workers: [
+                { id: 'OMKAR-101', compId: 'C1', name: 'Pradip Yadav', dept: 'Bhatti', phone: '9876543210', status: 'Present', ot: 2, days: 22, dailyRate: 500, otRate: 75, advances: [{ date: '22 Nov', amount: 500, note: 'साप्ताहिक खर्ची' }] },
+                { id: 'OMKAR-102', compId: 'C1', name: 'Ravi Ray', dept: 'Finishing', phone: '9876543211', status: 'Absent', ot: 0, days: 19, dailyRate: 500, otRate: 75, advances: [] },
+                { id: 'W-106', compId: 'C1', name: 'Rajesh Kumar', dept: 'Packing', phone: '9876543212', status: 'Present', ot: 0, days: 21, dailyRate: 500, otRate: 75, advances: [{ date: '20 Nov', amount: 1000, note: 'घर खर्च एडवांस' }] },
+                { id: 'APX-201', compId: 'C2', name: 'सुनील शर्मा', dept: 'Civil', phone: '9822334455', status: 'Present', ot: 3, days: 24, dailyRate: 600, otRate: 90, advances: [{ date: '24 Nov', amount: 1500, note: 'एडवांस' }] }
+            ]
+        };
+
+        function renderAllAppScreens() {
+            const activeComp = appState.companies.find(c => c.id === appState.activeCompanyId) || appState.companies[0];
+            const compWorkers = appState.workers.filter(w => w.compId === activeComp.id);
+
+            // 1. Render Super Admin
+            const totalMrr = appState.companies.reduce((s, c) => s + c.price, 0);
+            document.getElementById('sa-ui-mrr').innerText = `₹${totalMrr.toLocaleString('en-IN')}`;
+            document.getElementById('sa-ui-comp-count').innerText = appState.companies.length;
+            document.getElementById('sa-ui-worker-count').innerText = appState.workers.length;
+
+            const saList = document.getElementById('sa-ui-tenants-list');
+            saList.innerHTML = appState.companies.map(c => {
+                const count = appState.workers.filter(w => w.compId === c.id).length;
+                return `
+                    <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <div class="font-bold text-slate-900 text-xs">${c.name}</div>
+                                <div class="text-[10px] text-slate-400">${c.plan} Plan • ₹${c.price}/माह • ${count} Workers</div>
+                            </div>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">${c.status}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 mt-2">
+                            <button onclick="copyAppShareLink('${c.name} Admin Link')" class="flex-1 bg-indigo-50 text-indigo-700 border border-indigo-200 text-[10px] font-bold py-1.5 rounded-xl">
+                                <i class="fa-regular fa-copy mr-1"></i>Admin Link
+                            </button>
+                            <button onclick="copyAppShareLink('${c.name} Worker Link')" class="flex-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold py-1.5 rounded-xl">
+                                <i class="fa-regular fa-copy mr-1"></i>Worker Link
+                            </button>
+                            <button onclick="openCompanyInApp('${c.id}')" class="bg-slate-900 text-white text-[10px] font-bold px-3 py-1.5 rounded-xl">
+                                खोलें
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 2. Render Admin Home
+            document.getElementById('admin-ui-logo').innerText = activeComp.name.charAt(0).toUpperCase();
+            document.getElementById('admin-ui-comp-name').innerText = activeComp.name;
+            document.getElementById('admin-ui-plan').innerText = `${activeComp.plan} Plan • Active`;
+
+            const pCount = compWorkers.filter(w => w.status === 'Present').length;
+            const aCount = compWorkers.filter(w => w.status === 'Absent').length;
+            const otSum = compWorkers.reduce((s, w) => s + parseFloat(w.ot || 0), 0);
+
+            document.getElementById('home-stat-present').innerText = pCount;
+            document.getElementById('home-stat-absent').innerText = aCount;
+            document.getElementById('home-stat-ot').innerText = `${otSum}h`;
+
+            document.getElementById('home-workers-list').innerHTML = compWorkers.map(w => {
+                const initials = w.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                const badge = w.status === 'Present'
+                    ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Present • ${w.ot}h OT</span>`
+                    : `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200">Absent</span>`;
+                return `
+                    <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">${initials}</div>
+                            <div>
+                                <div class="font-bold text-slate-900 text-xs">${w.name}</div>
+                                <div class="flex items-center gap-1.5 mt-1">
+                                    <span class="text-[10px] font-mono font-bold bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded">${w.id}</span>
+                                    <span class="text-[10px] text-slate-400">${w.dept}</span>
+                                </div>
+                            </div>
+                        </div>
+                        ${badge}
+                    </div>
+                `;
+            }).join('');
+
+            // 3. Render Attendance Screen
+            document.getElementById('att-select-all').checked = false;
+            document.getElementById('att-cards-container').innerHTML = compWorkers.map(w => {
+                const initials = w.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                const pBtnClass = w.status === 'Present'
+                    ? 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-emerald-600 text-white shadow-sm'
+                    : 'px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 text-slate-600';
+                const aBtnClass = w.status === 'Absent'
+                    ? 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-rose-600 text-white shadow-sm'
+                    : 'px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 text-slate-600';
+                return `
+                    <div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" value="${w.id}" class="app-att-cb w-4 h-4 rounded text-indigo-600 cursor-pointer">
+                                <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">${initials}</div>
+                                <div>
+                                    <div class="font-bold text-slate-900 text-xs">${w.name}</div>
+                                    <div class="text-[10px] text-slate-400">${w.id} • ${w.dept}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <button onclick="sendAppWhatsApp('${w.id}')" class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center" title="WhatsApp">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </button>
+                                <button onclick="deleteAppWorker('${w.id}')" class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center" title="Delete">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-100">
+                            <div class="flex gap-1.5">
+                                <button onclick="setAppWorkerStatus('${w.id}', 'Present')" class="${pBtnClass}">Present</button>
+                                <button onclick="setAppWorkerStatus('${w.id}', 'Absent')" class="${aBtnClass}">Absent</button>
+                            </div>
+                            <div class="flex items-center gap-1 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-xl">
+                                <span class="text-[10px] font-bold text-amber-700">OT:</span>
+                                <input type="number" step="0.5" min="0" value="${w.ot}" onchange="setAppWorkerOt('${w.id}', this.value)" class="w-9 bg-transparent text-xs font-extrabold text-slate-900 text-center focus:outline-none">
+                                <span class="text-[10px] text-amber-700">hr</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 4. Render Payroll & Advance Screen
+            let sumGross = 0, sumAdv = 0, sumNet = 0;
+            const advWorkerSelect = document.getElementById('inp-app-adv-worker');
+            if (advWorkerSelect) {
+                advWorkerSelect.innerHTML = compWorkers.map(w => `<option value="${w.id}">${w.name} (${w.id})</option>`).join('');
+            }
+
+            document.getElementById('payroll-cards-container').innerHTML = compWorkers.map(w => {
+                const totalDays = w.days + (w.status === 'Present' ? 1 : 0);
+                const totalOt = (w.days * 0.5) + parseFloat(w.ot || 0);
+                const gross = Math.round((totalDays * w.dailyRate) + (totalOt * w.otRate));
+                const adv = w.advances.reduce((s, a) => s + a.amount, 0);
+                const net = gross - adv;
+                sumGross += gross; sumAdv += adv; sumNet += net;
+
+                return `
+                    <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <div>
+                                <div class="font-bold text-slate-900 text-sm">${w.name}</div>
+                                <div class="text-[11px] text-slate-400">${totalDays} दिन • ${totalOt}h OT • ₹${w.dailyRate}/दिन</div>
+                            </div>
+                            <button onclick="sendAppSalarySlip('${w.id}', ${totalDays}, ${totalOt}, ${gross}, ${adv}, ${net})" class="bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-brands fa-whatsapp"></i> Slip
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 py-2.5 text-center">
+                            <div class="bg-slate-50 rounded-xl p-2">
+                                <span class="text-[10px] text-slate-400 block">कुल कमाई</span>
+                                <span class="text-xs font-extrabold text-slate-800">₹${gross.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div class="bg-rose-50 rounded-xl p-2">
+                                <span class="text-[10px] text-rose-500 block">एडवांस</span>
+                                <span class="text-xs font-extrabold text-rose-600">-₹${adv.toLocaleString('en-IN')}</span>
+                            </div>
+                            <div class="bg-emerald-50 rounded-xl p-2">
+                                <span class="text-[10px] text-emerald-600 block">देय सैलरी</span>
+                                <span class="text-xs font-extrabold text-emerald-700">₹${net.toLocaleString('en-IN')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('pay-total-net').innerText = `₹${sumNet.toLocaleString('en-IN')}`;
+            document.getElementById('pay-total-gross').innerText = `कुल कमाई: ₹${sumGross.toLocaleString('en-IN')}`;
+            document.getElementById('pay-total-adv').innerText = `खर्ची: -₹${sumAdv.toLocaleString('en-IN')}`;
+
+            // 5. Render Worker App Screen
+            const wSwitcher = document.getElementById('worker-ui-switcher');
+            wSwitcher.innerHTML = compWorkers.map(w => `<option value="${w.id}" ${w.id === appState.selectedWorkerId ? 'selected' : ''}>${w.name}</option>`).join('');
+            
+            let activeWorker = compWorkers.find(w => w.id === appState.selectedWorkerId) || compWorkers[0];
+            if (activeWorker) {
+                appState.selectedWorkerId = activeWorker.id;
+                const wAdvTotal = activeWorker.advances.reduce((s, a) => s + a.amount, 0);
+                const wTotalDays = activeWorker.days + (activeWorker.status === 'Present' ? 1 : 0);
+                const wTotalOt = (activeWorker.days * 0.5) + parseFloat(activeWorker.ot || 0);
+
+                document.getElementById('worker-ui-comp').innerText = activeComp.name;
+                document.getElementById('worker-ui-avatar').innerText = activeWorker.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                document.getElementById('worker-ui-name').innerText = activeWorker.name;
+                document.getElementById('worker-ui-meta').innerText = `ID: ${activeWorker.id} • ${activeWorker.dept}`;
+                document.getElementById('worker-ui-present').innerText = `${wTotalDays} दिन`;
+                document.getElementById('worker-ui-ot').innerText = `${wTotalOt} hrs`;
+                document.getElementById('worker-ui-advance').innerText = `₹${wAdvTotal.toLocaleString('en-IN')}`;
+
+                const advHtml = activeWorker.advances.map(a => `
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-rose-50/70 border border-rose-100">
+                        <div>
+                            <span class="font-bold text-slate-800 block">${a.note || 'एडवांस / खर्ची'}</span>
+                            <span class="text-[10px] text-slate-500">${a.date}</span>
+                        </div>
+                        <span class="font-extrabold text-rose-600 text-xs">₹${a.amount.toLocaleString('en-IN')}</span>
+                    </div>
+                `).join('');
+
+                document.getElementById('worker-ui-history').innerHTML = `
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50">
+                        <div>
+                            <span class="font-bold text-slate-800 block">26 Nov 2026 (आज)</span>
+                            <span class="text-[10px] text-slate-500">OT: ${activeWorker.ot} hrs</span>
+                        </div>
+                        <span class="px-2.5 py-1 rounded-lg ${activeWorker.status === 'Present' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'} font-bold text-[10px]">${activeWorker.status}</span>
+                    </div>
+                    ${advHtml}
+                `;
+            }
+        }
+
         function switchAppScreen(screenId) {
             document.querySelectorAll('.app-screen').forEach(s => s.classList.add('hidden'));
             const activeScreen = document.getElementById('screen-' + screenId);
             if (activeScreen) activeScreen.classList.remove('hidden');
 
-            // Update Top Tabs
             document.querySelectorAll('.ui-tab').forEach(btn => {
                 btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm', 'font-bold');
                 btn.classList.add('text-slate-600', 'font-semibold');
@@ -599,7 +698,6 @@
                 activeTop.classList.remove('text-slate-600', 'font-semibold');
             }
 
-            // Update Bottom Bar
             document.querySelectorAll('.bottom-nav').forEach(btn => {
                 if (btn.dataset.target === screenId) {
                     btn.classList.remove('text-slate-400');
@@ -609,20 +707,135 @@
                     btn.classList.remove('text-indigo-600');
                 }
             });
+            renderAllAppScreens();
         }
 
-        function togglePill(btn) {
-            const parent = btn.parentElement;
-            parent.querySelectorAll('button').forEach(b => {
-                b.className = 'px-3 py-1.5 rounded-xl text-[11px] font-bold bg-slate-100 text-slate-600';
-            });
-            if (btn.innerText === 'Present') {
-                btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-emerald-600 text-white shadow-sm';
-                showUiToast('Present मार्क किया गया!');
-            } else {
-                btn.className = 'px-3 py-1.5 rounded-xl text-[11px] font-extrabold bg-rose-600 text-white shadow-sm';
-                showUiToast('Absent मार्क किया गया!');
+        function openCompanyInApp(compId) {
+            appState.activeCompanyId = compId;
+            switchAppScreen('home');
+            showUiToast('कंपनी पैनल खुल गया!');
+        }
+
+        function setAppWorkerStatus(wId, status) {
+            const w = appState.workers.find(x => x.id === wId);
+            if (w) {
+                w.status = status;
+                renderAllAppScreens();
+                showUiToast(`${w.name}: ${status} सेव हो गया!`);
             }
+        }
+
+        function setAppWorkerOt(wId, otVal) {
+            const w = appState.workers.find(x => x.id === wId);
+            if (w) {
+                w.ot = parseFloat(otVal) || 0;
+                renderAllAppScreens();
+                showUiToast(`${w.name} का OT ${w.ot} hrs अपडेट हुआ!`);
+            }
+        }
+
+        function toggleAllAppWorkers(checked) {
+            document.querySelectorAll('.app-att-cb').forEach(cb => cb.checked = checked);
+        }
+
+        function markSelectedAppWorkersPresent() {
+            const checked = Array.from(document.querySelectorAll('.app-att-cb:checked'));
+            if (checked.length === 0) {
+                showUiToast('पहले बॉक्स (☑️) में वर्कर्स चुनें!');
+                return;
+            }
+            checked.forEach(cb => {
+                const w = appState.workers.find(x => x.id === cb.value);
+                if (w) w.status = 'Present';
+            });
+            renderAllAppScreens();
+            showUiToast(`${checked.length} चुने हुए वर्कर्स Present हो गए!`);
+        }
+
+        function deleteAppWorker(wId) {
+            appState.workers = appState.workers.filter(w => w.id !== wId);
+            renderAllAppScreens();
+            showUiToast('वर्कर को लिस्ट से हटा दिया गया!');
+        }
+
+        function selectPreviewWorker(wId) {
+            appState.selectedWorkerId = wId;
+            renderAllAppScreens();
+        }
+
+        function openAppModal(id) {
+            const m = document.getElementById(id);
+            if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+        }
+
+        function closeAppModal(id) {
+            const m = document.getElementById(id);
+            if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+        }
+
+        function submitNewAppCompany(e) {
+            e.preventDefault();
+            const name = document.getElementById('inp-app-comp-name').value.trim();
+            const plan = document.getElementById('inp-app-comp-plan').value;
+            const price = plan === 'Business' ? 1999 : 999;
+            const newId = 'C' + (appState.companies.length + 1);
+            appState.companies.push({ id: newId, name, plan, price, status: 'Active', color: 'from-indigo-500 to-purple-600' });
+            e.target.reset();
+            closeAppModal('app-modal-company');
+            renderAllAppScreens();
+            showUiToast(`कंपनी "${name}" जुड़ गई!`);
+        }
+
+        function submitNewAppWorker(e) {
+            e.preventDefault();
+            const name = document.getElementById('inp-app-w-name').value.trim();
+            const dept = document.getElementById('inp-app-w-dept').value.trim();
+            const rate = parseFloat(document.getElementById('inp-app-w-rate').value) || 500;
+            const newId = 'W-' + (100 + appState.workers.length + 1);
+            appState.workers.push({ id: newId, compId: appState.activeCompanyId, name, dept, phone: '9876543210', status: 'Present', ot: 0, days: 1, dailyRate: rate, otRate: 75, advances: [] });
+            e.target.reset();
+            closeAppModal('app-modal-worker');
+            renderAllAppScreens();
+            showUiToast(`वर्कर ${name} (${newId}) जुड़ गया!`);
+        }
+
+        function submitNewAppAdvance(e) {
+            e.preventDefault();
+            const wId = document.getElementById('inp-app-adv-worker').value;
+            const amount = parseFloat(document.getElementById('inp-app-adv-amount').value) || 0;
+            const note = document.getElementById('inp-app-adv-note').value.trim();
+            const w = appState.workers.find(x => x.id === wId);
+            if (w && amount > 0) {
+                w.advances.unshift({ date: '26 Nov', amount, note: note || 'एडवांस / खर्ची' });
+                e.target.reset();
+                closeAppModal('app-modal-advance');
+                renderAllAppScreens();
+                showUiToast(`${w.name} को ₹${amount} खर्ची दर्ज हो गई!`);
+            }
+        }
+
+        function copyAppShareLink(label) {
+            const temp = document.createElement('textarea');
+            temp.value = 'https://worktracksaas.in';
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showUiToast(`${label} कॉपी हो गया!`);
+        }
+
+        function sendAppWhatsApp(wId) {
+            const w = appState.workers.find(x => x.id === wId);
+            if (!w) return;
+            const msg = `नमस्ते ${w.name} (${w.id}), आपकी आज की हाज़िरी: ${w.status}, OT: ${w.ot} घंटे।`;
+            window.open(`https://wa.me/91${w.phone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function sendAppSalarySlip(wId, days, ot, gross, adv, net) {
+            const w = appState.workers.find(x => x.id === wId);
+            if (!w) return;
+            const msg = `*Salary Slip - ${w.name} (${w.id})*\nहाज़िरी: ${days} दिन | OT: ${ot}h\nकुल कमाई: ₹${gross}\nएडवांस: -₹${adv}\n*नेट सैलरी: ₹${net}*`;
+            window.open(`https://wa.me/91${w.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function showUiToast(msg) {
@@ -631,6 +844,10 @@
             t.classList.remove('opacity-0');
             setTimeout(() => t.classList.add('opacity-0'), 2200);
         }
+
+        window.onload = () => {
+            renderAllAppScreens();
+        };
     </script>
 </body>
-                        </html>
+                    </html>
