@@ -2,7 +2,7 @@
 "name": "WorkTrack Worker",
 "short_name": "WT Worker",
 "description": "WorkTrack Employee Attendance & Overtime App",
-"start_url": "/?app=worker",
+"start_url": "/worker.html",
 "scope": "/",
 "display": "standalone",
 "orientation": "portrait",
