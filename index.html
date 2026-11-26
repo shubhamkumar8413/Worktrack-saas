@@ -44,16 +44,16 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #f1f5f9;
         }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb { background: #94a3b8; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(6px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .pb-safe {
@@ -111,7 +111,7 @@
         </div>
     </header>
 
-    <!-- Client Portal Mode Banner (Clean Company Header + Language Switcher) -->
+    <!-- Client Portal Mode Banner -->
     <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2.5 text-xs border-b border-indigo-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
             <span id="shared-link-label"><i class="fa-solid fa-building mr-1.5 text-indigo-400"></i> WorkTrack Client Portal</span>
@@ -131,7 +131,7 @@
         </div>
     </div>
 
-    <!-- Custom Notification Toast (Lifted slightly above bottom nav) -->
+    <!-- Custom Notification Toast -->
     <div id="toast" class="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl transform translate-y-28 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium border border-white/10">
         <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg shrink-0"></i>
         <span id="toast-msg">Action successful!</span>
@@ -306,64 +306,209 @@
                 </div>
             </div>
 
-            <!-- TAB 0: HOME (Only Company Header Card + Today's Overview Stats) -->
-            <div id="ca-content-home" class="ca-tab-content fade-in">
-                <!-- Company Context Bar (Premium SaaS Header Card) -->
-                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
-                    <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
-                    
-                    <div class="p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div class="flex items-start sm:items-center gap-3.5 min-w-0">
-                            <div id="ca-company-logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50">A</div>
-                            <div class="min-w-0 flex-1">
+            <!-- ========================================== -->
+            <!-- TAB 0: PREMIUM HOME OVERVIEW DASHBOARD     -->
+            <!-- ========================================== -->
+            <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
+                
+                <!-- 1. Premium Dark Hero Company Card -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
+                    <!-- Decorative Ambient Glow Orbs -->
+                    <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
+                    <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-500/15 blur-2xl"></div>
+
+                    <div class="relative flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div id="ca-company-logo" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center font-extrabold text-2xl shadow-lg shadow-emerald-950/50 shrink-0 ring-2 ring-white/25">O</div>
+                            <div class="min-w-0">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight truncate">Company Name</h1>
-                                    <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap shrink-0">
-                                        <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> Growth Plan
+                                    <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">Company Name</h1>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2 mt-1.5">
+                                    <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                        <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> Business Plan
+                                    </span>
+                                    <span id="ca-home-date-label" class="text-[11px] text-indigo-200/80 font-medium">
+                                        <i class="fa-regular fa-calendar mr-1"></i> आज की रिपोर्ट
                                     </span>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                                    <span data-i18n="ca_header_sub" class="truncate">Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन</span>
-                                </p>
                             </div>
                         </div>
 
-                        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
-                            <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
-                                <label class="text-xs font-semibold text-slate-500 whitespace-nowrap">कंपनी बदलें:</label>
-                                <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                </select>
-                            </div>
-                            <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="flex-1 sm:flex-initial justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-2 whitespace-nowrap">
-                                <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
-                            </button>
-                            <button type="button" onclick="logoutCompanyAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0" title="लॉगआउट करें">
-                                <i class="fa-solid fa-right-from-bracket"></i> <span class="sm:hidden" data-i18n="w_logout">लॉगआउट</span>
-                            </button>
+                        <!-- Logout Icon Button -->
+                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/25 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="लॉगआउट करें">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span class="hidden sm:inline" data-i18n="w_logout">लॉगआउट</span>
+                        </button>
+                    </div>
+
+                    <!-- Super Admin Company Switcher (Only when Super Admin inspects) -->
+                    <div id="ca-demo-selector-box" class="relative mt-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
+                        <label class="text-xs font-semibold text-indigo-200 whitespace-nowrap">कंपनी बदलें:</label>
+                        <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full bg-slate-900/90 border border-white/20 text-white text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
+                        </select>
+                    </div>
+
+                    <!-- Worker Capacity Progress Bar -->
+                    <div class="relative mt-4 pt-3.5 border-t border-white/10">
+                        <div class="flex items-center justify-between text-[11px] mb-1.5">
+                            <span class="text-indigo-200/90 font-medium"><i class="fa-solid fa-users-gear mr-1 text-indigo-300"></i> प्लान वर्कर लिमिट उपयोग</span>
+                            <span id="ca-home-capacity-text" class="font-bold text-white font-mono">0 / 500 Workers</span>
+                        </div>
+                        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div id="ca-home-capacity-bar" class="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-indigo-400 rounded-full transition-all duration-500" style="width: 5%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Primary Action Buttons inside Hero Card -->
+                    <div class="relative mt-4 grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-400 hover:to-blue-500 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md shadow-indigo-950/50 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
+                        </button>
+                        <button type="button" onclick="switchCaTab('attendance')" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-clipboard-check text-emerald-300"></i> <span>आज की हाज़िरी भरें</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Today's Attendance Progress Banner -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-xs font-bold text-slate-800">आज की हाज़िरी प्रोग्रेस (Attendance Rate)</span>
+                        </div>
+                        <span id="ca-home-att-percent" class="text-xs font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200/70 px-2.5 py-0.5 rounded-full">0%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="ca-home-att-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <p id="ca-home-unmarked-note" class="text-[11px] text-slate-400 mt-1.5">सभी वर्कर्स का आज का लाइव स्टेटस</p>
+                </div>
+
+                <!-- 3. Premium 2x2 KPI Cards with Icons & Accents -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <!-- Total Workers -->
+                    <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                                <i class="fa-solid fa-users"></i>
+                            </span>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-500"></i>
+                        </div>
+                        <p id="ca-stat-total" class="text-2xl font-extrabold text-slate-900">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_total">कुल वर्कर्स</span>
+                    </div>
+
+                    <!-- Present Today -->
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                                <i class="fa-solid fa-user-check"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">LIVE</span>
+                        </div>
+                        <p id="ca-stat-present" class="text-2xl font-extrabold text-emerald-600">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
+                    </div>
+
+                    <!-- Absent / Leave -->
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </span>
+                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-rose-500"></i>
+                        </div>
+                        <p id="ca-stat-absent" class="text-2xl font-extrabold text-rose-500">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
+                    </div>
+
+                    <!-- Today's OT -->
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
+                                <i class="fa-solid fa-clock"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">OT</span>
+                        </div>
+                        <p id="ca-stat-ot" class="text-2xl font-extrabold text-amber-600">0 hrs</p>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
+                    </div>
+                </div>
+
+                <!-- 4. Monthly Payroll & Advance Financial Summary Card -->
+                <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-wallet"></i>
+                            </span>
+                            <span class="text-xs font-bold text-slate-800">इस महीने का सैलरी व खर्ची हिसाब</span>
+                        </div>
+                        <span class="text-[11px] font-semibold text-indigo-600">पूरा देखें →</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                            <span class="text-[10px] font-semibold text-slate-400 uppercase block">अनुमानित नेट सैलरी</span>
+                            <span id="ca-home-net-salary" class="text-base font-extrabold text-slate-900 mt-0.5 block">₹0</span>
+                        </div>
+                        <div class="bg-rose-50/60 rounded-xl p-3 border border-rose-100">
+                            <span class="text-[10px] font-semibold text-rose-500 uppercase block">कुल दिया गया एडवांस</span>
+                            <span id="ca-home-total-advance" class="text-base font-extrabold text-rose-600 mt-0.5 block">₹0</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Today's Overview Stats -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <span class="text-xs font-semibold text-slate-400 uppercase" data-i18n="ca_stat_total">कुल वर्कर्स</span>
-                        <p id="ca-stat-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <span class="text-xs font-semibold text-emerald-600 uppercase" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
-                        <p id="ca-stat-present" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <span class="text-xs font-semibold text-rose-500 uppercase" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
-                        <p id="ca-stat-absent" class="text-2xl font-bold text-rose-500 mt-1">0</p>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <span class="text-xs font-semibold text-amber-600 uppercase" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
-                        <p id="ca-stat-ot" class="text-2xl font-bold text-amber-600 mt-1">0 hrs</p>
+                <!-- 5. Quick Actions Grid (1-Tap Shortcuts) -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-amber-500"></i> क्विक एक्शन (Quick Actions)
+                    </h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <button type="button" onclick="openAddWorkerModal()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-indigo-50/70 hover:bg-indigo-100/80 text-indigo-700 transition">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">नया Worker</span>
+                        </button>
+
+                        <button type="button" onclick="openModal('modal-add-advance')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-amber-50/70 hover:bg-amber-100/80 text-amber-800 transition">
+                            <span class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">खर्ची लिखें</span>
+                        </button>
+
+                        <button type="button" onclick="exportCSV()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-800 transition">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-file-excel"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">Excel रिपोर्ट</span>
+                        </button>
+
+                        <button type="button" onclick="switchCaTab('audit')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-700 transition">
+                            <span class="w-9 h-9 rounded-xl bg-slate-700 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">ऑडिट लॉग</span>
+                        </button>
                     </div>
                 </div>
+
+                <!-- 6. Recent Activity Mini Feed -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-bell text-indigo-500"></i> हाल की गतिविधियाँ (Recent Activity)
+                        </h3>
+                        <button type="button" onclick="switchCaTab('audit')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
+                    </div>
+                    <div id="ca-home-recent-activity" class="space-y-2">
+                        <p class="text-xs text-slate-400">कोई हालिया गतिविधि नहीं है।</p>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Main Tab Content Container (For Attendance, Workers, Payroll & Audit) -->
@@ -1804,11 +1949,11 @@
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (!comp) return;
 
+            const planInfo = PLANS[comp.plan] || PLANS['Growth'];
             document.getElementById('ca-company-name').innerText = comp.name;
-            document.getElementById('ca-plan-badge').innerHTML = `<i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> ${comp.plan} Plan`;
+            document.getElementById('ca-plan-badge').innerHTML = `<i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> ${comp.plan} Plan`;
             const logo = document.getElementById('ca-company-logo');
             logo.innerText = comp.name.charAt(0).toUpperCase();
-            logo.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${comp.color} text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50`;
 
             document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
 
@@ -1818,8 +1963,19 @@
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
 
+            // Update Hero Card Date & Plan Capacity Bar
+            const homeDateEl = document.getElementById('ca-home-date-label');
+            if (homeDateEl) homeDateEl.innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${selectedDate}`;
+
+            const capPercent = Math.min(100, Math.max(4, Math.round((tenantWorkers.length / planInfo.limit) * 100)));
+            const capTextEl = document.getElementById('ca-home-capacity-text');
+            const capBarEl = document.getElementById('ca-home-capacity-bar');
+            if (capTextEl) capTextEl.innerText = `${tenantWorkers.length} / ${planInfo.limit} Workers`;
+            if (capBarEl) capBarEl.style.width = `${capPercent}%`;
+
             let presentCount = 0;
             let absentCount = 0;
+            let unmarkedCount = 0;
             let totalOt = 0;
 
             const attBody = document.getElementById('ca-attendance-list');
@@ -1836,7 +1992,9 @@
                 const record = db.attendance[recordKey] || { status: 'Not Marked', ot: 0 };
 
                 if (record.status === 'Present' || record.status === 'Half Day') presentCount++;
-                if (record.status === 'Absent' || record.status === 'Leave') absentCount++;
+                else if (record.status === 'Absent' || record.status === 'Leave') absentCount++;
+                else unmarkedCount++;
+
                 totalOt += parseFloat(record.ot || 0);
 
                 const tr = document.createElement('tr');
@@ -1892,6 +2050,19 @@
             document.getElementById('ca-stat-present').innerText = presentCount;
             document.getElementById('ca-stat-absent').innerText = absentCount;
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
+
+            // Update Home Attendance Progress Bar
+            const attRate = tenantWorkers.length > 0 ? Math.round((presentCount / tenantWorkers.length) * 100) : 0;
+            const attPctEl = document.getElementById('ca-home-att-percent');
+            const attBarEl = document.getElementById('ca-home-att-bar');
+            const unmarkedEl = document.getElementById('ca-home-unmarked-note');
+            if (attPctEl) attPctEl.innerText = `${attRate}%`;
+            if (attBarEl) attBarEl.style.width = `${attRate}%`;
+            if (unmarkedEl) {
+                unmarkedEl.innerText = unmarkedCount > 0
+                    ? `⚠️ अभी ${unmarkedCount} वर्कर की हाज़िरी लगनी बाकी है`
+                    : `✅ आज सभी ${tenantWorkers.length} वर्कर्स की हाज़िरी दर्ज हो चुकी है`;
+            }
 
             // Render Workers Directory
             const wTable = document.getElementById('ca-workers-table');
@@ -1970,7 +2141,7 @@
                 }
             });
 
-            // Render Payroll & Advance Tab
+            // Calculate & Render Monthly Payroll & Home Financial Summary
             const isFullPlan = PLANS[comp.plan] && PLANS[comp.plan].allFeatures;
             document.getElementById('payroll-plan-lock').classList.toggle('hidden', isFullPlan);
             document.getElementById('payroll-main-area').classList.toggle('hidden', !isFullPlan);
@@ -1983,35 +2154,43 @@
             const payrollTable = document.getElementById('ca-payroll-table');
             const payrollCards = document.getElementById('ca-payroll-cards');
             const selectedMonth = document.getElementById('ca-month-picker').value || today.slice(0, 7);
-            if (payrollTable && isFullPlan) {
-                payrollTable.innerHTML = '';
-                if (payrollCards) payrollCards.innerHTML = '';
 
-                if (tenantWorkers.length === 0 && payrollCards) {
-                    payrollCards.innerHTML = `<div class="py-6 text-center text-slate-400 text-xs">इस कंपनी में अभी कोई वर्कर नहीं है।</div>`;
-                }
+            let totalMonthNetSalary = 0;
+            let totalMonthAdvance = 0;
 
-                tenantWorkers.forEach(w => {
-                    const dailyRate = parseFloat(w.dailyRate || 500);
-                    const otRate = parseFloat(w.otRate || 75);
-                    let mPresent = 0;
-                    let mOt = 0;
+            if (payrollTable) payrollTable.innerHTML = '';
+            if (payrollCards) payrollCards.innerHTML = '';
 
-                    Object.keys(db.attendance).forEach(k => {
-                        const rec = db.attendance[k];
-                        if (rec.companyId === activeCompanyId && rec.workerId === w.id && rec.date.startsWith(selectedMonth)) {
-                            if (rec.status === 'Present') mPresent += 1;
-                            if (rec.status === 'Half Day') mPresent += 0.5;
-                            mOt += parseFloat(rec.ot || 0);
-                        }
-                    });
+            if (tenantWorkers.length === 0 && payrollCards) {
+                payrollCards.innerHTML = `<div class="py-6 text-center text-slate-400 text-xs">इस कंपनी में अभी कोई वर्कर नहीं है।</div>`;
+            }
 
-                    const mAdvance = db.advances
-                        .filter(a => a.companyId === activeCompanyId && a.workerId === w.id && a.date.startsWith(selectedMonth))
-                        .reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+            tenantWorkers.forEach(w => {
+                const dailyRate = parseFloat(w.dailyRate || 500);
+                const otRate = parseFloat(w.otRate || 75);
+                let mPresent = 0;
+                let mOt = 0;
 
-                    const grossPay = Math.round((mPresent * dailyRate) + (mOt * otRate));
-                    const netPay = grossPay - mAdvance;
+                Object.keys(db.attendance).forEach(k => {
+                    const rec = db.attendance[k];
+                    if (rec.companyId === activeCompanyId && rec.workerId === w.id && rec.date.startsWith(selectedMonth)) {
+                        if (rec.status === 'Present') mPresent += 1;
+                        if (rec.status === 'Half Day') mPresent += 0.5;
+                        mOt += parseFloat(rec.ot || 0);
+                    }
+                });
+
+                const mAdvance = db.advances
+                    .filter(a => a.companyId === activeCompanyId && a.workerId === w.id && a.date.startsWith(selectedMonth))
+                    .reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+
+                const grossPay = Math.round((mPresent * dailyRate) + (mOt * otRate));
+                const netPay = grossPay - mAdvance;
+
+                totalMonthAdvance += mAdvance;
+                totalMonthNetSalary += netPay;
+
+                if (payrollTable && isFullPlan) {
                     const netBadgeClass = netPay < 0 ? 'text-rose-600 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
                     const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nकुल हाज़िरी: ${mPresent} दिन (₹${dailyRate}/दिन)\nकुल OT: ${mOt} घंटे (₹${otRate}/hr)\nकुल कमाई: ₹${grossPay}\nएडवांस/खर्ची कटौती: -₹${mAdvance}\n*नेट देय सैलरी: ₹${netPay}*`;
 
@@ -2080,11 +2259,20 @@
                             </div>
                         `;
                     }
-                });
-            }
+                }
+            });
 
+            // Update Home Financial Summary
+            const homeNetEl = document.getElementById('ca-home-net-salary');
+            const homeAdvEl = document.getElementById('ca-home-total-advance');
+            if (homeNetEl) homeNetEl.innerText = `₹${totalMonthNetSalary.toLocaleString('en-IN')}`;
+            if (homeAdvEl) homeAdvEl.innerText = `₹${totalMonthAdvance.toLocaleString('en-IN')}`;
+
+            // Render Audit Logs & Home Recent Activity
             const auditContainer = document.getElementById('ca-audit-list');
+            const homeRecentEl = document.getElementById('ca-home-recent-activity');
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
+
             auditContainer.innerHTML = compLogs.length ? '' : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
             compLogs.forEach(log => {
                 auditContainer.innerHTML += `
@@ -2097,6 +2285,25 @@
                     </div>
                 `;
             });
+
+            if (homeRecentEl) {
+                const topLogs = compLogs.slice(0, 2);
+                if (topLogs.length === 0) {
+                    homeRecentEl.innerHTML = `<p class="text-xs text-slate-400 py-1">अभी तक कोई गतिविधि दर्ज नहीं है।</p>`;
+                } else {
+                    homeRecentEl.innerHTML = topLogs.map(log => `
+                        <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                            <span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-slate-700 font-medium leading-snug line-clamp-2">${log.text}</p>
+                                <span class="text-[10px] text-slate-400 mt-0.5 block">${log.time}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
         }
 
         function toggleSelectAllWorkers(checked) {
@@ -2499,4 +2706,4 @@
         }
     </script>
 </body>
-                                                                            </html>
+                            </html>
