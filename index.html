@@ -3,11 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WorkTrack - Multi-Company Attendance & OT SaaS</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4f46e5">
-    <link rel="icon" type="image/png" href="app-icon.png">
-    <link rel="apple-touch-icon" href="app-icon.png">
+    <title>WorkTrack - Attendance & OT Management</title>
+    <link id="dynamic-manifest" rel="manifest" href="manifest.json">
+    <meta id="dynamic-theme" name="theme-color" content="#4f46e5">
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="app-icon.png">
+    <link id="dynamic-apple-icon" rel="apple-touch-icon" href="app-icon.png">
+    <script>
+        // Instant Dynamic Manifest & Icon Switcher based on ?app=owner / ?app=admin / ?app=worker
+        (function() {
+            const p = new URLSearchParams(window.location.search);
+            const appMode = p.get('app');
+            if (appMode === 'owner') {
+                document.title = 'WorkTrack Owner';
+                document.getElementById('dynamic-manifest').setAttribute('href', 'manifest-owner.json');
+                document.getElementById('dynamic-favicon').setAttribute('href', 'icon-owner.png');
+                document.getElementById('dynamic-apple-icon').setAttribute('href', 'icon-owner.png');
+                document.getElementById('dynamic-theme').setAttribute('content', '#0f172a');
+            } else if (appMode === 'admin') {
+                document.title = 'WorkTrack Admin';
+                document.getElementById('dynamic-manifest').setAttribute('href', 'manifest-admin.json');
+                document.getElementById('dynamic-favicon').setAttribute('href', 'icon-admin.png');
+                document.getElementById('dynamic-apple-icon').setAttribute('href', 'icon-admin.png');
+                document.getElementById('dynamic-theme').setAttribute('content', '#1e3a8a');
+            } else if (appMode === 'worker') {
+                document.title = 'WorkTrack Worker';
+                document.getElementById('dynamic-manifest').setAttribute('href', 'manifest-worker.json');
+                document.getElementById('dynamic-favicon').setAttribute('href', 'icon-worker.png');
+                document.getElementById('dynamic-apple-icon').setAttribute('href', 'icon-worker.png');
+                document.getElementById('dynamic-theme').setAttribute('content', '#059669');
+            }
+        })();
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,7 +45,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
@@ -32,59 +57,43 @@
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800">
+<body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800 min-h-screen flex flex-col">
 
-    <!-- Top Role Switcher Banner -->
-    <div id="demo-top-bar" class="bg-slate-900 text-white px-4 py-2.5 shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-                <span id="db-status-badge" class="bg-amber-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-1">
-                    <i class="fa-solid fa-spinner fa-spin"></i> Connecting DB...
-                </span>
-                <span class="text-sm font-medium text-slate-300" data-i18n="switch_panel">पैनल बदलें:</span>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center">
-                <button onclick="switchRole('super_admin')" id="btn-role-super" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-indigo-600 text-white shadow">
-                    <i class="fa-solid fa-crown"></i> <span data-i18n="role_super">Super Admin (आप)</span>
-                </button>
-                <button onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-                    <i class="fa-solid fa-building"></i> <span data-i18n="role_company">Company Admin</span>
-                </button>
-                <button onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-                    <i class="fa-solid fa-helmet-safety"></i> <span data-i18n="role_worker">Worker Panel</span>
-                </button>
-                <!-- Global Language Selector (Demo Mode) -->
-                <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-2 py-1">
-                    <i class="fa-solid fa-language text-indigo-400 text-sm mr-1.5"></i>
-                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-slate-800 text-white text-xs font-semibold focus:outline-none cursor-pointer">
-                        <option value="hi">हिंदी</option>
-                        <option value="en">English</option>
-                        <option value="gu">ગુજરાતી</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Client Portal Mode Banner (Clean Company Header + Language Switcher) -->
-    <div id="shared-link-banner" class="hidden bg-indigo-950 text-indigo-100 px-4 py-2.5 text-xs border-b border-indigo-800 sticky top-0 z-50">
+    <!-- Clean App Header -->
+    <header id="app-clean-header" class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-2.5 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
-            <span id="shared-link-label"><i class="fa-solid fa-building mr-1.5 text-indigo-400"></i> WorkTrack Client Portal</span>
-            <div class="flex items-center gap-2.5">
-                <div class="flex items-center bg-indigo-900/90 border border-indigo-700 rounded-lg px-2 py-1">
-                    <i class="fa-solid fa-language text-indigo-300 text-sm mr-1"></i>
-                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-indigo-900 text-white text-[11px] font-semibold focus:outline-none cursor-pointer">
+            <div class="flex items-center gap-2.5 min-w-0">
+                <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-8 h-8 rounded-xl object-cover shadow-xs border border-slate-200 shrink-0">
+                <div style="display:none" class="w-8 h-8 rounded-xl bg-indigo-600 text-white items-center justify-center font-bold text-sm shrink-0">W</div>
+                <div class="truncate">
+                    <span id="header-brand-title" class="font-extrabold text-sm text-slate-900 tracking-tight block truncate">WorkTrack</span>
+                    <span id="header-portal-subtitle" class="text-[10px] text-slate-400 font-medium block truncate">Attendance & Payroll App</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+                <!-- Clean Portal Toggle Pills (Hidden in dedicated ?app= mode) -->
+                <div id="portal-quick-tabs" class="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80">
+                    <button onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-bold transition bg-white text-indigo-600 shadow-xs">
+                        <span data-i18n="role_company">Company Admin</span>
+                    </button>
+                    <button onclick="switchRole('worker')" id="btn-role-worker" class="role-btn px-2.5 py-1 rounded-lg text-[11px] font-semibold transition text-slate-600 hover:text-slate-900">
+                        <span data-i18n="role_worker">Worker</span>
+                    </button>
+                </div>
+
+                <!-- Language Switcher -->
+                <div class="flex items-center bg-slate-100 border border-slate-200/80 rounded-xl px-2 py-1">
+                    <i class="fa-solid fa-language text-indigo-600 text-xs mr-1"></i>
+                    <select onchange="setAppLanguage(this.value)" class="lang-selector bg-transparent text-slate-700 text-[11px] font-bold focus:outline-none cursor-pointer">
                         <option value="hi">हिंदी</option>
-                        <option value="en">English</option>
+                        <option value="en">EN</option>
                         <option value="gu">ગુજરાતી</option>
                     </select>
                 </div>
-                <span class="hidden sm:flex text-[11px] text-indigo-300 font-medium items-center gap-1">
-                    <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secure
-                </span>
             </div>
         </div>
-    </div>
+    </header>
 
     <!-- Custom Notification Toast -->
     <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium">
@@ -92,18 +101,16 @@
         <span id="toast-msg">Action successful!</span>
     </div>
 
+    <main class="flex-1">
     <!-- ========================================== -->
-    <!-- 1. SUPER ADMIN PANEL VIEW (PASSWORD PROTECTED) -->
+    <!-- 1. SUPER ADMIN PANEL VIEW                  -->
     <!-- ========================================== -->
-    <div id="view-super_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+    <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
         <!-- Super Admin Password Lock Screen -->
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-6">
             <div class="text-center mb-6">
-                <img src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
-                <div style="display:none" class="w-16 h-16 bg-slate-900 text-amber-400 rounded-2xl items-center justify-center text-2xl mx-auto shadow-md mb-3">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
+                <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
                 <span class="inline-block bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold px-3 py-0.5 rounded-full mb-2">
                     <i class="fa-solid fa-lock mr-1"></i> OWNER ACCESS ONLY
                 </span>
@@ -126,8 +133,10 @@
                 </button>
             </form>
 
-            <div class="mt-5 pt-4 border-t border-slate-100 text-center">
-                <p class="text-[11px] text-slate-400">डिफ़ॉल्ट पासवर्ड: <span class="font-mono font-bold text-slate-600">admin@1234</span> (अंदर जाकर आप इसे बदल सकते हैं)</p>
+            <div id="sa-back-btn-box" class="mt-4 text-center">
+                <button type="button" onclick="switchRole('company_admin')" class="text-xs text-slate-500 hover:text-indigo-600 font-medium">
+                    ← वापस Login पर जाएं
+                </button>
             </div>
         </div>
 
@@ -137,8 +146,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
                     <div class="flex items-center gap-2.5">
-                        <img src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
-                        <div style="display:none" class="w-10 h-10 rounded-xl bg-indigo-600 text-white items-center justify-center font-bold text-xl shadow-sm">W</div>
+                        <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
                         <div>
                             <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
                             <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
@@ -205,7 +213,6 @@
                             </tr>
                         </thead>
                         <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
-                            <!-- Rendered dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -216,18 +223,15 @@
     <!-- ========================================== -->
     <!-- 2. COMPANY ADMIN PANEL VIEW                -->
     <!-- ========================================== -->
-    <div id="view-company_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+    <div id="view-company_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
         <!-- Company Admin Login Box -->
-        <div id="ca-login-box" class="hidden max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
+        <div id="ca-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
-                <img src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-14 h-14 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
-                <div style="display:none" class="w-14 h-14 bg-indigo-600 text-white rounded-2xl items-center justify-center text-2xl mx-auto shadow-md mb-3">
-                    <i class="fa-solid fa-building-user"></i>
-                </div>
+                <img src="icon-admin.png" alt="WorkTrack Admin" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
                 <span id="ca-login-comp-badge" class="hidden inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
                 <h2 class="text-xl font-bold text-slate-900" data-i18n="ca_login_title">Company Admin लॉगिन</h2>
-                <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">Super Admin द्वारा दी गई Admin ID और Password डालें</p>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">अपनी Admin ID और Password डालकर डैशबोर्ड खोलें</p>
             </div>
 
             <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
@@ -245,7 +249,7 @@
             </form>
 
             <!-- App Download Option (Company Admin Login) -->
-            <div class="mt-5 pt-4 border-t border-slate-100">
+            <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="WorkTrack.apk" download="WorkTrack.apk" onclick="showToast('WorkTrack Android App (APK) डाउनलोड शुरू हो गया है!')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i>
                     <span data-i18n="btn_download_app">Mobile App डाउनलोड करें (Android APK)</span>
@@ -254,10 +258,9 @@
         </div>
 
         <!-- Company Admin Dashboard -->
-        <div id="ca-dashboard-wrapper">
-            <!-- Company Context Bar (Premium SaaS Header Card) -->
+        <div id="ca-dashboard-wrapper" class="hidden">
+            <!-- Company Context Bar -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
-                <!-- Subtle Top Accent Strip -->
                 <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
                 
                 <div class="p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -278,7 +281,7 @@
                     </div>
 
                     <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
-                        <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
+                        <div id="ca-demo-selector-box" class="hidden flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
                             <label class="text-xs font-semibold text-slate-500 whitespace-nowrap">कंपनी बदलें:</label>
                             <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             </select>
@@ -321,7 +324,7 @@
                 </div>
             </div>
 
-            <!-- Classic Top Navigation Tabs (Clean Grid) -->
+            <!-- Classic Top Navigation Tabs -->
             <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
                 <div class="grid grid-cols-2 sm:grid-cols-4 border-b border-slate-200 bg-slate-50/70">
                     <button onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab py-3 px-2 text-xs sm:text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white flex items-center justify-center gap-1.5 transition">
@@ -389,9 +392,7 @@
                             <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
                         </button>
                     </div>
-                    <!-- Responsive Mobile Cards + Desktop Clean Table Wrapper -->
-                    <div id="ca-workers-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50">
-                    </div>
+                    <div id="ca-workers-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
                     <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -409,59 +410,28 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: PAYROLL & ADVANCE (KHARCHI) TRACKER (Growth ₹999 & Business ₹1999) -->
+                <!-- TAB 3: PAYROLL & ADVANCE (KHARCHI) TRACKER -->
                 <div id="ca-content-payroll" class="ca-tab-content hidden">
                     <div id="payroll-plan-lock" class="hidden p-5 sm:p-8">
                         <div class="max-w-lg mx-auto relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-amber-400/30 text-center">
-                            <!-- Decorative Glow -->
-                            <div class="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/20 rounded-full blur-2xl pointer-events-none"></div>
-                            <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
-
-                            <!-- Gold Crown Badge -->
                             <div class="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-slate-950 text-2xl shadow-lg shadow-amber-500/25 mb-4 ring-4 ring-amber-400/20">
                                 <i class="fa-solid fa-crown"></i>
                             </div>
-
                             <div class="mb-2">
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-amber-400/15 text-amber-300 border border-amber-400/30">
                                     <i class="fa-solid fa-sparkles text-[10px]"></i> Premium Payroll Suite
                                 </span>
                             </div>
-
                             <h3 class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-2">
                                 Growth (₹999) या Business (₹1,999) प्लान में अपग्रेड करें
                             </h3>
                             <p class="text-xs text-slate-300 max-w-md mx-auto mt-2 leading-relaxed">
-                                अपनी कंपनी का हिसाब-किताब 100% ऑटोमैटिक बनाएं। इस प्रीमियम पैक में आपको मिलते हैं:
+                                अपनी कंपनी का हिसाब-किताब 100% ऑटोमैटिक बनाएं। इस प्रीमियम पैक में ऑटो सैलरी, खर्ची/एडवांस और WhatsApp Slip सुविधा मिलती है।
                             </p>
-
-                            <!-- Feature Pills -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-5 text-left">
-                                <div class="bg-white/5 border border-white/10 rounded-2xl p-3 backdrop-blur-sm">
-                                    <i class="fa-solid fa-calculator text-amber-400 text-sm mb-1 block"></i>
-                                    <div class="text-xs font-bold text-white">ऑटो सैलरी</div>
-                                    <div class="text-[10px] text-slate-400 mt-0.5">हाज़िरी व OT से तुरंत गणना</div>
-                                </div>
-                                <div class="bg-white/5 border border-white/10 rounded-2xl p-3 backdrop-blur-sm">
-                                    <i class="fa-solid fa-hand-holding-dollar text-emerald-400 text-sm mb-1 block"></i>
-                                    <div class="text-xs font-bold text-white">खर्ची / एडवांस</div>
-                                    <div class="text-[10px] text-slate-400 mt-0.5">हर रुपये का पारदर्शी हिसाब</div>
-                                </div>
-                                <div class="bg-white/5 border border-white/10 rounded-2xl p-3 backdrop-blur-sm">
-                                    <i class="fa-brands fa-whatsapp text-green-400 text-sm mb-1 block"></i>
-                                    <div class="text-xs font-bold text-white">WhatsApp Slip</div>
-                                    <div class="text-[10px] text-slate-400 mt-0.5">1-क्लिक में वर्कर को स्लिप</div>
-                                </div>
-                            </div>
-
-                            <!-- Direct Upgrade CTA Button -->
                             <div class="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3">
-                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Growth%20(%E2%82%B9999)%20%E0%A4%AF%E0%A4%BE%20Business%20(%E2%82%B91%2C999)%20%E0%A4%AE%E0%A5%87%E0%A4%82%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
+                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
                                     <i class="fa-brands fa-whatsapp text-base"></i> अभी प्लान अपग्रेड करें
                                 </a>
-                                <span class="text-[11px] text-slate-400 font-medium">
-                                    <i class="fa-solid fa-headset text-amber-400 mr-1"></i> 24x7 Support: 6200889059
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -478,10 +448,7 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Mobile Pro Payroll Cards -->
-                        <div id="ca-payroll-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50">
-                        </div>
-                        <!-- Desktop Clean Payroll Table -->
+                        <div id="ca-payroll-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
                         <div class="hidden md:block overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
@@ -504,8 +471,7 @@
                 <!-- TAB 4: AUDIT LOGS -->
                 <div id="ca-content-audit" class="ca-tab-content hidden p-4 sm:p-5">
                     <h3 class="font-bold text-slate-800 text-sm mb-3">सिस्टम ऑडिट लॉग (किसने और कब बदलाव किया)</h3>
-                    <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto">
-                    </div>
+                    <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
                 </div>
             </div>
         </div>
@@ -519,10 +485,7 @@
         <!-- Worker Login Card -->
         <div id="worker-login-box" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <div class="text-center mb-6">
-                <img src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-14 h-14 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
-                <div style="display:none" class="w-14 h-14 bg-indigo-600 text-white rounded-2xl items-center justify-center text-2xl mx-auto shadow-md mb-3">
-                    <i class="fa-solid fa-helmet-safety"></i>
-                </div>
+                <img src="icon-worker.png" alt="WorkTrack Worker" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
                 <span id="w-login-company-badge" class="hidden inline-block bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
                 <h2 class="text-xl font-bold text-slate-900" data-i18n="w_login_title">Worker पोर्टल लॉगिन</h2>
                 <p class="text-xs text-slate-500 mt-1" data-i18n="w_login_sub">अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें</p>
@@ -543,7 +506,7 @@
             </form>
 
             <!-- App Download Option (Worker Login) -->
-            <div class="mt-5 pt-4 border-t border-slate-100">
+            <div id="w-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="WorkTrack.apk" download="WorkTrack.apk" onclick="showToast('WorkTrack Android App (APK) डाउनलोड शुरू हो गया है!')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-2.5 px-4 rounded-xl text-xs font-semibold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i>
                     <span data-i18n="btn_download_app">Mobile App डाउनलोड करें (Android APK)</span>
@@ -553,7 +516,6 @@
 
         <!-- Worker Dashboard Card (Shown after login) -->
         <div id="worker-dashboard-box" class="hidden space-y-4">
-            <!-- Profile Header -->
             <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
                 <div class="flex items-center justify-between mb-4">
                     <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Company</span>
@@ -595,32 +557,35 @@
                 </div>
             </div>
 
-            <!-- Read-Only Notice -->
             <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex items-center gap-2.5 text-xs text-amber-800">
                 <i class="fa-solid fa-lock text-amber-600"></i>
                 <span data-i18n="w_readonly_note">यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
             </div>
 
-            <!-- Worker Advance / Kharchi History -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                 <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-1.5">
                     <i class="fa-solid fa-hand-holding-dollar text-rose-500"></i> लिया गया एडवांस / खर्ची विवरण
                 </h3>
-                <div id="wd-advance-list" class="space-y-2">
-                </div>
+                <div id="wd-advance-list" class="space-y-2"></div>
             </div>
 
-            <!-- Attendance History List -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                 <h3 class="font-bold text-slate-800 text-sm mb-3" data-i18n="w_history_title">हाल की हाज़िरी और ओवरटाइम रिकॉर्ड</h3>
-                <div id="wd-history-list" class="space-y-2.5">
-                </div>
+                <div id="wd-history-list" class="space-y-2.5"></div>
             </div>
         </div>
     </div>
+    </main>
+
+    <!-- Subtle Footer with Discreet Owner Access -->
+    <footer id="app-footer" class="py-4 px-4 text-center text-[11px] text-slate-400">
+        <span>© 2026 WorkTrack SaaS</span>
+        <span id="footer-owner-sep" class="mx-1.5">•</span>
+        <button id="footer-owner-btn" type="button" onclick="openOwnerPanel()" class="hover:text-slate-600 transition font-medium">Owner Login</button>
+    </footer>
 
     <!-- ========================================== -->
-    <!-- MODALS (CHANGE SA PASS / ADD COMPANY / LINKS) -->
+    <!-- MODALS                                     -->
     <!-- ========================================== -->
 
     <!-- Modal: Change Super Admin Password -->
@@ -639,9 +604,6 @@
                     <label class="block text-xs font-semibold text-slate-600 mb-1">नया पासवर्ड (New Password)</label>
                     <input type="text" id="sa-new-pass" required minlength="4" placeholder="कम से कम 4 अक्षर/अंक" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <p class="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-                    <i class="fa-solid fa-cloud-arrow-up text-indigo-600 mr-1"></i> आपका नया पासवर्ड सुरक्षित रूप से आपके Firebase डेटाबेस में सेव हो जाएगा।
-                </p>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-change-sa-pass')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">नया पासवर्ड सेव करें</button>
@@ -680,9 +642,6 @@
                         <option value="Business">Business (500 Workers तक - सभी फीचर्स) - ₹1,999/माह</option>
                     </select>
                 </div>
-                <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-3 text-xs text-indigo-800">
-                    <i class="fa-solid fa-link mr-1"></i> कंपनी बनते ही इसके लिए <strong>2 अलग-अलग Share Links</strong> (1. Admin Link और 2. Worker Link) अपने आप तैयार हो जाएंगे।
-                </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-company')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">कंपनी बनाएं</button>
@@ -701,7 +660,6 @@
             <p id="links-modal-subtitle" class="text-xs text-slate-500 mb-5">ग्राहक कंपनी को नीचे दिए गए दोनों अलग-अलग लिंक भेजें:</p>
 
             <div class="space-y-4">
-                <!-- Link 1: Company Admin Link (Hidden in Company Admin View) -->
                 <div id="admin-link-section" class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100">
                     <div class="flex items-center justify-between mb-1.5">
                         <span class="text-xs font-bold text-indigo-900"><i class="fa-solid fa-building-shield mr-1.5 text-indigo-600"></i>1. Company Admin Portal Link (मालिक/HR के लिए)</span>
@@ -716,7 +674,6 @@
                     </div>
                 </div>
 
-                <!-- Link 2: Worker Portal Link -->
                 <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-100">
                     <div class="flex items-center justify-between mb-1.5">
                         <span class="text-xs font-bold text-emerald-900"><i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-600"></i>Worker Portal Link (कर्मचारियों के लिए)</span>
@@ -831,7 +788,7 @@
         </div>
     </div>
 
-    <!-- Modal: Confirm Delete Worker (Custom Safe Confirmation Modal) -->
+    <!-- Modal: Confirm Delete Worker -->
     <div id="modal-delete-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
             <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-rose-100">
@@ -846,55 +803,14 @@
         </div>
     </div>
 
-    <!-- Modal: Mobile App Install / Download Guide -->
-    <div id="modal-install-app" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in">
-            <div class="flex items-center justify-between mb-3">
-                <div class="flex items-center gap-2.5">
-                    <img src="app-icon.png" alt="WorkTrack" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
-                    <div style="display:none" class="w-10 h-10 rounded-xl bg-indigo-600 text-white items-center justify-center font-bold text-lg shadow-sm">W</div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900">WorkTrack Mobile App</h3>
-                        <span id="install-portal-tag" class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Android & iPhone App</span>
-                    </div>
-                </div>
-                <button onclick="closeModal('modal-install-app')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-
-            <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                अपने मोबाइल में <strong>WorkTrack App</strong> इंस्टॉल करने के लिए नीचे दिए गए आसान स्टेप्स अपनाएं:
-            </p>
-
-            <div class="space-y-2.5 text-xs bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 mb-4">
-                <div class="flex items-start gap-2.5">
-                    <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">1</span>
-                    <div><strong class="text-slate-800">Android (Chrome):</strong> ऊपर दाईं तरफ <span class="font-bold text-indigo-600">⋮ (3 Dots)</span> दबाएं और <strong>"Install app"</strong> या <strong>"Add to Home screen"</strong> चुनें।</div>
-                </div>
-                <div class="flex items-start gap-2.5">
-                    <span class="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">2</span>
-                    <div><strong class="text-slate-800">iPhone (Safari):</strong> नीचे <span class="font-bold text-indigo-600">Share (<i class="fa-solid fa-arrow-up-from-bracket"></i>)</span> बटन दबाएं और <strong>"Add to Home Screen"</strong> चुनें।</div>
-                </div>
-            </div>
-
-            <button type="button" onclick="closeModal('modal-install-app')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs shadow-sm transition">
-                ठीक है, समझ गया
-            </button>
-        </div>
-    </div>
-
     <!-- ========================================== -->
     <!-- JAVASCRIPT LOGIC (Firebase + i18n + Security) -->
     <!-- ========================================== -->
     <script>
-        // ==========================================
-        // MULTI-LANGUAGE DICTIONARY (Hindi, English, Gujarati)
-        // ==========================================
         const TRANSLATIONS = {
             hi: {
-                switch_panel: "पैनल बदलें:",
-                role_super: "Super Admin (आप)",
                 role_company: "Company Admin",
-                role_worker: "Worker Panel",
+                role_worker: "Worker",
                 sa_login_title: "Super Admin सुरक्षा लॉगिन",
                 sa_login_sub: "नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें",
                 sa_unlock_btn: "कंट्रोल सेंटर अनलॉक करें",
@@ -907,7 +823,7 @@
                 sa_kpi_mrr: "मासिक सब्सक्रिप्शन आय (MRR)",
                 sa_kpi_mrr_sub: "एक्टिव प्लान्स से अनुमानित आय",
                 ca_login_title: "Company Admin लॉगिन",
-                ca_login_sub: "Super Admin द्वारा दी गई Admin ID और Password डालें",
+                ca_login_sub: "अपनी Admin ID और Password डालकर डैशबोर्ड खोलें",
                 ca_login_btn: "Admin Panel खोलें",
                 ca_header_sub: "Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन",
                 ca_share_worker: "Worker Link शेयर करें",
@@ -956,10 +872,8 @@
                 btn_download_app: "Mobile App डाउनलोड करें (Android APK)"
             },
             en: {
-                switch_panel: "Switch Panel:",
-                role_super: "Super Admin (You)",
                 role_company: "Company Admin",
-                role_worker: "Worker Panel",
+                role_worker: "Worker",
                 sa_login_title: "Super Admin Security Login",
                 sa_login_sub: "Enter your master password to open control center",
                 sa_unlock_btn: "Unlock Control Center",
@@ -972,7 +886,7 @@
                 sa_kpi_mrr: "Monthly Subscription Revenue (MRR)",
                 sa_kpi_mrr_sub: "Estimated revenue from active plans",
                 ca_login_title: "Company Admin Login",
-                ca_login_sub: "Enter Admin ID and Password provided by Super Admin",
+                ca_login_sub: "Enter Admin ID and Password to open dashboard",
                 ca_login_btn: "Open Admin Panel",
                 ca_header_sub: "Company Admin Dashboard • Attendance & Overtime Management",
                 ca_share_worker: "Share Worker Link",
@@ -1021,10 +935,8 @@
                 btn_download_app: "Download Mobile App (Android APK)"
             },
             gu: {
-                switch_panel: "પેનલ બદલો:",
-                role_super: "Super Admin (તમે)",
                 role_company: "Company Admin",
-                role_worker: "Worker Panel",
+                role_worker: "Worker",
                 sa_login_title: "Super Admin સુરક્ષા લોગિન",
                 sa_login_sub: "કંટ્રોલ સેન્ટર ખોલવા માટે તમારો માસ્ટર પાસવર્ડ નાખો",
                 sa_unlock_btn: "કંટ્રોલ સેન્ટર અનલોક કરો",
@@ -1037,7 +949,7 @@
                 sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
                 sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
                 ca_login_title: "Company Admin લોગિન",
-                ca_login_sub: "Super Admin દ્વારા આપવામાં આવેલ Admin ID અને Password નાખો",
+                ca_login_sub: "તમારી Admin ID અને Password નાખો",
                 ca_login_btn: "Admin Panel ખોલો",
                 ca_header_sub: "Company Admin Dashboard • હાજરી અને ઓવરટાઇમ મેનેજમેન્ટ",
                 ca_share_worker: "Worker Link શેર કરો",
@@ -1108,24 +1020,20 @@
             });
         }
 
-        // Strict 10-Digit Mobile Number Input Handler
         function enforceTenDigitPhone(input) {
-            // Strip any non-numeric character and limit to 10 digits
             let cleaned = input.value.replace(/\D/g, '').slice(0, 10);
             input.value = cleaned;
 
             const counter = document.getElementById('phone-digit-counter');
             if (counter) {
                 counter.innerText = `${cleaned.length}/10`;
-                if (cleaned.length === 10) {
-                    counter.className = 'text-[11px] font-mono font-bold text-emerald-600';
-                } else {
-                    counter.className = 'text-[11px] font-mono font-semibold text-rose-500';
-                }
+                counter.className = cleaned.length === 10
+                    ? 'text-[11px] font-mono font-bold text-emerald-600'
+                    : 'text-[11px] font-mono font-semibold text-rose-500';
             }
         }
 
-        // 1. Firebase Configuration & Initialization
+        // Firebase Configuration & Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyDjaUQX7cXwMWwscB0Yi1LZeJCbHnhbe6Y",
             authDomain: "worktrack-saas-b70ae.firebaseapp.com",
@@ -1146,21 +1054,19 @@
             console.error("Firebase init error:", err);
         }
 
-        // Helper: Get Today's Date
         const getToday = () => new Date().toISOString().split('T')[0];
         const getYesterday = () => {
             const d = new Date();
             d.setDate(d.getDate() - 1);
             return d.toISOString().split('T')[0];
         };
-        // Plan Configurations (Starter ₹499, Growth ₹999, Business ₹1999)
+
         const PLANS = {
             'Starter': { limit: 25, price: 499, color: 'bg-slate-100 text-slate-700', allFeatures: false },
             'Growth': { limit: 100, price: 999, color: 'bg-indigo-50 text-indigo-700', allFeatures: true },
             'Business': { limit: 500, price: 1999, color: 'bg-purple-50 text-purple-700', allFeatures: true }
         };
 
-        // Local State Cache
         let db = {
             companies: [],
             workers: [],
@@ -1172,17 +1078,16 @@
         const today = getToday();
         const yesterday = getYesterday();
 
-        // Security & App State
         let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
         let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
         let activeCompanyId = '';
         let isCompanyAdminLoggedIn = false;
         let loggedInWorkerId = null;
         let sharedPortalMode = null;
+        let dedicatedAppMode = null;
         let selectedLinksCompanyId = null;
         let initialRouteHandled = false;
 
-        // Toggle Password Eye Icon
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -1194,20 +1099,6 @@
             }
         }
 
-        // Update Live DB Badge
-        function updateDbStatusBadge(connected, text) {
-            const badge = document.getElementById('db-status-badge');
-            if (!badge) return;
-            if (connected) {
-                badge.className = 'bg-emerald-500 text-slate-950 text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider flex items-center gap-1';
-                badge.innerHTML = `<i class="fa-solid fa-cloud"></i> ${text || 'Live Firebase'}`;
-            } else {
-                badge.className = 'bg-rose-500 text-white text-xs font-bold px-2.5 py-0.5 rounded uppercase tracking-wider flex items-center gap-1';
-                badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${text || 'DB Offline'}`;
-            }
-        }
-
-        // Sync Super Admin Password with Firestore
         async function syncSuperAdminSettings() {
             if (!firestore) return;
             try {
@@ -1231,30 +1122,24 @@
             }
         }
 
-        // Seed Initial Sample Data if Firestore is Empty
         async function seedInitialDataIfEmpty() {
             if (!firestore) return;
             try {
                 const snap = await firestore.collection('wt_companies').limit(1).get();
                 if (snap.empty) {
                     const batch = firestore.batch();
-
                     const sampleCompanies = [
                         { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', status: 'Active', color: 'bg-indigo-600' },
                         { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', status: 'Active', color: 'bg-emerald-600' }
                     ];
-                    sampleCompanies.forEach(c => {
-                        batch.set(firestore.collection('wt_companies').doc(c.id), c);
-                    });
+                    sampleCompanies.forEach(c => batch.set(firestore.collection('wt_companies').doc(c.id), c));
 
                     const sampleWorkers = [
                         { id: 'W-101', companyId: 'COMP-01', name: 'रमेश कुमार', dept: 'Fabrication', role: 'Senior Welder', phone: '9811223344', password: '123', photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK' },
                         { id: 'W-102', companyId: 'COMP-01', name: 'सुनील शर्मा', dept: 'Civil', role: 'Site Supervisor', phone: '9822334455', password: '123', photo: 'https://placehold.co/100x100/0284c7/ffffff?text=SS' },
                         { id: 'W-201', companyId: 'COMP-02', name: 'मनोज सिंह', dept: 'Assembly', role: 'Machine Operator', phone: '9844556677', password: '123', photo: 'https://placehold.co/100x100/059669/ffffff?text=MS' }
                     ];
-                    sampleWorkers.forEach(w => {
-                        batch.set(firestore.collection('wt_workers').doc(w.id), w);
-                    });
+                    sampleWorkers.forEach(w => batch.set(firestore.collection('wt_workers').doc(w.id), w));
 
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${today}`), { companyId: 'COMP-01', workerId: 'W-101', date: today, status: 'Present', ot: 2 });
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-102_${today}`), { companyId: 'COMP-01', workerId: 'W-102', date: today, status: 'Present', ot: 0 });
@@ -1263,17 +1148,14 @@
                     await batch.commit();
                 }
             } catch (e) {
-                console.error("Firestore seed/permission check failed:", e);
-                updateDbStatusBadge(false, 'Check Firestore Rules');
+                console.error("Firestore seed error:", e);
             }
         }
 
-        // Real-Time Listeners for Firestore Collections
         function startRealtimeSync() {
             if (!firestore) return;
 
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
-                updateDbStatusBadge(true, 'Firebase Live');
                 db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
                 if (!activeCompanyId && db.companies.length > 0) {
@@ -1285,6 +1167,10 @@
                     const params = new URLSearchParams(window.location.search);
                     const portalType = params.get('portal');
                     const compParam = params.get('company');
+                    if (portalType === 'owner') {
+                        openOwnerPanel();
+                        return;
+                    }
                     if (portalType && compParam && db.companies.some(c => c.id === compParam)) {
                         enterSharedLinkMode(portalType, compParam);
                         return;
@@ -1294,17 +1180,12 @@
                 renderSuperAdmin();
                 updateCompanySelector();
                 renderCompanyAdmin();
-                renderDemoWorkerCredentials();
-            }, (err) => {
-                console.error("Companies sync error:", err);
-                updateDbStatusBadge(false, 'Firestore Error');
             });
 
             firestore.collection('wt_workers').onSnapshot((snapshot) => {
                 db.workers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderSuperAdmin();
                 renderCompanyAdmin();
-                renderDemoWorkerCredentials();
                 if (loggedInWorkerId) renderWorkerDashboard();
             });
 
@@ -1335,7 +1216,6 @@
             });
         }
 
-        // Toast Notification Helper
         function showToast(msg, isError = false) {
             const toast = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
@@ -1351,7 +1231,6 @@
             }, 3200);
         }
 
-        // Modal Helpers
         function openModal(id) {
             const m = document.getElementById(id);
             if (!m) return;
@@ -1366,50 +1245,80 @@
             m.classList.remove('flex');
         }
 
-        // PWA App Install Prompt & Guide Handler
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').catch(() => {});
             });
         }
 
-        let deferredInstallPrompt = null;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredInstallPrompt = e;
-        });
+        // Apply Dedicated Standalone App Mode (?app=owner | ?app=admin | ?app=worker)
+        function applyDedicatedAppMode() {
+            const params = new URLSearchParams(window.location.search);
+            const appMode = params.get('app');
+            if (!appMode) return false;
 
-        async function triggerInstallApp(portalLabel) {
-            const tag = document.getElementById('install-portal-tag');
-            if (tag) tag.innerText = `${portalLabel} App • Android & iPhone`;
+            dedicatedAppMode = appMode;
+            const quickTabs = document.getElementById('portal-quick-tabs');
+            const headerIcon = document.getElementById('header-brand-icon');
+            const headerTitle = document.getElementById('header-brand-title');
+            const headerSub = document.getElementById('header-portal-subtitle');
+            const footerSep = document.getElementById('footer-owner-sep');
+            const footerOwnerBtn = document.getElementById('footer-owner-btn');
 
-            if (deferredInstallPrompt) {
-                deferredInstallPrompt.prompt();
-                const { outcome } = await deferredInstallPrompt.userChoice;
-                deferredInstallPrompt = null;
-                if (outcome === 'accepted') {
-                    showToast('WorkTrack Mobile App इंस्टॉल हो रहा है!');
-                }
-            } else {
-                openModal('modal-install-app');
+            if (quickTabs) quickTabs.classList.add('hidden');
+
+            if (appMode === 'owner') {
+                if (headerIcon) headerIcon.src = 'icon-owner.png';
+                if (headerTitle) headerTitle.innerText = 'WorkTrack Owner';
+                if (headerSub) headerSub.innerText = 'SaaS Control Center';
+                const backBtn = document.getElementById('sa-back-btn-box');
+                if (backBtn) backBtn.classList.add('hidden');
+                switchRole('super_admin');
+                return true;
+            } else if (appMode === 'admin') {
+                if (headerIcon) headerIcon.src = 'icon-admin.png';
+                if (headerTitle) headerTitle.innerText = 'WorkTrack Admin';
+                if (headerSub) headerSub.innerText = 'Company Management Portal';
+                if (footerSep) footerSep.classList.add('hidden');
+                if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
+                const dlBox = document.getElementById('ca-download-box');
+                if (dlBox) dlBox.classList.add('hidden');
+                switchRole('company_admin');
+                return true;
+            } else if (appMode === 'worker') {
+                if (headerIcon) headerIcon.src = 'icon-worker.png';
+                if (headerTitle) headerTitle.innerText = 'WorkTrack Worker';
+                if (headerSub) headerSub.innerText = 'Employee Attendance Portal';
+                if (footerSep) footerSep.classList.add('hidden');
+                if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
+                const wDlBox = document.getElementById('w-download-box');
+                if (wDlBox) wDlBox.classList.add('hidden');
+                switchRole('worker');
+                return true;
             }
+            return false;
         }
-        // Initialize App (Instant Route & Fast Parallel Sync)
+
         window.onload = () => {
             document.getElementById('ca-date-picker').value = today;
             document.getElementById('ca-month-picker').value = today.slice(0, 7);
             document.getElementById('adv-date').value = today;
             setAppLanguage(currentLang);
-            renderSuperAdmin();
-            // Run Firebase sync in background without blocking initial screen load
+            if (!applyDedicatedAppMode()) {
+                switchRole('company_admin');
+            }
             syncSuperAdminSettings();
             seedInitialDataIfEmpty();
             startRealtimeSync();
         };
 
         // ==========================================
-        // SUPER ADMIN SECURITY (LOGIN & PASSWORD)
+        // SUPER ADMIN SECURITY
         // ==========================================
+        function openOwnerPanel() {
+            switchRole('super_admin');
+        }
+
         function handleSuperAdminLogin(e) {
             e.preventDefault();
             const enteredPass = document.getElementById('sa-login-pass').value.trim();
@@ -1428,7 +1337,10 @@
             isSuperAdminUnlocked = false;
             sessionStorage.removeItem('wt_sa_unlocked');
             renderSuperAdmin();
-            showToast('Super Admin पैनल सुरक्षित रूप से लॉक कर दिया गया है।');
+            if (dedicatedAppMode !== 'owner') {
+                switchRole('company_admin');
+            }
+            showToast('Super Admin पैनल लॉक कर दिया गया है।');
         }
 
         async function handleChangeSuperAdminPassword(e) {
@@ -1488,7 +1400,6 @@
             }
 
             document.getElementById('input-worker-link').value = workerUrl;
-
             openModal('modal-company-links');
         }
 
@@ -1497,7 +1408,7 @@
             input.select();
             input.setSelectionRange(0, 99999);
             document.execCommand('copy');
-            showToast('लिंक क्लिपबोर्ड पर कॉपी हो गया! अब आप इसे WhatsApp/Email पर भेज सकते हैं।');
+            showToast('लिंक क्लिपबोर्ड पर कॉपी हो गया!');
         }
 
         function copyRawText(text, label) {
@@ -1522,13 +1433,14 @@
             sharedPortalMode = { role, companyId: compId };
             activeCompanyId = compId;
 
-            document.getElementById('demo-top-bar').classList.add('hidden');
-            document.getElementById('shared-link-banner').classList.remove('hidden');
+            document.getElementById('header-brand-title').innerText = comp.name;
+            document.getElementById('portal-quick-tabs').classList.add('hidden');
 
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
 
             if (role === 'admin') {
-                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-building-shield mr-1.5 text-indigo-400"></i> <strong>${comp.name}</strong> — Company Admin Portal`;
+                document.getElementById('header-brand-icon').src = 'icon-admin.png';
+                document.getElementById('header-portal-subtitle').innerText = 'Company Admin Portal';
                 isCompanyAdminLoggedIn = false;
                 document.getElementById('view-company_admin').classList.remove('hidden');
                 document.getElementById('ca-login-comp-badge').innerText = comp.name;
@@ -1536,46 +1448,36 @@
                 document.getElementById('ca-demo-selector-box').classList.add('hidden');
                 renderCompanyAdmin();
             } else if (role === 'worker') {
-                document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal`;
+                document.getElementById('header-brand-icon').src = 'icon-worker.png';
+                document.getElementById('header-portal-subtitle').innerText = 'Worker Attendance Portal';
                 loggedInWorkerId = null;
                 document.getElementById('view-worker').classList.remove('hidden');
                 document.getElementById('worker-dashboard-box').classList.add('hidden');
                 document.getElementById('worker-login-box').classList.remove('hidden');
                 document.getElementById('w-login-company-badge').innerText = comp.name;
                 document.getElementById('w-login-company-badge').classList.remove('hidden');
-                renderDemoWorkerCredentials();
             }
         }
 
-        function exitSharedLinkMode() {
-            sharedPortalMode = null;
-            isCompanyAdminLoggedIn = false;
-            document.getElementById('shared-link-banner').classList.add('hidden');
-            document.getElementById('demo-top-bar').classList.remove('hidden');
-            document.getElementById('ca-login-comp-badge').classList.add('hidden');
-            document.getElementById('ca-demo-selector-box').classList.remove('hidden');
-            document.getElementById('w-login-company-badge').classList.add('hidden');
-            switchRole('super_admin');
-        }
-
-        // Role Switcher (Top Bar)
         function switchRole(role) {
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
             document.getElementById(`view-${role}`).classList.remove('hidden');
 
-            document.querySelectorAll('.role-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
-                btn.classList.add('bg-slate-800', 'text-slate-300');
-            });
+            const btnCompany = document.getElementById('btn-role-company');
+            const btnWorker = document.getElementById('btn-role-worker');
 
-            const activeBtnId = role === 'super_admin' ? 'btn-role-super' : (role === 'company_admin' ? 'btn-role-company' : 'btn-role-worker');
-            const activeBtn = document.getElementById(activeBtnId);
-            activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
-            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+            if (btnCompany && btnWorker) {
+                [btnCompany, btnWorker].forEach(b => {
+                    b.classList.remove('bg-white', 'text-indigo-600', 'shadow-xs', 'font-bold');
+                    b.classList.add('text-slate-600', 'font-semibold');
+                });
+                const activeBtn = role === 'worker' ? btnWorker : btnCompany;
+                activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-xs', 'font-bold');
+                activeBtn.classList.remove('text-slate-600', 'font-semibold');
+            }
 
             if (role === 'super_admin') renderSuperAdmin();
             if (role === 'company_admin') renderCompanyAdmin();
-            if (role === 'worker') renderDemoWorkerCredentials();
         }
 
         // ==========================================
@@ -1771,6 +1673,7 @@
 
         function updateCompanySelector() {
             const sel = document.getElementById('ca-company-selector');
+            if (!sel) return;
             sel.innerHTML = '';
             db.companies.forEach(c => {
                 const opt = document.createElement('option');
@@ -1822,7 +1725,6 @@
             logo.innerText = comp.name.charAt(0).toUpperCase();
             logo.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-2xl ${comp.color} text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50`;
 
-            // Hide company switcher if Super Admin is not unlocked (Client Security)
             document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
 
             const isSuspended = comp.status === 'Suspended';
@@ -1906,7 +1808,6 @@
             document.getElementById('ca-stat-absent').innerText = absentCount;
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
 
-            // Render Workers Directory (Desktop Table + Mobile Cards)
             const wTable = document.getElementById('ca-workers-table');
             const wCards = document.getElementById('ca-workers-cards');
             wTable.innerHTML = '';
@@ -1920,7 +1821,6 @@
             tenantWorkers.forEach(w => {
                 const shareMsg = `WorkTrack Login (${comp.name})\nLink: ${workerPortalUrl}\nWorker ID: ${w.id}\nPassword: ${w.password}`;
                 
-                // Desktop Table Row
                 wTable.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-3.5 px-5">
@@ -1952,7 +1852,6 @@
                     </tr>
                 `;
 
-                // Mobile Card View
                 if (wCards) {
                     wCards.innerHTML += `
                         <div class="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-sm">
@@ -1985,7 +1884,6 @@
                 }
             });
 
-            // Render Payroll & Advance Tab
             const isFullPlan = PLANS[comp.plan] && PLANS[comp.plan].allFeatures;
             document.getElementById('payroll-plan-lock').classList.toggle('hidden', isFullPlan);
             document.getElementById('payroll-main-area').classList.toggle('hidden', !isFullPlan);
@@ -2030,7 +1928,6 @@
                     const netBadgeClass = netPay < 0 ? 'text-rose-600 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
                     const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nकुल हाज़िरी: ${mPresent} दिन (₹${dailyRate}/दिन)\nकुल OT: ${mOt} घंटे (₹${otRate}/hr)\nकुल कमाई: ₹${grossPay}\nएडवांस/खर्ची कटौती: -₹${mAdvance}\n*नेट देय सैलरी: ₹${netPay}*`;
 
-                    // Desktop Table Row
                     payrollTable.innerHTML += `
                         <tr class="hover:bg-slate-50 transition">
                             <td class="py-3.5 px-5 whitespace-nowrap">
@@ -2056,7 +1953,6 @@
                         </tr>
                     `;
 
-                    // Mobile Pro Salary Card
                     if (payrollCards) {
                         payrollCards.innerHTML += `
                             <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
@@ -2072,7 +1968,6 @@
                                         <i class="fa-brands fa-whatsapp text-sm"></i> Slip
                                     </a>
                                 </div>
-
                                 <div class="grid grid-cols-3 gap-2 py-3 text-center">
                                     <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
                                         <span class="text-[10px] font-semibold text-slate-400 block">हाज़िरी / OT</span>
@@ -2087,7 +1982,6 @@
                                         <span class="text-xs font-bold text-rose-600 mt-0.5 block">- ₹${mAdvance.toLocaleString('en-IN')}</span>
                                     </div>
                                 </div>
-
                                 <div class="flex items-center justify-between pt-2.5 border-t border-slate-100">
                                     <span class="text-xs font-semibold text-slate-500">नेट देय सैलरी (${selectedMonth}):</span>
                                     <span class="px-3 py-1 rounded-xl border text-sm font-extrabold ${netBadgeClass}">
@@ -2245,7 +2139,6 @@
             }
         }
 
-        // Delete Worker Handlers
         function openDeleteWorkerModal(workerId) {
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (comp && comp.status === 'Suspended') {
@@ -2333,8 +2226,6 @@
                 const recordKey = `${activeCompanyId}_${wId}_${selectedDate}`;
                 const existing = db.attendance[recordKey] || { ot: 0 };
                 const attData = { companyId: activeCompanyId, workerId: wId, date: selectedDate, status: 'Present', ot: existing.ot || 0 };
-
-                // Update local state immediately so UI refreshes instantly
                 db.attendance[recordKey] = attData;
 
                 if (firestore) {
@@ -2409,27 +2300,6 @@
         // ==========================================
         // WORKER PANEL LOGIC
         // ==========================================
-        function renderDemoWorkerCredentials() {
-            const container = document.getElementById('demo-worker-credentials');
-            if (!container) return;
-            container.innerHTML = '';
-            const workersList = (sharedPortalMode && sharedPortalMode.role === 'worker')
-                ? db.workers.filter(w => w.companyId === sharedPortalMode.companyId)
-                : db.workers;
-
-            workersList.forEach(w => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'text-xs bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 transition font-medium';
-                btn.innerText = `${w.id} (${w.name.split(' ')[0]})`;
-                btn.onclick = () => {
-                    document.getElementById('w-login-id').value = w.id;
-                    document.getElementById('w-login-pass').value = w.password;
-                };
-                container.appendChild(btn);
-            });
-        }
-
         function handleWorkerLogin(e) {
             e.preventDefault();
             const idInput = document.getElementById('w-login-id').value.trim().toUpperCase();
@@ -2443,7 +2313,7 @@
             }
 
             if (!worker) {
-                showToast('गलत Worker ID या Password (या आप गलत कंपनी के लिंक पर हैं)!', true);
+                showToast('गलत Worker ID या Password!', true);
                 return;
             }
 
@@ -2518,7 +2388,6 @@
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
-            // Render Worker Advance / Kharchi Summary & History
             const workerAdvances = db.advances
                 .filter(a => a.companyId === worker.companyId && a.workerId === worker.id)
                 .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -2548,4 +2417,4 @@
         }
     </script>
 </body>
-    </html>
+                    </html>
