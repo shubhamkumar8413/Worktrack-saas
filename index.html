@@ -56,6 +56,9 @@
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
     </style>
 </head>
 <body class="text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800 min-h-screen flex flex-col">
@@ -89,7 +92,7 @@
                     </button>
                 </div>
 
-                <!-- 24x7 Support Quick Help Icon (Fills empty space usefully in dedicated apps) -->
+                <!-- 24x7 Support Quick Help Icon -->
                 <a id="header-support-btn" href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="hidden items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 rounded-xl px-2.5 py-1.5 text-[11px] font-semibold transition" title="WhatsApp Support">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span class="hidden xs:inline">Help</span>
@@ -128,9 +131,9 @@
         </div>
     </div>
 
-    <!-- Custom Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 text-white px-4 py-3 rounded-xl shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium">
-        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+    <!-- Custom Notification Toast (Lifted slightly above bottom nav) -->
+    <div id="toast" class="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-5 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl transform translate-y-28 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium border border-white/10">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg shrink-0"></i>
         <span id="toast-msg">Action successful!</span>
     </div>
 
@@ -281,7 +284,7 @@
                 </button>
             </form>
 
-            <!-- Company Admin APK Download Button (Always Visible) -->
+            <!-- Company Admin APK Download Button -->
             <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100 space-y-2">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk" download="WT-Admin.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Admin App डाउनलोड शुरू हो गया है!')" class="w-full bg-blue-950 hover:bg-blue-900 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Admin App डाउनलोड करें (APK)
@@ -292,8 +295,8 @@
             </div>
         </div>
 
-        <!-- Company Admin Dashboard -->
-        <div id="ca-dashboard-wrapper" class="hidden">
+        <!-- Company Admin Dashboard (Added bottom padding for Bottom Navigation Bar) -->
+        <div id="ca-dashboard-wrapper" class="hidden pb-24">
             <!-- Company Context Bar (Premium SaaS Header Card) -->
             <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
                 <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
@@ -359,22 +362,8 @@
                 </div>
             </div>
 
-            <!-- Classic Top Navigation Tabs -->
-            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div class="grid grid-cols-2 sm:grid-cols-4 border-b border-slate-200 bg-slate-50/70">
-                    <button type="button" onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab py-3 px-2 text-xs sm:text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 bg-white flex items-center justify-center gap-1.5 transition">
-                        <i class="fa-solid fa-calendar-check"></i> <span data-i18n="tab_att">हाज़िरी व OT</span>
-                    </button>
-                    <button type="button" onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab py-3 px-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center justify-center gap-1.5 transition">
-                        <i class="fa-solid fa-users"></i> <span data-i18n="tab_workers">वर्कर्स लिस्ट</span>
-                    </button>
-                    <button type="button" onclick="switchCaTab('payroll')" id="tab-ca-payroll" class="ca-tab py-3 px-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center justify-center gap-1.5 transition">
-                        <i class="fa-solid fa-indian-rupee-sign"></i> <span data-i18n="tab_payroll">सैलरी व खर्ची</span>
-                    </button>
-                    <button type="button" onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab py-3 px-2 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex items-center justify-center gap-1.5 transition">
-                        <i class="fa-solid fa-clock-rotate-left"></i> <span data-i18n="tab_audit">ऑडिट लॉग</span>
-                    </button>
-                </div>
+            <!-- Main Tab Content Container (Controlled by Bottom Navigation Bar) -->
+            <div id="ca-main-card" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
 
                 <!-- TAB 1: DAILY ATTENDANCE & OT -->
                 <div id="ca-content-attendance" class="ca-tab-content">
@@ -505,6 +494,39 @@
                     <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
                 </div>
             </div>
+
+            <!-- Fixed Mobile/App Bottom Navigation Bar -->
+            <nav id="ca-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
+                <div class="max-w-2xl mx-auto grid grid-cols-4 h-16 px-1">
+                    <button type="button" onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab flex flex-col items-center justify-center gap-1 text-indigo-600 font-bold transition relative">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-calendar-check text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_att">हाज़िरी व OT</span>
+                    </button>
+
+                    <button type="button" onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-users text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_workers">वर्कर्स लिस्ट</span>
+                    </button>
+
+                    <button type="button" onclick="switchCaTab('payroll')" id="tab-ca-payroll" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_payroll">सैलरी व खर्ची</span>
+                    </button>
+
+                    <button type="button" onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_audit">ऑडिट लॉग</span>
+                    </button>
+                </div>
+            </nav>
         </div>
     </div>
 
@@ -536,7 +558,7 @@
                 </button>
             </form>
 
-            <!-- Worker APK Download Button (Always Visible) -->
+            <!-- Worker APK Download Button -->
             <div id="w-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk" download="WT-Worker.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Worker App डाउनलोड शुरू हो गया है!')" class="w-full bg-emerald-950 hover:bg-emerald-900 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Worker App डाउनलोड करें (APK)
@@ -923,9 +945,9 @@
                 ca_stat_present: "Present Today",
                 ca_stat_absent: "Absent / Leave",
                 ca_stat_ot: "Today's Total OT (Hrs)",
-                tab_att: "Attendance & OT",
-                tab_workers: "Workers List",
-                tab_payroll: "Payroll & Advance",
+                tab_att: "Attendance",
+                tab_workers: "Workers",
+                tab_payroll: "Payroll",
                 tab_audit: "Audit Log",
                 select_date: "Select Date:",
                 btn_mark_all: "Mark All Present",
@@ -1242,11 +1264,11 @@
             document.getElementById('toast-msg').innerText = msg;
             
             icon.className = isError 
-                ? 'fa-solid fa-circle-exclamation text-rose-400 text-lg' 
-                : 'fa-solid fa-circle-check text-emerald-400 text-lg';
+                ? 'fa-solid fa-circle-exclamation text-rose-400 text-lg shrink-0' 
+                : 'fa-solid fa-circle-check text-emerald-400 text-lg shrink-0';
 
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3200);
+            toast.classList.remove('translate-y-28', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-28', 'opacity-0'), 3200);
         }
 
         function openModal(id) {
@@ -1715,26 +1737,44 @@
             document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
 
             document.querySelectorAll('.ca-tab').forEach(btn => {
-                btn.classList.remove('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
-                btn.classList.add('text-slate-500', 'border-transparent', 'font-semibold');
+                btn.classList.remove('text-indigo-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'font-medium');
+                const pill = btn.querySelector('.nav-pill');
+                if (pill) {
+                    pill.classList.remove('bg-indigo-100', 'text-indigo-600');
+                    pill.classList.add('bg-transparent');
+                }
             });
 
             const activeTab = document.getElementById(`tab-ca-${tabName}`);
-            activeTab.classList.remove('text-slate-500', 'border-transparent', 'font-semibold');
-            activeTab.classList.add('text-indigo-600', 'border-indigo-600', 'bg-white', 'font-bold');
+            activeTab.classList.remove('text-slate-500', 'font-medium');
+            activeTab.classList.add('text-indigo-600', 'font-bold');
+            const activePill = activeTab.querySelector('.nav-pill');
+            if (activePill) {
+                activePill.classList.remove('bg-transparent');
+                activePill.classList.add('bg-indigo-100', 'text-indigo-600');
+            }
+
+            const mainCard = document.getElementById('ca-main-card');
+            if (mainCard) {
+                mainCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
         function renderCompanyAdmin() {
             const loginBox = document.getElementById('ca-login-box');
             const dashWrapper = document.getElementById('ca-dashboard-wrapper');
+            const footer = document.getElementById('app-footer');
 
             if (!isCompanyAdminLoggedIn) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
+                if (footer) footer.classList.remove('pb-20');
                 return;
             } else {
                 loginBox.classList.add('hidden');
                 dashWrapper.classList.remove('hidden');
+                if (footer) footer.classList.add('pb-20');
             }
 
             const comp = db.companies.find(c => c.id === activeCompanyId);
@@ -2435,4 +2475,4 @@
         }
     </script>
 </body>
-                                    </html>
+                        </html>
