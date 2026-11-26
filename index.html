@@ -176,15 +176,13 @@
             </div>
         </div>
 
-        <!-- Super Admin Main Dashboard (Premier Owner Command Center with Bottom Navigation) -->
+        <!-- Super Admin Main Dashboard -->
         <div id="sa-dashboard-wrapper" class="hidden pb-24">
 
-            <!-- ========================================== -->
-            <!-- SA TAB 1: PREMIER HOME OVERVIEW            -->
-            <!-- ========================================== -->
+            <!-- SA TAB 1: PREMIER HOME OVERVIEW -->
             <div id="sa-content-home" class="sa-tab-content fade-in space-y-4">
                 
-                <!-- 1. Luxury Obsidian & Gold Hero Owner Card -->
+                <!-- Luxury Obsidian & Gold Hero Owner Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white p-5 sm:p-6 shadow-xl border border-amber-400/25">
                     <div class="pointer-events-none absolute -top-12 -right-12 w-44 h-44 rounded-full bg-amber-500/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-indigo-500/15 blur-2xl"></div>
@@ -211,7 +209,6 @@
                         </button>
                     </div>
 
-                    <!-- Annual Run Rate (ARR) & Active Status Bar -->
                     <div class="relative mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-3">
                         <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10">
                             <span class="text-[10px] text-amber-200/80 uppercase font-semibold block">वार्षिक आय (Est. ARR)</span>
@@ -223,7 +220,6 @@
                         </div>
                     </div>
 
-                    <!-- Hero Action Buttons -->
                     <div class="relative mt-4 grid grid-cols-2 gap-2.5">
                         <button type="button" onclick="openModal('modal-add-company')" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 py-2.5 px-3 rounded-xl text-xs font-extrabold shadow-md shadow-amber-950/50 transition flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
@@ -234,9 +230,8 @@
                     </div>
                 </div>
 
-                <!-- 2. Premier SaaS KPI Cards -->
+                <!-- Premier SaaS KPI Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                    <!-- MRR Highlight Card -->
                     <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-sm hover:border-emerald-400 transition flex items-center justify-between">
                         <div>
                             <span class="text-[11px] font-bold text-slate-500 uppercase" data-i18n="sa_kpi_mrr">मासिक सब्सक्रिप्शन आय (MRR)</span>
@@ -249,7 +244,6 @@
                     </div>
 
                     <div class="grid grid-cols-2 sm:col-span-2 gap-3.5">
-                        <!-- Registered Companies -->
                         <div onclick="switchSaTab('companies')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
@@ -261,7 +255,6 @@
                             <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="sa_kpi_comp">कुल रजिस्टर्ड कंपनियाँ</span>
                         </div>
 
-                        <!-- Total Active Workers -->
                         <div onclick="switchSaTab('companies')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
@@ -275,7 +268,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Plan Distribution Breakdown Card -->
+                <!-- Plan Distribution Breakdown Card -->
                 <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-amber-300 transition">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -299,7 +292,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Owner Quick Actions Grid -->
+                <!-- Owner Quick Actions Grid -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                         <i class="fa-solid fa-bolt text-amber-500"></i> ओनर क्विक एक्शन (Owner Actions)
@@ -335,7 +328,7 @@
                     </div>
                 </div>
 
-                <!-- 5. Latest Joined Companies Mini List -->
+                <!-- Latest Joined Companies Mini List -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2.5">
                         <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -349,9 +342,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT  -->
-            <!-- ========================================== -->
+            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT -->
             <div id="sa-content-companies" class="sa-tab-content hidden fade-in">
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
                     <div class="p-4 sm:p-5 border-b border-slate-100 space-y-3">
@@ -365,7 +356,6 @@
                             </button>
                         </div>
 
-                        <!-- Search & Filter Bar -->
                         <div class="flex flex-col sm:flex-row gap-2">
                             <div class="relative flex-1">
                                 <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
@@ -379,10 +369,8 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Cards View for Companies -->
                     <div id="sa-company-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
 
-                    <!-- Desktop Table View for Companies -->
                     <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -402,9 +390,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- SA TAB 3: REVENUE & PLANS ANALYTICS        -->
-            <!-- ========================================== -->
+            <!-- SA TAB 3: REVENUE & PLANS ANALYTICS -->
             <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-lg border border-emerald-400/20">
                     <div class="flex items-center justify-between">
@@ -425,11 +411,8 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- SA TAB 4: OWNER SECURITY & APK SETTINGS    -->
-            <!-- ========================================== -->
+            <!-- SA TAB 4: OWNER SECURITY & APK SETTINGS -->
             <div id="sa-content-settings" class="sa-tab-content hidden fade-in space-y-4">
-                <!-- Security Controls -->
                 <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-4">
                     <div class="flex items-center gap-3">
                         <span class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg border border-amber-200">
@@ -451,7 +434,6 @@
                     </div>
                 </div>
 
-                <!-- 3 Apps APK Share Links for Clients -->
                 <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-brands fa-android text-emerald-600 text-base"></i> तीनों Android Apps (APK) डाउनलोड व शेयर करें
@@ -492,7 +474,7 @@
                 </div>
             </div>
 
-            <!-- Fixed Mobile/App Bottom Navigation Bar for Owner (4 Tabs) -->
+            <!-- Fixed Bottom Navigation Bar for Owner (4 Tabs) -->
             <nav id="sa-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
                 <div class="max-w-xl mx-auto grid grid-cols-4 h-16 px-1">
                     <button type="button" onclick="switchSaTab('home')" id="tab-sa-home" class="sa-tab flex flex-col items-center justify-center gap-1 text-amber-600 font-bold transition">
@@ -569,7 +551,6 @@
         <!-- Company Admin Dashboard -->
         <div id="ca-dashboard-wrapper" class="hidden pb-24">
 
-            <!-- Suspended Warning Banner -->
             <div id="ca-suspended-banner" class="hidden bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
                 <i class="fa-solid fa-ban text-rose-600 text-lg"></i>
                 <div class="text-sm">
@@ -580,7 +561,6 @@
             <!-- TAB 0: PREMIUM HOME OVERVIEW DASHBOARD -->
             <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
                 
-                <!-- 1. Premium Dark Hero Company Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
                     <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-500/15 blur-2xl"></div>
@@ -609,14 +589,12 @@
                         </button>
                     </div>
 
-                    <!-- Super Admin Company Switcher -->
                     <div id="ca-demo-selector-box" class="relative mt-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
                         <label class="text-xs font-semibold text-indigo-200 whitespace-nowrap">कंपनी बदलें:</label>
                         <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full bg-slate-900/90 border border-white/20 text-white text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
                         </select>
                     </div>
 
-                    <!-- Worker Capacity Progress Bar -->
                     <div class="relative mt-4 pt-3.5 border-t border-white/10">
                         <div class="flex items-center justify-between text-[11px] mb-1.5">
                             <span class="text-indigo-200/90 font-medium"><i class="fa-solid fa-users-gear mr-1 text-indigo-300"></i> प्लान वर्कर लिमिट उपयोग</span>
@@ -627,7 +605,6 @@
                         </div>
                     </div>
 
-                    <!-- Primary Action Buttons inside Hero Card -->
                     <div class="relative mt-4 grid grid-cols-2 gap-2.5">
                         <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-400 hover:to-blue-500 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md shadow-indigo-950/50 transition flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
@@ -638,7 +615,6 @@
                     </div>
                 </div>
 
-                <!-- 2. Today's Attendance Progress Banner -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
@@ -653,7 +629,6 @@
                     <p id="ca-home-unmarked-note" class="text-[11px] text-slate-400 mt-1.5">सभी वर्कर्स का आज का लाइव स्टेटस</p>
                 </div>
 
-                <!-- 3. Premium 2x2 KPI Cards -->
                 <div class="grid grid-cols-2 gap-3.5">
                     <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition relative overflow-hidden group">
                         <div class="flex items-center justify-between mb-2">
@@ -700,7 +675,6 @@
                     </div>
                 </div>
 
-                <!-- 4. Monthly Payroll & Advance Financial Summary Card -->
                 <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-2">
@@ -723,7 +697,6 @@
                     </div>
                 </div>
 
-                <!-- 5. Quick Actions Grid -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                         <i class="fa-solid fa-bolt text-amber-500"></i> क्विक एक्शन (Quick Actions)
@@ -759,7 +732,6 @@
                     </div>
                 </div>
 
-                <!-- 6. Recent Activity Mini Feed -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2.5">
                         <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -859,7 +831,7 @@
                                 अपनी कंपनी का हिसाब-किताब 100% ऑटोमैटिक बनाएं। ऑटो सैलरी, एडवांस/खर्ची और 1-क्लिक WhatsApp Slip पाएं।
                             </p>
                             <div class="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3">
-                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Growth%20(%E2%82%B9999)%20%E0%A4%AF%E0%A4%BE%20Business%20(%E2%82%B91%2C999)%20%E0%A4%AE%E0%A5%87%E0%A4%82%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
+                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Growth%20(%E2%82%B9999)%20%E0%A4%AF%E0%A4%A6%20Business%20(%E2%82%B91%2C999)%20%E0%A4%AE%E0%A5%87%E0%A4%82%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
                                     <i class="fa-brands fa-whatsapp text-base"></i> अभी प्लान अपग्रेड करें
                                 </a>
                                 <span class="text-[11px] text-slate-400 font-medium">
@@ -907,7 +879,7 @@
                 </div>
             </div>
 
-            <!-- Fixed Mobile/App Bottom Navigation Bar (5 Tabs: Home + 4 Sections) -->
+            <!-- Fixed Mobile/App Bottom Navigation Bar (5 Tabs) -->
             <nav id="ca-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
                 <div class="max-w-2xl mx-auto grid grid-cols-5 h-16 px-1">
                     <button type="button" onclick="switchCaTab('home')" id="tab-ca-home" class="ca-tab flex flex-col items-center justify-center gap-1 text-indigo-600 font-bold transition relative">
@@ -950,9 +922,9 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 3. WORKER PANEL VIEW (MOBILE FIRST)        -->
+    <!-- 3. WORKER PANEL VIEW (PREMIER STAFF APP)   -->
     <!-- ========================================== -->
-    <div id="view-worker" class="role-view hidden max-w-md mx-auto p-4 sm:py-8 fade-in">
+    <div id="view-worker" class="role-view hidden max-w-md mx-auto p-4 sm:py-6 fade-in">
         
         <!-- Worker Login Card -->
         <div id="worker-login-box" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
@@ -966,13 +938,13 @@
             <form onsubmit="handleWorkerLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Worker ID</label>
-                    <input type="text" id="w-login-id" required placeholder="W-101" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase">
+                    <input type="text" id="w-login-id" required placeholder="W-101" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 uppercase">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password / PIN</label>
-                    <input type="password" id="w-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="password" id="w-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
                     <span data-i18n="w_login_btn">लॉगिन करें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
@@ -985,64 +957,247 @@
             </div>
         </div>
 
-        <!-- Worker Dashboard Card -->
-        <div id="worker-dashboard-box" class="hidden space-y-4">
-            <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
-                <div class="flex items-center justify-between mb-4">
-                    <span id="wd-company" class="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Company</span>
-                    <button type="button" onclick="logoutWorker()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full transition">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> <span data-i18n="w_logout">लॉगआउट</span>
-                    </button>
-                </div>
-                <div class="flex items-center gap-4">
-                    <img id="wd-photo" src="https://placehold.co/100x100/ffffff/4f46e5?text=W" alt="Worker" class="w-16 h-16 rounded-2xl object-cover border-2 border-white/40 bg-white">
-                    <div>
-                        <h2 id="wd-name" class="text-lg font-bold">Worker Name</h2>
-                        <p id="wd-role" class="text-xs text-indigo-100">ID: W-101 • Welder</p>
-                        <p class="text-xs text-indigo-200 mt-1"><i class="fa-solid fa-phone mr-1"></i> <span id="wd-phone">9876543210</span></p>
+        <!-- Worker Premier Dashboard with 4-Tab Bottom Navigation -->
+        <div id="worker-dashboard-box" class="hidden pb-24">
+
+            <!-- ========================================== -->
+            <!-- WORKER TAB 1: PREMIER HOME DASHBOARD       -->
+            <!-- ========================================== -->
+            <div id="w-content-home" class="w-tab-content fade-in space-y-4">
+                
+                <!-- 1. Luxury Emerald & Slate Hero Staff Card -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white p-5 shadow-xl border border-emerald-400/25">
+                    <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-emerald-400/20 blur-2xl"></div>
+                    <div class="pointer-events-none absolute -bottom-12 -left-8 w-32 h-32 rounded-full bg-teal-400/15 blur-2xl"></div>
+
+                    <div class="relative flex items-center justify-between mb-4">
+                        <span id="wd-company" class="inline-flex items-center gap-1.5 text-[11px] font-bold bg-white/15 px-3 py-1 rounded-full backdrop-blur-sm border border-white/15">
+                            <i class="fa-solid fa-building text-emerald-300"></i> Company
+                        </span>
+                        <button type="button" onclick="logoutWorker()" class="text-xs bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="w_logout">लॉगआउट</span>
+                        </button>
+                    </div>
+
+                    <div class="relative flex items-center gap-3.5">
+                        <img id="wd-photo" src="https://placehold.co/100x100/ffffff/059669?text=W" alt="Worker" class="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-400/50 bg-white shadow-lg shrink-0">
+                        <div class="min-w-0">
+                            <h2 id="wd-name" class="text-lg font-extrabold text-white truncate">Worker Name</h2>
+                            <p id="wd-role" class="text-xs text-emerald-200 font-medium mt-0.5 truncate">ID: W-101 • Staff</p>
+                            <p class="text-[11px] text-slate-300 mt-1 font-mono"><i class="fa-solid fa-phone mr-1 text-emerald-400"></i> <span id="wd-phone">9876543210</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Today's Live Status Strip -->
+                    <div class="relative mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between text-xs">
+                        <span class="text-emerald-200/90 font-medium"><i class="fa-regular fa-calendar-check mr-1"></i> आज की हाज़िरी:</span>
+                        <span id="wd-today-status-badge" class="font-extrabold px-2.5 py-0.5 rounded-full bg-white/15 text-white text-[11px]">Not Marked</span>
                     </div>
                 </div>
+
+                <!-- 2. Estimated Net Pay Summary Card (New Feature!) -->
+                <div onclick="switchWTab('kharchi')" class="cursor-pointer bg-white rounded-2xl border border-emerald-200/80 p-4 shadow-sm hover:border-emerald-400 transition">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                            <i class="fa-solid fa-wallet text-emerald-600"></i> अनुमानित नेट हिसाब (Est. Net Balance)
+                        </span>
+                        <span id="wd-home-month-badge" class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">इस माह</span>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <div id="wd-net-balance" class="text-2xl font-extrabold text-emerald-600">₹0</div>
+                            <div id="wd-rate-info" class="text-[11px] text-slate-500 mt-0.5">दैनिक दर: ₹500 • OT: ₹75/hr</div>
+                        </div>
+                        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl">हिसाब देखें →</span>
+                    </div>
+                </div>
+
+                <!-- 3. 2x2 Clickable KPI Cards -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="switchWTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full" data-i18n="unit_days">दिन</span>
+                        </div>
+                        <span id="wd-stat-present" class="text-2xl font-extrabold text-emerald-600 block">0</span>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="w_stat_present">कुल हाज़िरी</span>
+                    </div>
+
+                    <div onclick="switchWTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-calendar-xmark"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full" data-i18n="unit_days">दिन</span>
+                        </div>
+                        <span id="wd-stat-absent" class="text-2xl font-extrabold text-rose-500 block">0</span>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="w_stat_absent">अनुपस्थित</span>
+                    </div>
+
+                    <div onclick="switchWTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-clock"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full" data-i18n="unit_hours">घंटे</span>
+                        </div>
+                        <span id="wd-stat-ot" class="text-2xl font-extrabold text-amber-600 block">0</span>
+                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="w_stat_ot">कुल ओवरटाइम</span>
+                    </div>
+
+                    <div onclick="switchWTab('kharchi')" class="cursor-pointer bg-white p-4 rounded-2xl border border-rose-200/80 shadow-sm bg-rose-50/20 hover:border-rose-400 transition">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">खर्ची</span>
+                        </div>
+                        <span id="wd-stat-advance" class="text-2xl font-extrabold text-rose-600 block">₹0</span>
+                        <span class="text-[11px] font-semibold text-rose-700 block mt-0.5">कुल एडवांस (खर्ची)</span>
+                    </div>
+                </div>
+
+                <!-- 4. Quick Actions & Read-Only Security Badge -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" onclick="switchWTab('idcard')" class="bg-white hover:bg-slate-50 border border-slate-200/90 p-3 rounded-2xl text-xs font-bold text-slate-800 shadow-sm flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-id-card text-emerald-600 text-sm"></i> मेरा ID Card देखें
+                    </button>
+                    <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A5%80%20%E0%A4%B9%E0%A4%BE%E0%A4%9C%E0%A4%BC%E0%A4%BF%E0%A4%B0%E0%A5%80%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 p-3 rounded-2xl text-xs font-bold text-emerald-800 shadow-sm flex items-center justify-center gap-2 transition">
+                        <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> हेल्प / सपोर्ट
+                    </a>
+                </div>
+
+                <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex items-center gap-2.5 text-[11px] text-amber-800">
+                    <i class="fa-solid fa-lock text-amber-600 shrink-0"></i>
+                    <span data-i18n="w_readonly_note">यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_present">कुल हाज़िरी</span>
-                    <span id="wd-stat-present" class="text-xl font-bold text-emerald-600 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400" data-i18n="unit_days">दिन</span>
-                </div>
-                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_absent">अनुपस्थित</span>
-                    <span id="wd-stat-absent" class="text-xl font-bold text-rose-500 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400" data-i18n="unit_days">दिन</span>
-                </div>
-                <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 text-center shadow-sm">
-                    <span class="text-[11px] font-semibold text-slate-400 block" data-i18n="w_stat_ot">कुल ओवरटाइम</span>
-                    <span id="wd-stat-ot" class="text-xl font-bold text-amber-600 mt-0.5 block">0</span>
-                    <span class="text-[10px] text-slate-400" data-i18n="unit_hours">घंटे</span>
-                </div>
-                <div class="bg-white p-3.5 rounded-2xl border border-rose-200/80 text-center shadow-sm bg-rose-50/30">
-                    <span class="text-[11px] font-semibold text-rose-600 block">कुल एडवांस (खर्ची)</span>
-                    <span id="wd-stat-advance" class="text-xl font-bold text-rose-600 mt-0.5 block">₹0</span>
-                    <span class="text-[10px] text-slate-400">लिया गया</span>
+            <!-- ========================================== -->
+            <!-- WORKER TAB 2: ATTENDANCE & OT HISTORY      -->
+            <!-- ========================================== -->
+            <div id="w-content-attendance" class="w-tab-content hidden fade-in space-y-4">
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
+                    <div class="flex items-center justify-between gap-2 mb-3">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5" data-i18n="w_history_title">
+                            <i class="fa-solid fa-calendar-days text-emerald-600"></i> हाल की हाज़िरी और ओवरटाइम
+                        </h3>
+                        <select id="wd-att-filter" onchange="renderWorkerDashboard()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700">
+                            <option value="ALL">सभी दिन (All)</option>
+                            <option value="Present">✅ Present</option>
+                            <option value="Absent">❌ Absent</option>
+                        </select>
+                    </div>
+                    <div id="wd-history-list" class="space-y-2.5"></div>
                 </div>
             </div>
 
-            <div class="bg-amber-50 border border-amber-200/80 rounded-2xl p-3 flex items-center gap-2.5 text-xs text-amber-800">
-                <i class="fa-solid fa-lock text-amber-600"></i>
-                <span data-i18n="w_readonly_note">यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।</span>
+            <!-- ========================================== -->
+            <!-- WORKER TAB 3: KHARCHI (ADVANCE) & SALARY   -->
+            <!-- ========================================== -->
+            <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
+                <!-- Salary Calculation Breakdown Card -->
+                <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider">कमाई व खर्ची हिसाब</span>
+                        <span id="wd-calc-days-badge" class="text-[11px] bg-white/15 px-2.5 py-0.5 rounded-full font-semibold">0 दिन • 0 OT</span>
+                    </div>
+                    <div class="space-y-1.5 text-xs pt-1 border-t border-white/10">
+                        <div class="flex justify-between text-slate-300">
+                            <span>कुल हाज़िरी व OT कमाई:</span>
+                            <span id="wd-calc-gross" class="font-bold text-white">₹0</span>
+                        </div>
+                        <div class="flex justify-between text-rose-300">
+                            <span>कुल एडवांस / खर्ची कटौती:</span>
+                            <span id="wd-calc-adv" class="font-bold">- ₹0</span>
+                        </div>
+                        <div class="flex justify-between text-sm pt-2 border-t border-white/15 font-extrabold text-emerald-300">
+                            <span>अनुमानित शेष सैलरी:</span>
+                            <span id="wd-calc-net">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advance / Kharchi List -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-hand-holding-dollar text-rose-500"></i> लिया गया एडवांस / खर्ची विवरण
+                    </h3>
+                    <div id="wd-advance-list" class="space-y-2.5"></div>
+                </div>
             </div>
 
-            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
-                <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-1.5">
-                    <i class="fa-solid fa-hand-holding-dollar text-rose-500"></i> लिया गया एडवांस / खर्ची विवरण
-                </h3>
-                <div id="wd-advance-list" class="space-y-2"></div>
+            <!-- ========================================== -->
+            <!-- WORKER TAB 4: DIGITAL STAFF ID CARD        -->
+            <!-- ========================================== -->
+            <div id="w-content-idcard" class="w-tab-content hidden fade-in space-y-4">
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-emerald-800 via-teal-900 to-slate-950 text-white p-6 shadow-xl border border-emerald-400/30 text-center">
+                    <div class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300 mb-1" id="wd-card-company">WORKTRACK VERIFIED STAFF</div>
+                    <div class="text-[11px] text-slate-300 mb-4">डिजिटल कर्मचारी पहचान पत्र (Digital Staff ID)</div>
+
+                    <img id="wd-card-photo" src="https://placehold.co/100x100/ffffff/059669?text=W" alt="Staff" class="w-24 h-24 rounded-3xl object-cover mx-auto border-4 border-emerald-400/50 shadow-xl bg-white mb-3">
+                    <h3 id="wd-card-name" class="text-xl font-extrabold text-white">Worker Name</h3>
+                    <p id="wd-card-dept" class="text-xs text-emerald-200 font-semibold mt-0.5">Department</p>
+
+                    <div class="mt-5 bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/15 text-left space-y-2 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-300">Employee ID:</span>
+                            <span id="wd-card-id" class="font-mono font-extrabold text-emerald-300">W-101</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-300">Mobile No:</span>
+                            <span id="wd-card-phone" class="font-mono font-bold text-white">9876543210</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-300">Daily Wage / OT:</span>
+                            <span id="wd-card-rates" class="font-mono font-bold text-amber-300">₹500/day • ₹75/hr</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-300">Verification:</span>
+                            <span class="font-bold text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Active Staff</span>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="logoutWorker()" class="mt-5 w-full bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-400/30 py-2.5 rounded-xl text-xs font-bold transition">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> पोर्टल से लॉगआउट करें
+                    </button>
+                </div>
             </div>
 
-            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
-                <h3 class="font-bold text-slate-800 text-sm mb-3" data-i18n="w_history_title">हाल की हाज़िरी और ओवरटाइम रिकॉर्ड</h3>
-                <div id="wd-history-list" class="space-y-2.5"></div>
-            </div>
+            <!-- Fixed Bottom Navigation Bar for Worker (4 Tabs) -->
+            <nav id="w-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
+                <div class="max-w-md mx-auto grid grid-cols-4 h-16 px-1">
+                    <button type="button" onclick="switchWTab('home')" id="tab-w-home" class="w-tab flex flex-col items-center justify-center gap-1 text-emerald-600 font-bold transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-house text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">Home</span>
+                    </button>
+
+                    <button type="button" onclick="switchWTab('attendance')" id="tab-w-attendance" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-calendar-check text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">हाज़िरी व OT</span>
+                    </button>
+
+                    <button type="button" onclick="switchWTab('kharchi')" id="tab-w-kharchi" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">खर्ची व सैलरी</span>
+                    </button>
+
+                    <button type="button" onclick="switchWTab('idcard')" id="tab-w-idcard" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-id-card text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">ID Card</span>
+                    </button>
+                </div>
+            </nav>
         </div>
     </div>
     </main>
@@ -1987,7 +2142,7 @@
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
-                if (footer) footer.classList.remove('pb-20');
+                if (footer && !isCompanyAdminLoggedIn && !loggedInWorkerId) footer.classList.remove('pb-20');
                 return;
             } else {
                 loginBox.classList.add('hidden');
@@ -2015,7 +2170,6 @@
                 }
             });
 
-            // Update Home KPIs & Hero Metrics
             document.getElementById('sa-total-companies').innerText = totalCompanies;
             document.getElementById('sa-total-workers').innerText = totalWorkers;
             document.getElementById('sa-mrr').innerText = `₹${mrr.toLocaleString('en-IN')}`;
@@ -2030,7 +2184,6 @@
             document.getElementById('sa-plan-count-growth').innerText = planCounts.Growth;
             document.getElementById('sa-plan-count-business').innerText = planCounts.Business;
 
-            // Update Revenue Tab
             const revMrrBig = document.getElementById('sa-rev-mrr-big');
             const revArrSub = document.getElementById('sa-rev-arr-sub');
             const revBreakdown = document.getElementById('sa-revenue-breakdown');
@@ -2056,7 +2209,6 @@
                 }).join('');
             }
 
-            // Update Home Recent Companies Mini Feed
             const recentEl = document.getElementById('sa-home-recent-companies');
             if (recentEl) {
                 const recentComps = [...db.companies].slice(-3).reverse();
@@ -2080,7 +2232,6 @@
                 }
             }
 
-            // Filter & Render Companies (Mobile Cards + Desktop Table)
             const searchQuery = (document.getElementById('sa-company-search')?.value || '').toLowerCase().trim();
             const statusFilter = document.getElementById('sa-company-filter')?.value || 'ALL';
 
@@ -2109,7 +2260,6 @@
                 const adminUrl = `${base}?portal=admin&company=${comp.id}`;
                 const workerUrl = `${base}?portal=worker&company=${comp.id}`;
 
-                // Desktop Row
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50/80 transition';
                 tr.innerHTML = `
@@ -2170,7 +2320,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // Mobile Card View
                 if (cardsContainer) {
                     const statusBadge = comp.status === 'Active'
                         ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">● Active</span>'
@@ -2186,7 +2335,6 @@
                                 ${statusBadge}
                             </div>
 
-                            <!-- Plan Selector + Worker Usage -->
                             <div class="grid grid-cols-2 gap-2 items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                                 <div>
                                     <span class="text-[10px] text-slate-400 block font-semibold">प्लान बदलें:</span>
@@ -2207,7 +2355,6 @@
                                 </div>
                             </div>
 
-                            <!-- Copy Links Row -->
                             <div class="grid grid-cols-2 gap-2">
                                 <button type="button" onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-2 px-2.5 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1">
                                     <i class="fa-regular fa-copy"></i> Admin Link
@@ -2217,7 +2364,6 @@
                                 </button>
                             </div>
 
-                            <!-- Action Buttons -->
                             <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
                                 <button type="button" onclick="inspectCompany('${comp.id}')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-xl text-xs font-bold transition">
                                     पैनल खोलें
@@ -2419,7 +2565,7 @@
             if (!isCompanyAdminLoggedIn) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
-                if (footer && !isSuperAdminUnlocked) footer.classList.remove('pb-20');
+                if (footer && !isSuperAdminUnlocked && !loggedInWorkerId) footer.classList.remove('pb-20');
                 return;
             } else {
                 loginBox.classList.add('hidden');
@@ -3064,8 +3210,37 @@
         }
 
         // ==========================================
-        // WORKER PANEL LOGIC
+        // WORKER PANEL LOGIC (PREMIER STAFF APP)
         // ==========================================
+        function switchWTab(tabName) {
+            document.querySelectorAll('.w-tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`w-content-${tabName}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.w-tab').forEach(btn => {
+                btn.classList.remove('text-emerald-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'font-medium');
+                const pill = btn.querySelector('.nav-pill');
+                if (pill) {
+                    pill.classList.remove('bg-emerald-100', 'text-emerald-700');
+                    pill.classList.add('bg-transparent');
+                }
+            });
+
+            const activeBtn = document.getElementById(`tab-w-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-500', 'font-medium');
+                activeBtn.classList.add('text-emerald-600', 'font-bold');
+                const activePill = activeBtn.querySelector('.nav-pill');
+                if (activePill) {
+                    activePill.classList.remove('bg-transparent');
+                    activePill.classList.add('bg-emerald-100', 'text-emerald-700');
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function handleWorkerLogin(e) {
             e.preventDefault();
             const idInput = document.getElementById('w-login-id').value.trim().toUpperCase();
@@ -3086,6 +3261,9 @@
             loggedInWorkerId = worker.id;
             document.getElementById('worker-login-box').classList.add('hidden');
             document.getElementById('worker-dashboard-box').classList.remove('hidden');
+            const footer = document.getElementById('app-footer');
+            if (footer) footer.classList.add('pb-20');
+            switchWTab('home');
             renderWorkerDashboard();
             showToast(`स्वागत है, ${worker.name}!`);
         }
@@ -3095,6 +3273,8 @@
             document.getElementById('worker-dashboard-box').classList.add('hidden');
             document.getElementById('worker-login-box').classList.remove('hidden');
             document.getElementById('w-login-pass').value = '';
+            const footer = document.getElementById('app-footer');
+            if (footer && !isSuperAdminUnlocked && !isCompanyAdminLoggedIn) footer.classList.remove('pb-20');
         }
 
         function renderWorkerDashboard() {
@@ -3102,13 +3282,50 @@
             if (!worker) return;
 
             const comp = db.companies.find(c => c.id === worker.companyId);
+            const compName = comp ? comp.name : 'WorkTrack';
 
+            // Hero Card Details
             document.getElementById('wd-photo').src = worker.photo;
-            document.getElementById('wd-company').innerText = comp ? comp.name : 'WorkTrack';
+            document.getElementById('wd-company').innerHTML = `<i class="fa-solid fa-building text-emerald-300"></i> ${compName}`;
             document.getElementById('wd-name').innerText = worker.name;
             document.getElementById('wd-role').innerText = `ID: ${worker.id} • ${worker.dept}${worker.role ? ` (${worker.role})` : ''}`;
             document.getElementById('wd-phone').innerText = worker.phone;
 
+            // Digital ID Card Tab Details
+            const cardPhoto = document.getElementById('wd-card-photo');
+            if (cardPhoto) cardPhoto.src = worker.photo;
+            const cardComp = document.getElementById('wd-card-company');
+            if (cardComp) cardComp.innerText = compName.toUpperCase();
+            const cardName = document.getElementById('wd-card-name');
+            if (cardName) cardName.innerText = worker.name;
+            const cardDept = document.getElementById('wd-card-dept');
+            if (cardDept) cardDept.innerText = `${worker.dept}${worker.role ? ` • ${worker.role}` : ''}`;
+            const cardId = document.getElementById('wd-card-id');
+            if (cardId) cardId.innerText = worker.id;
+            const cardPhone = document.getElementById('wd-card-phone');
+            if (cardPhone) cardPhone.innerText = worker.phone;
+            const dailyRate = parseFloat(worker.dailyRate || 500);
+            const otRate = parseFloat(worker.otRate || 75);
+            const cardRates = document.getElementById('wd-card-rates');
+            if (cardRates) cardRates.innerText = `₹${dailyRate}/day • ₹${otRate}/hr`;
+
+            // Today's Status Badge on Hero Card
+            const todayRec = db.attendance[`${worker.companyId}_${worker.id}_${today}`];
+            const todayBadge = document.getElementById('wd-today-status-badge');
+            if (todayBadge) {
+                if (!todayRec || todayRec.status === 'Not Marked') {
+                    todayBadge.innerText = 'अभी दर्ज नहीं (Pending)';
+                    todayBadge.className = 'font-bold px-2.5 py-0.5 rounded-full bg-white/15 text-slate-200 text-[11px]';
+                } else if (todayRec.status === 'Present') {
+                    todayBadge.innerText = `✅ Present${todayRec.ot > 0 ? ` (+${todayRec.ot}h OT)` : ''}`;
+                    todayBadge.className = 'font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-400/25 text-emerald-200 border border-emerald-300/30 text-[11px]';
+                } else {
+                    todayBadge.innerText = todayRec.status;
+                    todayBadge.className = 'font-extrabold px-2.5 py-0.5 rounded-full bg-amber-400/25 text-amber-200 border border-amber-300/30 text-[11px]';
+                }
+            }
+
+            // Attendance & OT Calculations
             const historyContainer = document.getElementById('wd-history-list');
             historyContainer.innerHTML = '';
 
@@ -3117,33 +3334,38 @@
             let totalOt = 0;
 
             const prefix = `${worker.companyId}_${worker.id}_`;
-            const records = Object.keys(db.attendance)
+            const allRecords = Object.keys(db.attendance)
                 .filter(k => k.startsWith(prefix))
                 .map(k => ({ date: k.replace(prefix, ''), ...db.attendance[k] }))
                 .sort((a, b) => b.date.localeCompare(a.date));
 
-            if (records.length === 0) {
-                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">अभी तक कोई रिकॉर्ड दर्ज नहीं है।</p>`;
-            }
-
-            records.forEach(rec => {
+            allRecords.forEach(rec => {
                 if (rec.status === 'Present') totalPresent += 1;
                 if (rec.status === 'Half Day') totalPresent += 0.5;
                 if (rec.status === 'Absent' || rec.status === 'Leave') totalAbsent += 1;
                 totalOt += parseFloat(rec.ot || 0);
+            });
 
+            const attFilter = document.getElementById('wd-att-filter')?.value || 'ALL';
+            const filteredRecords = allRecords.filter(rec => attFilter === 'ALL' || rec.status === attFilter);
+
+            if (filteredRecords.length === 0) {
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">कोई हाज़िरी रिकॉर्ड नहीं मिला।</p>`;
+            }
+
+            filteredRecords.forEach(rec => {
                 let badgeClass = 'bg-slate-100 text-slate-600';
                 if (rec.status === 'Present') badgeClass = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
                 if (rec.status === 'Half Day') badgeClass = 'bg-amber-50 text-amber-700 border border-amber-200';
                 if (rec.status === 'Absent' || rec.status === 'Leave') badgeClass = 'bg-rose-50 text-rose-700 border border-rose-200';
 
                 historyContainer.innerHTML += `
-                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50/60">
+                    <div class="flex items-center justify-between p-3 rounded-2xl border border-slate-100 bg-slate-50/70">
                         <div>
                             <div class="text-xs font-bold text-slate-800">${rec.date}</div>
                             <div class="text-[11px] text-slate-500 mt-0.5">OT: <strong class="text-slate-700">${rec.ot} घंटे</strong></div>
                         </div>
-                        <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${badgeClass}">
+                        <span class="px-2.5 py-1 rounded-xl text-xs font-bold ${badgeClass}">
                             ${rec.status}
                         </span>
                     </div>
@@ -3154,6 +3376,7 @@
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
+            // Advances & Net Earnings Calculation
             const workerAdvances = db.advances
                 .filter(a => a.companyId === worker.companyId && a.workerId === worker.id)
                 .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -3162,18 +3385,38 @@
             const advStatEl = document.getElementById('wd-stat-advance');
             if (advStatEl) advStatEl.innerText = `₹${totalAdvance.toLocaleString('en-IN')}`;
 
+            const grossEarnings = Math.round((totalPresent * dailyRate) + (totalOt * otRate));
+            const netBalance = grossEarnings - totalAdvance;
+
+            const netBalEl = document.getElementById('wd-net-balance');
+            const rateInfoEl = document.getElementById('wd-rate-info');
+            if (netBalEl) {
+                netBalEl.innerText = `₹${netBalance.toLocaleString('en-IN')}`;
+                netBalEl.className = netBalance < 0 ? 'text-2xl font-extrabold text-rose-600' : 'text-2xl font-extrabold text-emerald-600';
+            }
+            if (rateInfoEl) rateInfoEl.innerText = `दैनिक दर: ₹${dailyRate} • OT: ₹${otRate}/hr`;
+
+            const calcDaysEl = document.getElementById('wd-calc-days-badge');
+            const calcGrossEl = document.getElementById('wd-calc-gross');
+            const calcAdvEl = document.getElementById('wd-calc-adv');
+            const calcNetEl = document.getElementById('wd-calc-net');
+            if (calcDaysEl) calcDaysEl.innerText = `${totalPresent} दिन • ${totalOt} OT`;
+            if (calcGrossEl) calcGrossEl.innerText = `₹${grossEarnings.toLocaleString('en-IN')}`;
+            if (calcAdvEl) calcAdvEl.innerText = `- ₹${totalAdvance.toLocaleString('en-IN')}`;
+            if (calcNetEl) calcNetEl.innerText = `₹${netBalance.toLocaleString('en-IN')}`;
+
             const advListEl = document.getElementById('wd-advance-list');
             if (advListEl) {
                 if (workerAdvances.length === 0) {
-                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">कोई एडवांस / खर्ची दर्ज नहीं है।</p>`;
+                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">कोई एडवांस / खर्ची दर्ज नहीं है।</p>`;
                 } else {
                     advListEl.innerHTML = workerAdvances.map(a => `
-                        <div class="flex items-center justify-between p-2.5 rounded-xl border border-rose-100 bg-rose-50/40">
+                        <div class="flex items-center justify-between p-3 rounded-2xl border border-rose-100 bg-rose-50/40">
                             <div>
                                 <div class="text-xs font-bold text-slate-800">${a.date}</div>
                                 <div class="text-[11px] text-slate-500">${a.note || 'एडवांस / खर्ची'}</div>
                             </div>
-                            <span class="text-xs font-extrabold text-rose-600 bg-white px-2.5 py-1 rounded-lg border border-rose-200">
+                            <span class="text-xs font-extrabold text-rose-600 bg-white px-3 py-1 rounded-xl border border-rose-200">
                                 ₹${parseFloat(a.amount || 0).toLocaleString('en-IN')}
                             </span>
                         </div>
