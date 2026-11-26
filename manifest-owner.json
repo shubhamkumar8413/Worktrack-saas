@@ -2,7 +2,7 @@
 "name": "WorkTrack Owner",
 "short_name": "WT Owner",
 "description": "WorkTrack SaaS Owner Control Center",
-"start_url": "/?app=owner",
+"start_url": "/owner.html",
 "scope": "/",
 "display": "standalone",
 "orientation": "portrait",
