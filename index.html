@@ -297,42 +297,6 @@
 
         <!-- Company Admin Dashboard (Added bottom padding for Bottom Navigation Bar) -->
         <div id="ca-dashboard-wrapper" class="hidden pb-24">
-            <!-- Company Context Bar (Premium SaaS Header Card) -->
-            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
-                <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
-                
-                <div class="p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="flex items-start sm:items-center gap-3.5 min-w-0">
-                        <div id="ca-company-logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50">A</div>
-                        <div class="min-w-0 flex-1">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight truncate">Company Name</h1>
-                                <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap shrink-0">
-                                    <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> Growth Plan
-                                </span>
-                            </div>
-                            <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
-                                <span data-i18n="ca_header_sub" class="truncate">Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
-                        <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
-                            <label class="text-xs font-semibold text-slate-500 whitespace-nowrap">कंपनी बदलें:</label>
-                            <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </select>
-                        </div>
-                        <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="flex-1 sm:flex-initial justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-2 whitespace-nowrap">
-                            <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
-                        </button>
-                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0" title="लॉगआउट करें">
-                            <i class="fa-solid fa-right-from-bracket"></i> <span class="sm:hidden" data-i18n="w_logout">लॉगआउट</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Suspended Warning Banner -->
             <div id="ca-suspended-banner" class="hidden bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
@@ -342,31 +306,71 @@
                 </div>
             </div>
 
-            <!-- Today's Overview Stats -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-slate-400 uppercase" data-i18n="ca_stat_total">कुल वर्कर्स</span>
-                    <p id="ca-stat-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+            <!-- TAB 0: HOME (Only Company Header Card + Today's Overview Stats) -->
+            <div id="ca-content-home" class="ca-tab-content fade-in">
+                <!-- Company Context Bar (Premium SaaS Header Card) -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm mb-6 overflow-hidden">
+                    <div class="h-1.5 w-full bg-gradient-to-r from-indigo-600 via-blue-500 to-emerald-500"></div>
+                    
+                    <div class="p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <div class="flex items-start sm:items-center gap-3.5 min-w-0">
+                            <div id="ca-company-logo" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xl sm:text-2xl shadow-md shrink-0 ring-4 ring-slate-50">A</div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight truncate">Company Name</h1>
+                                    <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap shrink-0">
+                                        <i class="fa-solid fa-crown text-amber-500 text-[10px]"></i> Growth Plan
+                                    </span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1 flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                                    <span data-i18n="ca_header_sub" class="truncate">Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100">
+                            <div id="ca-demo-selector-box" class="flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 w-full sm:w-auto">
+                                <label class="text-xs font-semibold text-slate-500 whitespace-nowrap">कंपनी बदलें:</label>
+                                <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full sm:w-auto bg-white border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                </select>
+                            </div>
+                            <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="flex-1 sm:flex-initial justify-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-2 whitespace-nowrap">
+                                <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
+                            </button>
+                            <button type="button" onclick="logoutCompanyAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/70 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0" title="लॉगआउट करें">
+                                <i class="fa-solid fa-right-from-bracket"></i> <span class="sm:hidden" data-i18n="w_logout">लॉगआउट</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-emerald-600 uppercase" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
-                    <p id="ca-stat-present" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-rose-500 uppercase" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
-                    <p id="ca-stat-absent" class="text-2xl font-bold text-rose-500 mt-1">0</p>
-                </div>
-                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <span class="text-xs font-semibold text-amber-600 uppercase" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
-                    <p id="ca-stat-ot" class="text-2xl font-bold text-amber-600 mt-1">0 hrs</p>
+
+                <!-- Today's Overview Stats -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <span class="text-xs font-semibold text-slate-400 uppercase" data-i18n="ca_stat_total">कुल वर्कर्स</span>
+                        <p id="ca-stat-total" class="text-2xl font-bold text-slate-900 mt-1">0</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <span class="text-xs font-semibold text-emerald-600 uppercase" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
+                        <p id="ca-stat-present" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <span class="text-xs font-semibold text-rose-500 uppercase" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
+                        <p id="ca-stat-absent" class="text-2xl font-bold text-rose-500 mt-1">0</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <span class="text-xs font-semibold text-amber-600 uppercase" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
+                        <p id="ca-stat-ot" class="text-2xl font-bold text-amber-600 mt-1">0 hrs</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Main Tab Content Container (Controlled by Bottom Navigation Bar) -->
-            <div id="ca-main-card" class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+            <!-- Main Tab Content Container (For Attendance, Workers, Payroll & Audit) -->
+            <div id="ca-main-card" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
 
                 <!-- TAB 1: DAILY ATTENDANCE & OT -->
-                <div id="ca-content-attendance" class="ca-tab-content">
+                <div id="ca-content-attendance" class="ca-tab-content hidden">
                     <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div class="flex items-center gap-2">
                             <label class="text-xs font-semibold text-slate-500" data-i18n="select_date">तारीख चुनें:</label>
@@ -495,32 +499,39 @@
                 </div>
             </div>
 
-            <!-- Fixed Mobile/App Bottom Navigation Bar -->
+            <!-- Fixed Mobile/App Bottom Navigation Bar (5 Tabs: Home + 4 Sections) -->
             <nav id="ca-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
-                <div class="max-w-2xl mx-auto grid grid-cols-4 h-16 px-1">
-                    <button type="button" onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab flex flex-col items-center justify-center gap-1 text-indigo-600 font-bold transition relative">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center transition-all">
+                <div class="max-w-2xl mx-auto grid grid-cols-5 h-16 px-1">
+                    <button type="button" onclick="switchCaTab('home')" id="tab-ca-home" class="ca-tab flex flex-col items-center justify-center gap-1 text-indigo-600 font-bold transition relative">
+                        <span class="nav-pill w-11 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-house text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_home">Home</span>
+                    </button>
+
+                    <button type="button" onclick="switchCaTab('attendance')" id="tab-ca-attendance" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
+                        <span class="nav-pill w-11 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-calendar-check text-sm"></i>
                         </span>
                         <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_att">हाज़िरी व OT</span>
                     </button>
 
                     <button type="button" onclick="switchCaTab('workers')" id="tab-ca-workers" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                        <span class="nav-pill w-11 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-users text-sm"></i>
                         </span>
                         <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_workers">वर्कर्स लिस्ट</span>
                     </button>
 
                     <button type="button" onclick="switchCaTab('payroll')" id="tab-ca-payroll" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                        <span class="nav-pill w-11 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
                         </span>
                         <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_payroll">सैलरी व खर्ची</span>
                     </button>
 
                     <button type="button" onclick="switchCaTab('audit')" id="tab-ca-audit" class="ca-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition relative">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                        <span class="nav-pill w-11 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-clock-rotate-left text-sm"></i>
                         </span>
                         <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_audit">ऑडिट लॉग</span>
@@ -882,6 +893,7 @@
                 ca_stat_present: "आज हाज़िर (Present)",
                 ca_stat_absent: "अनुपस्थित / छुट्टी",
                 ca_stat_ot: "आज का कुल OT (घंटे)",
+                tab_home: "Home",
                 tab_att: "हाज़िरी व OT",
                 tab_workers: "वर्कर्स लिस्ट",
                 tab_payroll: "सैलरी व खर्ची",
@@ -945,6 +957,7 @@
                 ca_stat_present: "Present Today",
                 ca_stat_absent: "Absent / Leave",
                 ca_stat_ot: "Today's Total OT (Hrs)",
+                tab_home: "Home",
                 tab_att: "Attendance",
                 tab_workers: "Workers",
                 tab_payroll: "Payroll",
@@ -1008,6 +1021,7 @@
                 ca_stat_present: "આજે હાજર (Present)",
                 ca_stat_absent: "ગેરહાજર / રજા",
                 ca_stat_ot: "આજનો કુલ OT (કલાક)",
+                tab_home: "Home",
                 tab_att: "હાજરી અને OT",
                 tab_workers: "વર્કર્સ લિસ્ટ",
                 tab_payroll: "પગાર અને ખર્ચી",
@@ -1491,6 +1505,7 @@
                 document.getElementById('ca-login-comp-badge').innerText = comp.name;
                 document.getElementById('ca-login-comp-badge').classList.remove('hidden');
                 document.getElementById('ca-demo-selector-box').classList.add('hidden');
+                switchCaTab('home');
                 renderCompanyAdmin();
             } else if (role === 'worker') {
                 document.getElementById('shared-link-label').innerHTML = `<i class="fa-solid fa-helmet-safety mr-1.5 text-emerald-400"></i> <strong>${comp.name}</strong> — Worker Portal`;
@@ -1678,6 +1693,7 @@
             activeCompanyId = compId;
             isCompanyAdminLoggedIn = true;
             updateCompanySelector();
+            switchCaTab('home');
             switchRole('company_admin');
         }
 
@@ -1704,6 +1720,7 @@
             activeCompanyId = comp.id;
             isCompanyAdminLoggedIn = true;
             updateCompanySelector();
+            switchCaTab('home');
             renderCompanyAdmin();
             showToast(`${comp.name} Admin Panel में स्वागत है!`);
         }
@@ -1734,7 +1751,15 @@
 
         function switchCaTab(tabName) {
             document.querySelectorAll('.ca-tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
+            const mainCard = document.getElementById('ca-main-card');
+
+            if (tabName === 'home') {
+                document.getElementById('ca-content-home').classList.remove('hidden');
+                if (mainCard) mainCard.classList.add('hidden');
+            } else {
+                if (mainCard) mainCard.classList.remove('hidden');
+                document.getElementById(`ca-content-${tabName}`).classList.remove('hidden');
+            }
 
             document.querySelectorAll('.ca-tab').forEach(btn => {
                 btn.classList.remove('text-indigo-600', 'font-bold');
@@ -1747,18 +1772,17 @@
             });
 
             const activeTab = document.getElementById(`tab-ca-${tabName}`);
-            activeTab.classList.remove('text-slate-500', 'font-medium');
-            activeTab.classList.add('text-indigo-600', 'font-bold');
-            const activePill = activeTab.querySelector('.nav-pill');
-            if (activePill) {
-                activePill.classList.remove('bg-transparent');
-                activePill.classList.add('bg-indigo-100', 'text-indigo-600');
+            if (activeTab) {
+                activeTab.classList.remove('text-slate-500', 'font-medium');
+                activeTab.classList.add('text-indigo-600', 'font-bold');
+                const activePill = activeTab.querySelector('.nav-pill');
+                if (activePill) {
+                    activePill.classList.remove('bg-transparent');
+                    activePill.classList.add('bg-indigo-100', 'text-indigo-600');
+                }
             }
 
-            const mainCard = document.getElementById('ca-main-card');
-            if (mainCard) {
-                mainCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderCompanyAdmin() {
@@ -2475,4 +2499,4 @@
         }
     </script>
 </body>
-                        </html>
+                                                                            </html>
