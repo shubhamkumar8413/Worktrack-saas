@@ -9,11 +9,11 @@
     <link rel="icon" type="image/png" href="icon-owner.png">
     <link rel="apple-touch-icon" href="icon-owner.png">
     <script>
+        window.FORCED_APP_MODE = 'owner';
         localStorage.setItem('wt_locked_app', 'owner');
-        window.location.replace('index.html?app=owner');
     </script>
 </head>
-<body style="background:#0f172a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-    <p>Opening WorkTrack Owner...</p>
+<body style="margin:0;padding:0;background:#0f172a;">
+    <iframe src="index.html?app=owner" style="border:none;width:100vw;height:100vh;display:block;"></iframe>
 </body>
 </html>
