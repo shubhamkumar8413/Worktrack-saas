@@ -139,7 +139,7 @@
 
     <main class="flex-1">
     <!-- ========================================== -->
-    <!-- 1. SUPER ADMIN PANEL VIEW (PASSWORD PROTECTED) -->
+    <!-- 1. SUPER ADMIN PANEL VIEW (PREMIER OWNER)  -->
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
@@ -158,7 +158,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Super Admin Password</label>
                     <div class="relative">
-                        <input type="password" id="sa-login-pass" required placeholder="••••••••" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 pr-10">
+                        <input type="password" id="sa-login-pass" required placeholder="••••••••" class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 pr-10">
                         <button type="button" onclick="togglePasswordVisibility('sa-login-pass', this)" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
                             <i class="fa-regular fa-eye"></i>
                         </button>
@@ -176,83 +176,354 @@
             </div>
         </div>
 
-        <!-- Super Admin Main Dashboard (Unlocked) -->
-        <div id="sa-dashboard-wrapper" class="hidden">
-            <!-- Header -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                <div>
-                    <div class="flex items-center gap-2.5">
-                        <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-10 h-10 rounded-xl object-cover shadow-sm border border-slate-200">
+        <!-- Super Admin Main Dashboard (Premier Owner Command Center with Bottom Navigation) -->
+        <div id="sa-dashboard-wrapper" class="hidden pb-24">
+
+            <!-- ========================================== -->
+            <!-- SA TAB 1: PREMIER HOME OVERVIEW            -->
+            <!-- ========================================== -->
+            <div id="sa-content-home" class="sa-tab-content fade-in space-y-4">
+                
+                <!-- 1. Luxury Obsidian & Gold Hero Owner Card -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white p-5 sm:p-6 shadow-xl border border-amber-400/25">
+                    <div class="pointer-events-none absolute -top-12 -right-12 w-44 h-44 rounded-full bg-amber-500/20 blur-2xl"></div>
+                    <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-indigo-500/15 blur-2xl"></div>
+
+                    <div class="relative flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-14 h-14 rounded-2xl object-cover shadow-lg shrink-0 ring-2 ring-amber-400/40">
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                        <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> SaaS Founder & Owner
+                                    </span>
+                                </div>
+                                <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-1 truncate">WorkTrack Control Center</h1>
+                                <p class="text-[11px] text-slate-300/90 mt-0.5 flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live Cloud Sync • All Systems Active
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="logoutSuperAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="पैनल लॉक करें">
+                            <i class="fa-solid fa-lock"></i>
+                            <span class="hidden sm:inline" data-i18n="sa_lock_btn">लॉक करें</span>
+                        </button>
+                    </div>
+
+                    <!-- Annual Run Rate (ARR) & Active Status Bar -->
+                    <div class="relative mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 gap-3">
+                        <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10">
+                            <span class="text-[10px] text-amber-200/80 uppercase font-semibold block">वार्षिक आय (Est. ARR)</span>
+                            <span id="sa-home-arr" class="text-base font-extrabold text-amber-300 mt-0.5 block">₹0 / वर्ष</span>
+                        </div>
+                        <div class="bg-white/5 rounded-2xl p-2.5 border border-white/10">
+                            <span class="text-[10px] text-emerald-200/80 uppercase font-semibold block">कंपनी स्टेटस</span>
+                            <span id="sa-home-active-ratio" class="text-sm font-extrabold text-emerald-300 mt-0.5 block">0 Active • 0 Hold</span>
+                        </div>
+                    </div>
+
+                    <!-- Hero Action Buttons -->
+                    <div class="relative mt-4 grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="openModal('modal-add-company')" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 py-2.5 px-3 rounded-xl text-xs font-extrabold shadow-md shadow-amber-950/50 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
+                        </button>
+                        <button type="button" onclick="switchSaTab('companies')" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-building-circle-check text-amber-300"></i> <span>सभी कंपनियाँ देखें</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. Premier SaaS KPI Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <!-- MRR Highlight Card -->
+                    <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-sm hover:border-emerald-400 transition flex items-center justify-between">
                         <div>
-                            <h1 class="text-2xl font-bold text-slate-900">WorkTrack SaaS Control Center</h1>
-                            <p class="text-xs text-slate-500">Super Admin Panel • सभी क्लाइंट कंपनियों और सब्सक्रिप्शन का नियंत्रण</p>
+                            <span class="text-[11px] font-bold text-slate-500 uppercase" data-i18n="sa_kpi_mrr">मासिक सब्सक्रिप्शन आय (MRR)</span>
+                            <p id="sa-mrr" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1">₹0</p>
+                            <p class="text-[11px] text-emerald-600/80 mt-0.5 font-medium" data-i18n="sa_kpi_mrr_sub">एक्टिव प्लान्स से अनुमानित आय</p>
+                        </div>
+                        <span class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl border border-emerald-100 shrink-0">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:col-span-2 gap-3.5">
+                        <!-- Registered Companies -->
+                        <div onclick="switchSaTab('companies')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-building"></i>
+                                </span>
+                                <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">TENANTS</span>
+                            </div>
+                            <p id="sa-total-companies" class="text-2xl font-extrabold text-slate-900">0</p>
+                            <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="sa_kpi_comp">कुल रजिस्टर्ड कंपनियाँ</span>
+                        </div>
+
+                        <!-- Total Active Workers -->
+                        <div onclick="switchSaTab('companies')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-users"></i>
+                                </span>
+                                <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">LIVE</span>
+                            </div>
+                            <p id="sa-total-workers" class="text-2xl font-extrabold text-slate-900">0</p>
+                            <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="sa_kpi_workers">कुल एक्टिव वर्कर्स</span>
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
-                    <button type="button" onclick="openModal('modal-change-sa-pass')" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3.5 py-2.5 rounded-xl font-medium text-xs shadow-sm transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-key text-amber-600"></i> <span data-i18n="sa_change_pass">पासवर्ड बदलें</span>
-                    </button>
-                    <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी (Tenant) जोड़ें</span>
-                    </button>
-                    <button type="button" onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 px-3.5 py-2.5 rounded-xl font-semibold text-xs transition flex items-center gap-1.5" title="पैनल लॉक करें">
-                        <i class="fa-solid fa-lock"></i> <span data-i18n="sa_lock_btn">लॉक करें</span>
-                    </button>
+
+                <!-- 3. Plan Distribution Breakdown Card -->
+                <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-amber-300 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-pie text-amber-500"></i> प्लान के अनुसार कंपनियाँ (Plan Breakdown)
+                        </h3>
+                        <span class="text-[11px] font-semibold text-amber-600">आय विवरण →</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2.5 text-center">
+                        <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-200/70">
+                            <span class="text-[10px] font-bold text-slate-500 block">Starter (₹499)</span>
+                            <span id="sa-plan-count-starter" class="text-lg font-extrabold text-slate-800 mt-0.5 block">0</span>
+                        </div>
+                        <div class="bg-indigo-50/70 rounded-xl p-2.5 border border-indigo-200/70">
+                            <span class="text-[10px] font-bold text-indigo-600 block">Growth (₹999)</span>
+                            <span id="sa-plan-count-growth" class="text-lg font-extrabold text-indigo-700 mt-0.5 block">0</span>
+                        </div>
+                        <div class="bg-amber-50/70 rounded-xl p-2.5 border border-amber-200/70">
+                            <span class="text-[10px] font-bold text-amber-700 block">Business (₹1,999)</span>
+                            <span id="sa-plan-count-business" class="text-lg font-extrabold text-amber-700 mt-0.5 block">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Owner Quick Actions Grid -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-amber-500"></i> ओनर क्विक एक्शन (Owner Actions)
+                    </h3>
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <button type="button" onclick="openModal('modal-add-company')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100 text-amber-800 transition">
+                            <span class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-building-circle-plus"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">नई कंपनी</span>
+                        </button>
+
+                        <button type="button" onclick="exportAllTenantsCSV()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 transition">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-file-csv"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">SaaS रिपोर्ट</span>
+                        </button>
+
+                        <button type="button" onclick="openModal('modal-change-sa-pass')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100 text-indigo-800 transition">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-key"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">पासवर्ड बदलें</span>
+                        </button>
+
+                        <button type="button" onclick="switchSaTab('settings')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 transition">
+                            <span class="w-9 h-9 rounded-xl bg-slate-800 text-white flex items-center justify-center text-sm shadow-xs">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </span>
+                            <span class="text-[10px] font-bold leading-tight">APK व सुरक्षा</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. Latest Joined Companies Mini List -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-sparkles text-indigo-500"></i> हाल की क्लाइंट कंपनियाँ
+                        </h3>
+                        <button type="button" onclick="switchSaTab('companies')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
+                    </div>
+                    <div id="sa-home-recent-companies" class="space-y-2">
+                        <p class="text-xs text-slate-400">कोई कंपनी उपलब्ध नहीं है।</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- SaaS KPI Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_comp">कुल रजिस्टर्ड कंपनियाँ</span>
-                        <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-building"></i></span>
+            <!-- ========================================== -->
+            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT  -->
+            <!-- ========================================== -->
+            <div id="sa-content-companies" class="sa-tab-content hidden fade-in">
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-slate-100 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
+                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान बदलें, लिंक कॉपी करें या पैनल खोलें</p>
+                            </div>
+                            <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
+                                <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
+                            </button>
+                        </div>
+
+                        <!-- Search & Filter Bar -->
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <div class="relative flex-1">
+                                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
+                                <input type="text" id="sa-company-search" oninput="renderSuperAdmin()" placeholder="कंपनी का नाम या Admin ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <select id="sa-company-filter" onchange="renderSuperAdmin()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none">
+                                <option value="ALL">सभी स्टेटस (All)</option>
+                                <option value="Active">✅ Active Only</option>
+                                <option value="Suspended">⛔ Suspended Only</option>
+                            </select>
+                        </div>
                     </div>
-                    <p id="sa-total-companies" class="text-3xl font-bold text-slate-900 mt-2">0</p>
-                    <p class="text-xs text-emerald-600 mt-1 font-medium"><i class="fa-solid fa-arrow-up"></i> Live Firebase Sync</p>
-                </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_workers">कुल एक्टिव वर्कर्स (All Tenants)</span>
-                        <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-users"></i></span>
+
+                    <!-- Mobile Cards View for Companies -->
+                    <div id="sa-company-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
+
+                    <!-- Desktop Table View for Companies -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                    <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
+                                    <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
+                                    <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
+                                    <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
+                                    <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
+                                    <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
+                            </tbody>
+                        </table>
                     </div>
-                    <p id="sa-total-workers" class="text-3xl font-bold text-slate-900 mt-2">0</p>
-                    <p class="text-xs text-slate-500 mt-1" data-i18n="sa_kpi_workers_sub">सभी कंपनियों के कर्मचारी मिलाकर</p>
-                </div>
-                <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <span class="text-sm font-medium text-slate-500" data-i18n="sa_kpi_mrr">मासिक सब्सक्रिप्शन आय (MRR)</span>
-                        <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-indian-rupee-sign"></i></span>
-                    </div>
-                    <p id="sa-mrr" class="text-3xl font-bold text-slate-900 mt-2">₹0</p>
-                    <p class="text-xs text-emerald-600 mt-1 font-medium" data-i18n="sa_kpi_mrr_sub">एक्टिव प्लान्स से अनुमानित आय</p>
                 </div>
             </div>
 
-            <!-- Companies Table -->
-            <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <h2 class="text-base font-bold text-slate-800">क्लाइंट कंपनियाँ (Tenants) और शेयर करने योग्य पोर्टल लिंक्स</h2>
-                    <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-medium">प्रत्येक कंपनी के लिए 2 अलग-अलग Share Links उपलब्ध</span>
+            <!-- ========================================== -->
+            <!-- SA TAB 3: REVENUE & PLANS ANALYTICS        -->
+            <!-- ========================================== -->
+            <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
+                <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-lg border border-emerald-400/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300">WorkTrack SaaS Revenue</span>
+                            <h2 id="sa-rev-mrr-big" class="text-3xl font-extrabold text-white mt-1">₹0 / माह</h2>
+                            <p id="sa-rev-arr-sub" class="text-xs text-emerald-200/80 mt-1">वार्षिक अनुमानित आय (ARR): ₹0</p>
+                        </div>
+                        <button type="button" onclick="exportAllTenantsCSV()" class="bg-white/15 hover:bg-white/25 text-white border border-white/20 px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> CSV रिपोर्ट
+                        </button>
+                    </div>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
-                                <th class="py-3.5 px-6 font-semibold">सब्सक्रिप्शन प्लान</th>
-                                <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
-                                <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
-                                <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
-                                <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
-                        </tbody>
-                    </table>
+
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm">
+                    <h3 class="text-sm font-bold text-slate-900 mb-3">सब्सक्रिप्शन प्लान्स और मासिक आय विवरण</h3>
+                    <div id="sa-revenue-breakdown" class="space-y-3"></div>
                 </div>
             </div>
+
+            <!-- ========================================== -->
+            <!-- SA TAB 4: OWNER SECURITY & APK SETTINGS    -->
+            <!-- ========================================== -->
+            <div id="sa-content-settings" class="sa-tab-content hidden fade-in space-y-4">
+                <!-- Security Controls -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg border border-amber-200">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900">Owner सुरक्षा व नियंत्रण</h3>
+                            <p class="text-xs text-slate-500">मास्टर पासवर्ड बदलें या कंट्रोल सेंटर लॉक करें</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <button type="button" onclick="openModal('modal-change-sa-pass')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 px-4 rounded-2xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-key text-amber-400"></i> <span data-i18n="sa_change_pass">Super Admin पासवर्ड बदलें</span>
+                        </button>
+                        <button type="button" onclick="logoutSuperAdmin()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 py-3 px-4 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-lock"></i> <span data-i18n="sa_lock_btn">कंट्रोल सेंटर लॉक करें</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 Apps APK Share Links for Clients -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-brands fa-android text-emerald-600 text-base"></i> तीनों Android Apps (APK) डाउनलोड व शेयर करें
+                    </h3>
+                    <p class="text-xs text-slate-500">अपने नए क्लाइंट्स को सीधे उनके ऐप का डाउनलोड लिंक भेजें:</p>
+
+                    <div class="space-y-2.5 pt-1">
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <div>
+                                <div class="text-xs font-bold text-slate-900">1. WorkTrack Owner APK</div>
+                                <div class="text-[11px] text-slate-500">केवल आपके (SaaS Owner) लिए</div>
+                            </div>
+                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Owner.apk", "WT Owner APK लिंक")' class="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-indigo-50/60 border border-indigo-200/80">
+                            <div>
+                                <div class="text-xs font-bold text-indigo-950">2. WorkTrack Admin APK</div>
+                                <div class="text-[11px] text-indigo-700">क्लाइंट कंपनी के मालिक/HR के लिए</div>
+                            </div>
+                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk", "WT Admin APK लिंक")' class="bg-indigo-600 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
+                            <div>
+                                <div class="text-xs font-bold text-emerald-950">3. WorkTrack Worker APK</div>
+                                <div class="text-[11px] text-emerald-700">कंपनी के सभी कर्मचारियों के लिए</div>
+                            </div>
+                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk", "WT Worker APK लिंक")' class="bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed Mobile/App Bottom Navigation Bar for Owner (4 Tabs) -->
+            <nav id="sa-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
+                <div class="max-w-xl mx-auto grid grid-cols-4 h-16 px-1">
+                    <button type="button" onclick="switchSaTab('home')" id="tab-sa-home" class="sa-tab flex flex-col items-center justify-center gap-1 text-amber-600 font-bold transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-house text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">Home</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('companies')" id="tab-sa-companies" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-building text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">कंपनियाँ</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('revenue')" id="tab-sa-revenue" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">आय व प्लान</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('settings')" id="tab-sa-settings" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">सुरक्षा व APK</span>
+                    </button>
+                </div>
+            </nav>
         </div>
     </div>
 
@@ -295,7 +566,7 @@
             </div>
         </div>
 
-        <!-- Company Admin Dashboard (Added bottom padding for Bottom Navigation Bar) -->
+        <!-- Company Admin Dashboard -->
         <div id="ca-dashboard-wrapper" class="hidden pb-24">
 
             <!-- Suspended Warning Banner -->
@@ -306,14 +577,11 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 0: PREMIUM HOME OVERVIEW DASHBOARD     -->
-            <!-- ========================================== -->
+            <!-- TAB 0: PREMIUM HOME OVERVIEW DASHBOARD -->
             <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
                 
                 <!-- 1. Premium Dark Hero Company Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
-                    <!-- Decorative Ambient Glow Orbs -->
                     <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-500/15 blur-2xl"></div>
 
@@ -335,14 +603,13 @@
                             </div>
                         </div>
 
-                        <!-- Logout Icon Button -->
                         <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/25 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="लॉगआउट करें">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <span class="hidden sm:inline" data-i18n="w_logout">लॉगआउट</span>
                         </button>
                     </div>
 
-                    <!-- Super Admin Company Switcher (Only when Super Admin inspects) -->
+                    <!-- Super Admin Company Switcher -->
                     <div id="ca-demo-selector-box" class="relative mt-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
                         <label class="text-xs font-semibold text-indigo-200 whitespace-nowrap">कंपनी बदलें:</label>
                         <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full bg-slate-900/90 border border-white/20 text-white text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
@@ -386,9 +653,8 @@
                     <p id="ca-home-unmarked-note" class="text-[11px] text-slate-400 mt-1.5">सभी वर्कर्स का आज का लाइव स्टेटस</p>
                 </div>
 
-                <!-- 3. Premium 2x2 KPI Cards with Icons & Accents -->
+                <!-- 3. Premium 2x2 KPI Cards -->
                 <div class="grid grid-cols-2 gap-3.5">
-                    <!-- Total Workers -->
                     <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition relative overflow-hidden group">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
@@ -400,7 +666,6 @@
                         <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_total">कुल वर्कर्स</span>
                     </div>
 
-                    <!-- Present Today -->
                     <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition relative overflow-hidden group">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
@@ -412,7 +677,6 @@
                         <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
                     </div>
 
-                    <!-- Absent / Leave -->
                     <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition relative overflow-hidden group">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-sm group-hover:scale-105 transition">
@@ -424,7 +688,6 @@
                         <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
                     </div>
 
-                    <!-- Today's OT -->
                     <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition relative overflow-hidden group">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
@@ -460,7 +723,7 @@
                     </div>
                 </div>
 
-                <!-- 5. Quick Actions Grid (1-Tap Shortcuts) -->
+                <!-- 5. Quick Actions Grid -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                         <i class="fa-solid fa-bolt text-amber-500"></i> क्विक एक्शन (Quick Actions)
@@ -511,7 +774,7 @@
 
             </div>
 
-            <!-- Main Tab Content Container (For Attendance, Workers, Payroll & Audit) -->
+            <!-- Main Tab Content Container -->
             <div id="ca-main-card" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
 
                 <!-- TAB 1: DAILY ATTENDANCE & OT -->
@@ -722,7 +985,7 @@
             </div>
         </div>
 
-        <!-- Worker Dashboard Card (Shown after login) -->
+        <!-- Worker Dashboard Card -->
         <div id="worker-dashboard-box" class="hidden space-y-4">
             <div class="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-5 text-white shadow-md relative overflow-hidden">
                 <div class="flex items-center justify-between mb-4">
@@ -1022,10 +1285,10 @@
                 sa_login_sub: "नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें",
                 sa_unlock_btn: "कंट्रोल सेंटर अनलॉक करें",
                 sa_change_pass: "पासवर्ड बदलें",
-                sa_add_comp: "नई कंपनी (Tenant) जोड़ें",
+                sa_add_comp: "नई कंपनी जोड़ें",
                 sa_lock_btn: "लॉक करें",
                 sa_kpi_comp: "कुल रजिस्टर्ड कंपनियाँ",
-                sa_kpi_workers: "कुल एक्टिव वर्कर्स (All Tenants)",
+                sa_kpi_workers: "कुल एक्टिव वर्कर्स",
                 sa_kpi_workers_sub: "सभी कंपनियों के कर्मचारी मिलाकर",
                 sa_kpi_mrr: "मासिक सब्सक्रिप्शन आय (MRR)",
                 sa_kpi_mrr_sub: "एक्टिव प्लान्स से अनुमानित आय",
@@ -1086,10 +1349,10 @@
                 sa_login_sub: "Enter your master password to open control center",
                 sa_unlock_btn: "Unlock Control Center",
                 sa_change_pass: "Change Password",
-                sa_add_comp: "Add New Company (Tenant)",
+                sa_add_comp: "Add New Company",
                 sa_lock_btn: "Lock Panel",
                 sa_kpi_comp: "Total Registered Companies",
-                sa_kpi_workers: "Total Active Workers (All Tenants)",
+                sa_kpi_workers: "Total Active Workers",
                 sa_kpi_workers_sub: "Combined workers across all companies",
                 sa_kpi_mrr: "Monthly Subscription Revenue (MRR)",
                 sa_kpi_mrr_sub: "Estimated revenue from active plans",
@@ -1150,10 +1413,10 @@
                 sa_login_sub: "કંટ્રોલ સેન્ટર ખોલવા માટે તમારો માસ્ટર પાસવર્ડ નાખો",
                 sa_unlock_btn: "કંટ્રોલ સેન્ટર અનલોક કરો",
                 sa_change_pass: "પાસવર્ડ બદલો",
-                sa_add_comp: "નવી કંપની (Tenant) ઉમેરો",
+                sa_add_comp: "નવી કંપની ઉમેરો",
                 sa_lock_btn: "લોક કરો",
                 sa_kpi_comp: "કુલ રજિસ્ટર્ડ કંપનીઓ",
-                sa_kpi_workers: "કુલ એક્ટિવ વર્કર્સ (All Tenants)",
+                sa_kpi_workers: "કુલ એક્ટિવ વર્કર્સ",
                 sa_kpi_workers_sub: "બધી કંપનીઓના કર્મચારીઓ મળીને",
                 sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
                 sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
@@ -1523,8 +1786,37 @@
         };
 
         // ==========================================
-        // SUPER ADMIN SECURITY (LOGIN & PASSWORD)
+        // SUPER ADMIN SECURITY & TAB NAVIGATION
         // ==========================================
+        function switchSaTab(tabName) {
+            document.querySelectorAll('.sa-tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`sa-content-${tabName}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.sa-tab').forEach(btn => {
+                btn.classList.remove('text-amber-600', 'font-bold');
+                btn.classList.add('text-slate-500', 'font-medium');
+                const pill = btn.querySelector('.nav-pill');
+                if (pill) {
+                    pill.classList.remove('bg-amber-100', 'text-amber-700');
+                    pill.classList.add('bg-transparent');
+                }
+            });
+
+            const activeBtn = document.getElementById(`tab-sa-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-500', 'font-medium');
+                activeBtn.classList.add('text-amber-600', 'font-bold');
+                const activePill = activeBtn.querySelector('.nav-pill');
+                if (activePill) {
+                    activePill.classList.remove('bg-transparent');
+                    activePill.classList.add('bg-amber-100', 'text-amber-700');
+                }
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function handleSuperAdminLogin(e) {
             e.preventDefault();
             const enteredPass = document.getElementById('sa-login-pass').value.trim();
@@ -1532,6 +1824,7 @@
                 isSuperAdminUnlocked = true;
                 sessionStorage.setItem('wt_sa_unlocked', 'true');
                 document.getElementById('sa-login-pass').value = '';
+                switchSaTab('home');
                 renderSuperAdmin();
                 showToast('Super Admin कंट्रोल सेंटर अनलॉक हो गया!');
             } else {
@@ -1684,38 +1977,139 @@
         }
 
         // ==========================================
-        // SUPER ADMIN LOGIC
+        // SUPER ADMIN LOGIC (PREMIER OWNER)
         // ==========================================
         function renderSuperAdmin() {
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
+            const footer = document.getElementById('app-footer');
 
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
+                if (footer) footer.classList.remove('pb-20');
                 return;
             } else {
                 loginBox.classList.add('hidden');
                 dashWrapper.classList.remove('hidden');
+                if (footer) footer.classList.add('pb-20');
             }
 
             const totalCompanies = db.companies.length;
             const totalWorkers = db.workers.length;
             let mrr = 0;
-
-            const tbody = document.getElementById('sa-company-list');
-            tbody.innerHTML = '';
+            let activeCount = 0;
+            let suspendedCount = 0;
+            const planCounts = { Starter: 0, Growth: 0, Business: 0 };
 
             db.companies.forEach(comp => {
                 const planInfo = PLANS[comp.plan] || PLANS['Growth'];
-                if (comp.status === 'Active') mrr += planInfo.price;
-                
+                if (comp.status === 'Active') {
+                    mrr += planInfo.price;
+                    activeCount++;
+                } else {
+                    suspendedCount++;
+                }
+                if (planCounts[comp.plan] !== undefined) {
+                    planCounts[comp.plan]++;
+                }
+            });
+
+            // Update Home KPIs & Hero Metrics
+            document.getElementById('sa-total-companies').innerText = totalCompanies;
+            document.getElementById('sa-total-workers').innerText = totalWorkers;
+            document.getElementById('sa-mrr').innerText = `₹${mrr.toLocaleString('en-IN')}`;
+
+            const arr = mrr * 12;
+            const homeArrEl = document.getElementById('sa-home-arr');
+            const homeRatioEl = document.getElementById('sa-home-active-ratio');
+            if (homeArrEl) homeArrEl.innerText = `₹${arr.toLocaleString('en-IN')} / वर्ष`;
+            if (homeRatioEl) homeRatioEl.innerText = `${activeCount} Active • ${suspendedCount} Hold`;
+
+            document.getElementById('sa-plan-count-starter').innerText = planCounts.Starter;
+            document.getElementById('sa-plan-count-growth').innerText = planCounts.Growth;
+            document.getElementById('sa-plan-count-business').innerText = planCounts.Business;
+
+            // Update Revenue Tab
+            const revMrrBig = document.getElementById('sa-rev-mrr-big');
+            const revArrSub = document.getElementById('sa-rev-arr-sub');
+            const revBreakdown = document.getElementById('sa-revenue-breakdown');
+            if (revMrrBig) revMrrBig.innerText = `₹${mrr.toLocaleString('en-IN')} / माह`;
+            if (revArrSub) revArrSub.innerText = `वार्षिक अनुमानित आय (ARR): ₹${arr.toLocaleString('en-IN')}`;
+            if (revBreakdown) {
+                revBreakdown.innerHTML = Object.keys(PLANS).map(pName => {
+                    const p = PLANS[pName];
+                    const activeInPlan = db.companies.filter(c => c.plan === pName && c.status === 'Active').length;
+                    const planMrr = activeInPlan * p.price;
+                    return `
+                        <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                            <div>
+                                <div class="font-bold text-slate-900 text-sm">${pName} Plan <span class="text-xs font-normal text-slate-500">(₹${p.price}/माह • ${p.limit} Workers)</span></div>
+                                <div class="text-xs text-slate-500 mt-0.5">${activeInPlan} Active कंपनियाँ</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-base font-extrabold text-emerald-600">₹${planMrr.toLocaleString('en-IN')}</div>
+                                <div class="text-[10px] text-slate-400">प्रति माह</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            // Update Home Recent Companies Mini Feed
+            const recentEl = document.getElementById('sa-home-recent-companies');
+            if (recentEl) {
+                const recentComps = [...db.companies].slice(-3).reverse();
+                if (recentComps.length === 0) {
+                    recentEl.innerHTML = `<p class="text-xs text-slate-400">अभी कोई कंपनी नहीं जुड़ी है।</p>`;
+                } else {
+                    recentEl.innerHTML = recentComps.map(c => {
+                        const wCount = db.workers.filter(w => w.companyId === c.id).length;
+                        return `
+                            <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="min-w-0">
+                                    <div class="text-xs font-bold text-slate-900 truncate">${c.name}</div>
+                                    <div class="text-[10px] text-slate-500">${c.plan} Plan • ${wCount} Workers</div>
+                                </div>
+                                <button type="button" onclick="inspectCompany('${c.id}')" class="text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg shrink-0">
+                                    खोलें →
+                                </button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+
+            // Filter & Render Companies (Mobile Cards + Desktop Table)
+            const searchQuery = (document.getElementById('sa-company-search')?.value || '').toLowerCase().trim();
+            const statusFilter = document.getElementById('sa-company-filter')?.value || 'ALL';
+
+            const filteredCompanies = db.companies.filter(comp => {
+                const matchesSearch = !searchQuery || comp.name.toLowerCase().includes(searchQuery) || comp.adminId.toLowerCase().includes(searchQuery) || comp.id.toLowerCase().includes(searchQuery);
+                const matchesStatus = statusFilter === 'ALL' || comp.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+
+            const tbody = document.getElementById('sa-company-list');
+            const cardsContainer = document.getElementById('sa-company-cards');
+            tbody.innerHTML = '';
+            if (cardsContainer) cardsContainer.innerHTML = '';
+
+            if (filteredCompanies.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-400 text-xs">कोई कंपनी नहीं मिली।</td></tr>`;
+                if (cardsContainer) cardsContainer.innerHTML = `<div class="py-8 text-center text-slate-400 text-xs">कोई कंपनी नहीं मिली।</div>`;
+                return;
+            }
+
+            filteredCompanies.forEach(comp => {
+                const planInfo = PLANS[comp.plan] || PLANS['Growth'];
                 const compWorkersCount = db.workers.filter(w => w.companyId === comp.id).length;
                 const usagePercent = Math.min(100, Math.round((compWorkersCount / planInfo.limit) * 100));
                 const base = getBaseUrl();
                 const adminUrl = `${base}?portal=admin&company=${comp.id}`;
                 const workerUrl = `${base}?portal=worker&company=${comp.id}`;
 
+                // Desktop Row
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50/80 transition';
                 tr.innerHTML = `
@@ -1724,8 +2118,11 @@
                         <div class="text-xs text-slate-400">Tenant ID: ${comp.id} • Admin: <span class="font-mono">${comp.adminId}</span></div>
                     </td>
                     <td class="py-4 px-6">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${planInfo.color}">${comp.plan}</span>
-                        <div class="text-xs text-slate-500 mt-1">₹${planInfo.price}/माह</div>
+                        <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-200 bg-white">
+                            <option value="Starter" ${comp.plan === 'Starter' ? 'selected' : ''}>Starter (₹499)</option>
+                            <option value="Growth" ${comp.plan === 'Growth' ? 'selected' : ''}>Growth (₹999)</option>
+                            <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
+                        </select>
                     </td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-between text-xs font-medium mb-1">
@@ -1742,7 +2139,7 @@
                                 <button type="button" onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="text-[11px] bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
                                     <i class="fa-regular fa-copy"></i> 1. Admin Link
                                 </button>
-                                <button type="button" onclick="enterSharedLinkMode('admin', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Admin Link खोलकर देखें">
+                                <button type="button" onclick="enterSharedLinkMode('admin', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </button>
                             </div>
@@ -1750,7 +2147,7 @@
                                 <button type="button" onclick='copyRawText(${JSON.stringify(workerUrl)}, "${comp.name} का Worker Link")' class="text-[11px] bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
                                     <i class="fa-regular fa-copy"></i> 2. Worker Link
                                 </button>
-                                <button type="button" onclick="enterSharedLinkMode('worker', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition" title="Worker Link खोलकर देखें">
+                                <button type="button" onclick="enterSharedLinkMode('worker', '${comp.id}')" class="text-[11px] bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 px-2 py-1 rounded-lg transition">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </button>
                             </div>
@@ -1763,9 +2160,6 @@
                         </span>
                     </td>
                     <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
-                        <button type="button" onclick="openCompanyLinksModal('${comp.id}', false)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 py-1.5 rounded-lg transition">
-                            All Details
-                        </button>
                         <button type="button" onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition">
                             पैनल खोलें
                         </button>
@@ -1775,11 +2169,98 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
-            });
 
-            document.getElementById('sa-total-companies').innerText = totalCompanies;
-            document.getElementById('sa-total-workers').innerText = totalWorkers;
-            document.getElementById('sa-mrr').innerText = `₹${mrr.toLocaleString('en-IN')}`;
+                // Mobile Card View
+                if (cardsContainer) {
+                    const statusBadge = comp.status === 'Active'
+                        ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">● Active</span>'
+                        : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">● Suspended</span>';
+
+                    cardsContainer.innerHTML += `
+                        <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-3">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="min-w-0">
+                                    <div class="font-extrabold text-slate-900 text-sm truncate">${comp.name}</div>
+                                    <div class="text-[11px] text-slate-500 font-mono mt-0.5">ID: ${comp.adminId} • Pass: ${comp.adminPass}</div>
+                                </div>
+                                ${statusBadge}
+                            </div>
+
+                            <!-- Plan Selector + Worker Usage -->
+                            <div class="grid grid-cols-2 gap-2 items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <div>
+                                    <span class="text-[10px] text-slate-400 block font-semibold">प्लान बदलें:</span>
+                                    <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="mt-0.5 w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
+                                        <option value="Starter" ${comp.plan === 'Starter' ? 'selected' : ''}>Starter (₹499)</option>
+                                        <option value="Growth" ${comp.plan === 'Growth' ? 'selected' : ''}>Growth (₹999)</option>
+                                        <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-bold text-slate-600 mb-1">
+                                        <span>Workers</span>
+                                        <span>${compWorkersCount}/${planInfo.limit}</span>
+                                    </div>
+                                    <div class="w-full bg-slate-200 rounded-full h-2">
+                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: ${usagePercent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Copy Links Row -->
+                            <div class="grid grid-cols-2 gap-2">
+                                <button type="button" onclick='copyRawText(${JSON.stringify(adminUrl)}, "${comp.name} का Admin Link")' class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-2 px-2.5 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> Admin Link
+                                </button>
+                                <button type="button" onclick='copyRawText(${JSON.stringify(workerUrl)}, "${comp.name} का Worker Link")' class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 py-2 px-2.5 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1">
+                                    <i class="fa-regular fa-copy"></i> Worker Link
+                                </button>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
+                                <button type="button" onclick="inspectCompany('${comp.id}')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-xl text-xs font-bold transition">
+                                    पैनल खोलें
+                                </button>
+                                <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold border ${comp.status === 'Active' ? 'border-rose-200 text-rose-600 bg-rose-50/50' : 'border-emerald-200 text-emerald-700 bg-emerald-50/50'}">
+                                    ${comp.status === 'Active' ? 'Suspend' : 'Activate'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        async function changeCompanyPlan(compId, newPlan) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update({ plan: newPlan });
+                } else {
+                    comp.plan = newPlan;
+                }
+                showToast(`${comp.name} का प्लान अब ${newPlan} कर दिया गया है!`);
+            } catch (err) {
+                showToast('प्लान अपडेट करने में त्रुटि!', true);
+            }
+        }
+
+        function exportAllTenantsCSV() {
+            let csv = 'Company ID,Company Name,Admin ID,Plan,Monthly Price,Active Workers,Status\n';
+            db.companies.forEach(comp => {
+                const p = PLANS[comp.plan] || PLANS['Growth'];
+                const wCount = db.workers.filter(w => w.companyId === comp.id).length;
+                csv += `"${comp.id}","${comp.name}","${comp.adminId}","${comp.plan}","${p.price}","${wCount}","${comp.status}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WorkTrack_SaaS_Owner_Report_${today}.csv`;
+            a.click();
+            showToast('सभी कंपनियों की SaaS रिपोर्ट डाउनलोड हो गई!');
         }
 
         async function handleAddCompany(e) {
@@ -1938,7 +2419,7 @@
             if (!isCompanyAdminLoggedIn) {
                 loginBox.classList.remove('hidden');
                 dashWrapper.classList.add('hidden');
-                if (footer) footer.classList.remove('pb-20');
+                if (footer && !isSuperAdminUnlocked) footer.classList.remove('pb-20');
                 return;
             } else {
                 loginBox.classList.add('hidden');
@@ -1963,7 +2444,6 @@
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
 
-            // Update Hero Card Date & Plan Capacity Bar
             const homeDateEl = document.getElementById('ca-home-date-label');
             if (homeDateEl) homeDateEl.innerHTML = `<i class="fa-regular fa-calendar mr-1"></i> ${selectedDate}`;
 
@@ -2051,7 +2531,6 @@
             document.getElementById('ca-stat-absent').innerText = absentCount;
             document.getElementById('ca-stat-ot').innerText = `${totalOt} hrs`;
 
-            // Update Home Attendance Progress Bar
             const attRate = tenantWorkers.length > 0 ? Math.round((presentCount / tenantWorkers.length) * 100) : 0;
             const attPctEl = document.getElementById('ca-home-att-percent');
             const attBarEl = document.getElementById('ca-home-att-bar');
@@ -2141,7 +2620,7 @@
                 }
             });
 
-            // Calculate & Render Monthly Payroll & Home Financial Summary
+            // Calculate & Render Monthly Payroll
             const isFullPlan = PLANS[comp.plan] && PLANS[comp.plan].allFeatures;
             document.getElementById('payroll-plan-lock').classList.toggle('hidden', isFullPlan);
             document.getElementById('payroll-main-area').classList.toggle('hidden', !isFullPlan);
@@ -2262,13 +2741,11 @@
                 }
             });
 
-            // Update Home Financial Summary
             const homeNetEl = document.getElementById('ca-home-net-salary');
             const homeAdvEl = document.getElementById('ca-home-total-advance');
             if (homeNetEl) homeNetEl.innerText = `₹${totalMonthNetSalary.toLocaleString('en-IN')}`;
             if (homeAdvEl) homeAdvEl.innerText = `₹${totalMonthAdvance.toLocaleString('en-IN')}`;
 
-            // Render Audit Logs & Home Recent Activity
             const auditContainer = document.getElementById('ca-audit-list');
             const homeRecentEl = document.getElementById('ca-home-recent-activity');
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
@@ -2706,4 +3183,4 @@
         }
     </script>
 </body>
-                            </html>
+                        </html>
