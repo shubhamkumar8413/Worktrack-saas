@@ -1289,21 +1289,21 @@
                     if (res.ok) {
                         const a = document.createElement('a');
                         a.href = url;
-                        a.setAttribute('download', targetSaveName);
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        showToast(`${label} डाउनलोड शुरू हो गया है!`);
-                        return;
-                    }
-                } catch (e) {
-                    // Cross-origin raw GitHub fallback check skipped by CORS, continue
-                }
-            }
+        // Direct Separate APK Downloader (No 404 HEAD ambiguity)
+        function smartDownloadApk(roleType) {
+            const isWorker = roleType === 'worker';
+            const label = isWorker ? 'WorkTrack Worker App' : 'WorkTrack Admin App';
+            const fileName = isWorker ? 'WorkTrack-Worker.apk' : 'WorkTrack-Admin.apk';
+            const rawUrl = `https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/${fileName}?v=${Date.now()}`;
 
-            // Direct fallback to GitHub Raw main branch
-            window.location.href = ghRawBase + targetSaveName;
-            showToast(`${label} GitHub से डाउनलोड हो रहा है...`);
+            const a = document.createElement('a');
+            a.href = rawUrl;
+            a.setAttribute('download', fileName);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            showToast(`${label} (${fileName}) डाउनलोड शुरू हो गया है!`);
         }
 
         if ('serviceWorker' in navigator) {
@@ -2478,4 +2478,4 @@
         }
     </script>
 </body>
-                        </html>
+    </html>
