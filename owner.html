@@ -9,12 +9,11 @@
     <link rel="icon" type="image/png" href="icon-owner.png">
     <link rel="apple-touch-icon" href="icon-owner.png">
     <script>
-        if (!window.location.search.includes('app=owner')) {
-            window.location.replace('index.html?app=owner');
-        }
+        localStorage.setItem('wt_locked_app', 'owner');
+        window.location.replace('index.html?app=owner');
     </script>
 </head>
 <body style="background:#0f172a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-    <p>Loading WorkTrack Owner...</p>
+    <p>Opening WorkTrack Owner...</p>
 </body>
 </html>
