@@ -9,11 +9,11 @@
     <link rel="icon" type="image/png" href="icon-admin.png">
     <link rel="apple-touch-icon" href="icon-admin.png">
     <script>
+        window.FORCED_APP_MODE = 'admin';
         localStorage.setItem('wt_locked_app', 'admin');
-        window.location.replace('index.html?app=admin');
     </script>
 </head>
-<body style="background:#1e3a8a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
-    <p>Opening WorkTrack Admin...</p>
+<body style="margin:0;padding:0;background:#1e3a8a;">
+    <iframe src="index.html?app=admin" style="border:none;width:100vw;height:100vh;display:block;"></iframe>
 </body>
 </html>
