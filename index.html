@@ -141,23 +141,6 @@
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
-        <!-- 404 Restricted Area Screen (Shown if accessed without Secret Access Key) -->
-        <div id="sa-restricted-box" class="hidden max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-8 mt-8 text-center">
-            <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mx-auto mb-4 border border-rose-200">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <span class="inline-block bg-rose-100 text-rose-700 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
-                404 • RESTRICTED ACCESS
-            </span>
-            <h2 class="text-xl font-extrabold text-slate-900">पेज उपलब्ध नहीं है</h2>
-            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
-                यह क्षेत्र केवल अधिकृत सिस्टम एडमिनिस्ट्रेटर के लिए सुरक्षित है।
-            </p>
-            <button type="button" onclick="window.location.href='index.html'" class="mt-6 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition">
-                मुख्य पोर्टल पर वापस जाएं
-            </button>
-        </div>
-
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -1842,24 +1825,7 @@
         let dedicatedAppMode = null;
 
         // ============================================================
-        // SECURITY GUARD 1: OWNER SECRET ACCESS KEY & AUTHORIZATION
-        // ============================================================
-        const OWNER_SECRET_KEY = 'WT9988';
-        let isOwnerAuthorized = false;
-
-        function checkOwnerAuthorization() {
-            const p = new URLSearchParams(window.location.search);
-            const urlKey = p.get('key');
-            const isFromOwnerApp = p.get('src') === 'apk' || window.FORCED_APP_MODE === 'owner';
-            if (urlKey === OWNER_SECRET_KEY || isFromOwnerApp || sessionStorage.getItem('wt_owner_auth') === 'true') {
-                isOwnerAuthorized = true;
-                sessionStorage.setItem('wt_owner_auth', 'true');
-            }
-            return isOwnerAuthorized;
-        }
-
-        // ============================================================
-        // SECURITY GUARD 2: 3-ATTEMPT BRUTE-FORCE AUTO-LOCK (5 MINS)
+        // SECURITY GUARD: 3-ATTEMPT BRUTE-FORCE AUTO-LOCK (5 MINS)
         // ============================================================
         const MAX_LOGIN_ATTEMPTS = 3;
         const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
@@ -2229,7 +2195,6 @@
             }
 
             if (appMode === 'owner') {
-                checkOwnerAuthorization();
                 if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-amber-500/20';
                 if (headerIcon) headerIcon.src = 'icon-owner.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Owner';
@@ -2279,7 +2244,6 @@
             if (advDate) advDate.value = today;
             if (newExp) newExp.value = defaultExpiry;
 
-            checkOwnerAuthorization();
             startLockoutTicker();
             ['sa', 'ca', 'w'].forEach(k => updateLockoutUI(k));
 
@@ -2329,10 +2293,6 @@
 
         function handleSuperAdminLogin(e) {
             e.preventDefault();
-            if (!checkOwnerAuthorization()) {
-                renderSuperAdmin();
-                return;
-            }
             const lockStatus = checkLoginLockout('sa');
             if (lockStatus.locked) {
                 updateLockoutUI('sa');
@@ -2502,7 +2462,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setTimeout(() => {
                     const passEl = document.getElementById('sa-login-pass');
-                    if (passEl && !isSuperAdminUnlocked && isOwnerAuthorized) passEl.focus();
+                    if (passEl && !isSuperAdminUnlocked) passEl.focus();
                 }, 150);
             }
             if (role === 'company_admin') {
@@ -2515,19 +2475,9 @@
         }
 
         function renderSuperAdmin() {
-            const restrictedBox = document.getElementById('sa-restricted-box');
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
             const footer = document.getElementById('app-footer');
-
-            if (!checkOwnerAuthorization()) {
-                if (restrictedBox) restrictedBox.classList.remove('hidden');
-                if (loginBox) loginBox.classList.add('hidden');
-                if (dashWrapper) dashWrapper.classList.add('hidden');
-                return;
-            } else {
-                if (restrictedBox) restrictedBox.classList.add('hidden');
-            }
 
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
@@ -3739,7 +3689,6 @@
 
             entries.forEach(a => {
                 const amt = parseFloat(a.amount || 0);
-                // Legacy records without 'type' are treated as 'GIVEN'
                 const entryType = a.type || 'GIVEN';
                 if (entryType === 'DEDUCTED') {
                     totalDeducted += amt;
@@ -4105,4 +4054,4 @@
         }
     </script>
 </body>
-                            </html>
+    </html>
