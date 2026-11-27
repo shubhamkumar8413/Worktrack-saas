@@ -141,6 +141,23 @@
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
+        <!-- 404 Restricted Area Screen (Shown if accessed without Secret Access Key) -->
+        <div id="sa-restricted-box" class="hidden max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-8 mt-8 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mx-auto mb-4 border border-rose-200">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span class="inline-block bg-rose-100 text-rose-700 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2">
+                404 • RESTRICTED ACCESS
+            </span>
+            <h2 class="text-xl font-extrabold text-slate-900">पेज उपलब्ध नहीं है</h2>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                यह क्षेत्र केवल अधिकृत सिस्टम एडमिनिस्ट्रेटर के लिए सुरक्षित है।
+            </p>
+            <button type="button" onclick="window.location.href='index.html'" class="mt-6 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition">
+                मुख्य पोर्टल पर वापस जाएं
+            </button>
+        </div>
+
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -150,6 +167,8 @@
                 <h2 class="text-xl font-bold text-slate-900" data-i18n="sa_login_title">Super Admin सुरक्षा लॉगिन</h2>
                 <p class="text-xs text-slate-500 mt-1" data-i18n="sa_login_sub">नियंत्रण केंद्र खोलने के लिए अपना मास्टर पासवर्ड डालें</p>
             </div>
+
+            <div id="sa-lockout-banner" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-bold text-center"></div>
 
             <form onsubmit="handleSuperAdminLogin(event)" class="space-y-4">
                 <div>
@@ -161,7 +180,7 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center gap-2">
+                <button type="submit" id="sa-login-submit-btn" class="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm flex items-center justify-center gap-2">
                     <i class="fa-solid fa-unlock-keyhole text-amber-400"></i> <span data-i18n="sa_unlock_btn">कंट्रोल सेंटर अनलॉक करें</span>
                 </button>
             </form>
@@ -474,6 +493,8 @@
                 <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">अपनी Admin ID और Password डालकर डैशबोर्ड खोलें</p>
             </div>
 
+            <div id="ca-lockout-banner" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-bold text-center"></div>
+
             <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin ID</label>
@@ -483,7 +504,7 @@
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Password</label>
                     <input type="password" id="ca-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                <button type="submit" id="ca-login-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-400 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
                     <span data-i18n="ca_login_btn">Admin Panel खोलें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
@@ -923,6 +944,8 @@
                 <p class="text-xs text-slate-500 mt-1" data-i18n="w_login_sub">अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें</p>
             </div>
 
+            <div id="w-lockout-banner" class="hidden mb-4 bg-rose-50 border border-rose-200 text-rose-700 px-3.5 py-2.5 rounded-xl text-xs font-bold text-center"></div>
+
             <form onsubmit="handleWorkerLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Worker ID</label>
@@ -932,7 +955,7 @@
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password / PIN</label>
                     <input type="password" id="w-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 </div>
-                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                <button type="submit" id="w-login-submit-btn" class="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-400 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
                     <span data-i18n="w_login_btn">लॉगिन करें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
                 </button>
             </form>
@@ -1196,9 +1219,7 @@
     </main>
 
     <footer id="app-footer" class="py-4 px-4 text-center text-[11px] text-slate-400">
-        <span>© 2026 WorkTrack SaaS</span>
-        <span id="footer-owner-sep" class="mx-1.5">•</span>
-        <button id="footer-owner-btn" type="button" onclick="switchRole('super_admin')" class="hover:text-slate-600 font-medium transition cursor-pointer">Owner Login</button>
+        <span>© 2026 WorkTrack SaaS • Enterprise Cloud Security</span>
     </footer>
 
     <!-- MODALS -->
@@ -1820,6 +1841,101 @@
         let workerIdToDelete = null;
         let dedicatedAppMode = null;
 
+        // ============================================================
+        // SECURITY GUARD 1: OWNER SECRET ACCESS KEY & AUTHORIZATION
+        // ============================================================
+        const OWNER_SECRET_KEY = 'WT9988';
+        let isOwnerAuthorized = false;
+
+        function checkOwnerAuthorization() {
+            const p = new URLSearchParams(window.location.search);
+            const urlKey = p.get('key');
+            const isFromOwnerApp = p.get('src') === 'apk' || window.FORCED_APP_MODE === 'owner';
+            if (urlKey === OWNER_SECRET_KEY || isFromOwnerApp || sessionStorage.getItem('wt_owner_auth') === 'true') {
+                isOwnerAuthorized = true;
+                sessionStorage.setItem('wt_owner_auth', 'true');
+            }
+            return isOwnerAuthorized;
+        }
+
+        // ============================================================
+        // SECURITY GUARD 2: 3-ATTEMPT BRUTE-FORCE AUTO-LOCK (5 MINS)
+        // ============================================================
+        const MAX_LOGIN_ATTEMPTS = 3;
+        const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+        let lockoutTimerInterval = null;
+
+        function getLockoutState(roleKey) {
+            try {
+                const raw = localStorage.getItem(`wt_lock_${roleKey}`);
+                return raw ? JSON.parse(raw) : { attempts: 0, lockedUntil: 0 };
+            } catch (e) {
+                return { attempts: 0, lockedUntil: 0 };
+            }
+        }
+
+        function setLockoutState(roleKey, state) {
+            localStorage.setItem(`wt_lock_${roleKey}`, JSON.stringify(state));
+        }
+
+        function checkLoginLockout(roleKey) {
+            const state = getLockoutState(roleKey);
+            const now = Date.now();
+            if (state.lockedUntil && now < state.lockedUntil) {
+                return { locked: true, remainingSec: Math.ceil((state.lockedUntil - now) / 1000) };
+            }
+            if (state.lockedUntil && now >= state.lockedUntil) {
+                setLockoutState(roleKey, { attempts: 0, lockedUntil: 0 });
+            }
+            return { locked: false, remainingSec: 0 };
+        }
+
+        function recordFailedLogin(roleKey) {
+            const state = getLockoutState(roleKey);
+            const nextAttempts = (state.attempts || 0) + 1;
+            if (nextAttempts >= MAX_LOGIN_ATTEMPTS) {
+                const lockedUntil = Date.now() + LOCKOUT_DURATION_MS;
+                setLockoutState(roleKey, { attempts: nextAttempts, lockedUntil });
+                updateLockoutUI(roleKey);
+                return { locked: true, attemptsLeft: 0 };
+            } else {
+                setLockoutState(roleKey, { attempts: nextAttempts, lockedUntil: 0 });
+                return { locked: false, attemptsLeft: MAX_LOGIN_ATTEMPTS - nextAttempts };
+            }
+        }
+
+        function clearFailedLogins(roleKey) {
+            setLockoutState(roleKey, { attempts: 0, lockedUntil: 0 });
+            updateLockoutUI(roleKey);
+        }
+
+        function updateLockoutUI(roleKey) {
+            const bannerId = roleKey === 'sa' ? 'sa-lockout-banner' : (roleKey === 'ca' ? 'ca-lockout-banner' : 'w-lockout-banner');
+            const btnId = roleKey === 'sa' ? 'sa-login-submit-btn' : (roleKey === 'ca' ? 'ca-login-submit-btn' : 'w-login-submit-btn');
+            const banner = document.getElementById(bannerId);
+            const btn = document.getElementById(btnId);
+            if (!banner || !btn) return;
+
+            const status = checkLoginLockout(roleKey);
+            if (status.locked) {
+                const mins = Math.floor(status.remainingSec / 60);
+                const secs = String(status.remainingSec % 60).padStart(2, '0');
+                banner.innerHTML = `<i class="fa-solid fa-lock mr-1"></i> सुरक्षा लॉक: 3 बार गलत पासवर्ड डालने के कारण लॉगिन <strong>${mins}:${secs}</strong> मिनट के लिए बंद है।`;
+                banner.classList.remove('hidden');
+                btn.disabled = true;
+            } else {
+                banner.classList.add('hidden');
+                btn.disabled = false;
+            }
+        }
+
+        function startLockoutTicker() {
+            if (lockoutTimerInterval) clearInterval(lockoutTimerInterval);
+            lockoutTimerInterval = setInterval(() => {
+                ['sa', 'ca', 'w'].forEach(k => updateLockoutUI(k));
+            }, 1000);
+        }
+
         function t(key) {
             return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.hi[key] || key;
         }
@@ -2105,8 +2221,6 @@
             const headerTitle = document.getElementById('header-brand-title');
             const headerSub = document.getElementById('header-portal-subtitle');
             const rolePill = document.getElementById('header-role-pill');
-            const footerSep = document.getElementById('footer-owner-sep');
-            const footerOwnerBtn = document.getElementById('footer-owner-btn');
 
             if (quickTabs) quickTabs.classList.add('hidden');
             if (supportBtn) {
@@ -2115,6 +2229,7 @@
             }
 
             if (appMode === 'owner') {
+                checkOwnerAuthorization();
                 if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-amber-500/20';
                 if (headerIcon) headerIcon.src = 'icon-owner.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Owner';
@@ -2136,8 +2251,6 @@
                     rolePill.innerText = 'ADMIN';
                     rolePill.className = 'text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-400/20 text-indigo-200 border border-indigo-400/30 shrink-0';
                 }
-                if (footerSep) footerSep.classList.add('hidden');
-                if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
                 switchRole('company_admin');
                 return true;
             } else if (appMode === 'worker') {
@@ -2149,8 +2262,6 @@
                     rolePill.innerText = 'STAFF';
                     rolePill.className = 'text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/30 shrink-0';
                 }
-                if (footerSep) footerSep.classList.add('hidden');
-                if (footerOwnerBtn) footerOwnerBtn.classList.add('hidden');
                 switchRole('worker');
                 return true;
             }
@@ -2167,6 +2278,10 @@
             if (monthPicker) monthPicker.value = today.slice(0, 7);
             if (advDate) advDate.value = today;
             if (newExp) newExp.value = defaultExpiry;
+
+            checkOwnerAuthorization();
+            startLockoutTicker();
+            ['sa', 'ca', 'w'].forEach(k => updateLockoutUI(k));
 
             setAppLanguage(currentLang);
             if (!applyDedicatedAppMode()) {
@@ -2214,8 +2329,19 @@
 
         function handleSuperAdminLogin(e) {
             e.preventDefault();
+            if (!checkOwnerAuthorization()) {
+                renderSuperAdmin();
+                return;
+            }
+            const lockStatus = checkLoginLockout('sa');
+            if (lockStatus.locked) {
+                updateLockoutUI('sa');
+                return;
+            }
+
             const enteredPass = document.getElementById('sa-login-pass').value.trim();
             if (enteredPass === superAdminPassword) {
+                clearFailedLogins('sa');
                 isSuperAdminUnlocked = true;
                 sessionStorage.setItem('wt_sa_unlocked', 'true');
                 document.getElementById('sa-login-pass').value = '';
@@ -2223,7 +2349,12 @@
                 renderSuperAdmin();
                 showToast('Super Admin कंट्रोल सेंटर अनलॉक हो गया!');
             } else {
-                showToast('गलत पासवर्ड! कृपया सही Super Admin पासवर्ड डालें।', true);
+                const res = recordFailedLogin('sa');
+                if (res.locked) {
+                    showToast('3 बार गलत पासवर्ड! सुरक्षा के लिए लॉगिन 5 मिनट के लिए लॉक हो गया है।', true);
+                } else {
+                    showToast(`गलत पासवर्ड! केवल ${res.attemptsLeft} प्रयास शेष हैं।`, true);
+                }
             }
         }
 
@@ -2371,7 +2502,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setTimeout(() => {
                     const passEl = document.getElementById('sa-login-pass');
-                    if (passEl && !isSuperAdminUnlocked) passEl.focus();
+                    if (passEl && !isSuperAdminUnlocked && isOwnerAuthorized) passEl.focus();
                 }, 150);
             }
             if (role === 'company_admin') {
@@ -2384,9 +2515,19 @@
         }
 
         function renderSuperAdmin() {
+            const restrictedBox = document.getElementById('sa-restricted-box');
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
             const footer = document.getElementById('app-footer');
+
+            if (!checkOwnerAuthorization()) {
+                if (restrictedBox) restrictedBox.classList.remove('hidden');
+                if (loginBox) loginBox.classList.add('hidden');
+                if (dashWrapper) dashWrapper.classList.add('hidden');
+                return;
+            } else {
+                if (restrictedBox) restrictedBox.classList.add('hidden');
+            }
 
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
@@ -2739,6 +2880,12 @@
 
         function handleCompanyAdminLogin(e) {
             e.preventDefault();
+            const lockStatus = checkLoginLockout('ca');
+            if (lockStatus.locked) {
+                updateLockoutUI('ca');
+                return;
+            }
+
             const idInput = document.getElementById('ca-login-id').value.trim();
             const passInput = document.getElementById('ca-login-pass').value.trim();
 
@@ -2750,10 +2897,16 @@
             }
 
             if (!comp) {
-                showToast('गलत Admin ID या Password!', true);
+                const res = recordFailedLogin('ca');
+                if (res.locked) {
+                    showToast('3 बार गलत पासवर्ड! सुरक्षा के लिए Admin लॉगिन 5 मिनट के लिए लॉक हो गया है।', true);
+                } else {
+                    showToast(`गलत Admin ID या Password! केवल ${res.attemptsLeft} प्रयास शेष हैं।`, true);
+                }
                 return;
             }
 
+            clearFailedLogins('ca');
             // Ensure complete tenant isolation: clear any lingering Super Admin unlock on this browser
             isSuperAdminUnlocked = false;
             sessionStorage.removeItem('wt_sa_unlocked');
@@ -3729,6 +3882,12 @@
 
         function handleWorkerLogin(e) {
             e.preventDefault();
+            const lockStatus = checkLoginLockout('w');
+            if (lockStatus.locked) {
+                updateLockoutUI('w');
+                return;
+            }
+
             const idInput = document.getElementById('w-login-id').value.trim().toUpperCase();
             const passInput = document.getElementById('w-login-pass').value.trim();
 
@@ -3740,10 +3899,16 @@
             }
 
             if (!worker) {
-                showToast('गलत Worker ID या Password (या आप गलत कंपनी के लिंक पर हैं)!', true);
+                const res = recordFailedLogin('w');
+                if (res.locked) {
+                    showToast('3 बार गलत पासवर्ड! सुरक्षा के लिए Worker लॉगिन 5 मिनट के लिए लॉक हो गया है।', true);
+                } else {
+                    showToast(`गलत Worker ID या Password! केवल ${res.attemptsLeft} प्रयास शेष हैं।`, true);
+                }
                 return;
             }
 
+            clearFailedLogins('w');
             loggedInWorkerId = worker.id;
             document.getElementById('worker-login-box').classList.add('hidden');
             document.getElementById('worker-dashboard-box').classList.remove('hidden');
@@ -3940,4 +4105,4 @@
         }
     </script>
 </body>
-                                        </html>
+                            </html>
