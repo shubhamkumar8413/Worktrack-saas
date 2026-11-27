@@ -662,13 +662,13 @@
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                    <button type="button" onclick="openModal('modal-add-advance')" class="bg-white hover:bg-amber-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
+                    <button type="button" onclick="openAdvanceModal('GIVEN')" class="bg-white hover:bg-amber-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
                         <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm shrink-0">
                             <i class="fa-solid fa-hand-holding-dollar"></i>
                         </span>
                         <div>
                             <div class="text-xs font-bold text-slate-800">खर्ची / एडवांस</div>
-                            <div class="text-[10px] text-slate-400">तुरंत दर्ज करें</div>
+                            <div class="text-[10px] text-slate-400">एडवांस दें / किस्त काटें</div>
                         </div>
                     </button>
 
@@ -791,13 +791,13 @@
                     <div id="payroll-main-area">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                             <div>
-                                <h3 class="font-bold text-slate-900 text-base">मासिक सैलरी और खर्ची (Advance) हिसाब</h3>
-                                <p class="text-xs text-slate-500">ऑटो सैलरी = (हाज़िरी × दैनिक दर) + (OT × OT दर) − एडवांस/खर्ची</p>
+                                <h3 class="font-bold text-slate-900 text-base">मासिक सैलरी और एडवांस किस्त (Installment) हिसाब</h3>
+                                <p class="text-xs text-slate-500">ऑटो सैलरी = कुल कमाई − इस माह की एडवांस कटौती (बकाया एडवांस अलग से ट्रैक होता है)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <input type="month" id="ca-month-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold bg-white">
-                                <button type="button" onclick="openModal('modal-add-advance')" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5">
-                                    <i class="fa-solid fa-hand-holding-dollar"></i> एडवांस / खर्ची दें
+                                <button type="button" onclick="openAdvanceModal('GIVEN')" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i> एडवांस दें / किस्त काटें
                                 </button>
                             </div>
                         </div>
@@ -811,9 +811,10 @@
                                         <th class="py-3 px-5 whitespace-nowrap">वर्कर व दर</th>
                                         <th class="py-3 px-5 whitespace-nowrap">मासिक हाज़िरी / OT</th>
                                         <th class="py-3 px-5 whitespace-nowrap">कुल कमाई (Gross)</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">एडवांस / खर्ची</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">इस माह की किस्त कटौती</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">बकाया एडवांस (Remaining)</th>
                                         <th class="py-3 px-5 whitespace-nowrap">नेट देय सैलरी</th>
-                                        <th class="py-3 px-5 text-right whitespace-nowrap">WhatsApp Slip</th>
+                                        <th class="py-3 px-5 text-right whitespace-nowrap">एक्शन / Slip</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ca-payroll-table" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -1031,10 +1032,10 @@
                             <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
                                 <i class="fa-solid fa-hand-holding-dollar"></i>
                             </span>
-                            <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">खर्ची</span>
+                            <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">बकाया</span>
                         </div>
                         <span id="wd-stat-advance" class="text-2xl font-extrabold text-rose-600 block">₹0</span>
-                        <span class="text-[11px] font-semibold text-rose-700 block mt-0.5">कुल एडवांस (खर्ची)</span>
+                        <span class="text-[11px] font-semibold text-rose-700 block mt-0.5">बकाया एडवांस (Remaining)</span>
                     </div>
                 </div>
 
@@ -1072,28 +1073,57 @@
             <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider">कमाई व खर्ची हिसाब</span>
+                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider">इस माह सैलरी व किस्त हिसाब</span>
                         <span id="wd-calc-days-badge" class="text-[11px] bg-white/15 px-2.5 py-0.5 rounded-full font-semibold">0 दिन • 0 OT</span>
                     </div>
                     <div class="space-y-1.5 text-xs pt-1 border-t border-white/10">
                         <div class="flex justify-between text-slate-300">
-                            <span>कुल हाज़िरी व OT कमाई:</span>
+                            <span>इस माह हाज़िरी व OT कमाई:</span>
                             <span id="wd-calc-gross" class="font-bold text-white">₹0</span>
                         </div>
-                        <div class="flex justify-between text-rose-300">
-                            <span>कुल एडवांस / खर्ची कटौती:</span>
+                        <div class="flex justify-between text-amber-300">
+                            <span>इस माह सैलरी से किस्त कटौती:</span>
                             <span id="wd-calc-adv" class="font-bold">- ₹0</span>
                         </div>
                         <div class="flex justify-between text-sm pt-2 border-t border-white/15 font-extrabold text-emerald-300">
-                            <span>अनुमानित शेष सैलरी:</span>
+                            <span>इस माह नेट देय सैलरी:</span>
                             <span id="wd-calc-net">₹0</span>
                         </div>
                     </div>
                 </div>
 
+                <!-- Advance Loan & Remaining Balance Tracker Card -->
+                <div class="bg-white rounded-3xl border border-amber-200/90 shadow-sm p-5 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-scale-balanced text-amber-600"></i> एडवांस लोन व बकाया बैलेंस
+                        </h3>
+                        <span id="wd-adv-progress-pct" class="text-[11px] font-extrabold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">0% चुकता</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80">
+                            <span class="text-[10px] font-semibold text-slate-500 block">कुल लिया एडवांस</span>
+                            <span id="wd-adv-total-taken" class="text-sm font-extrabold text-slate-900 mt-0.5 block">₹0</span>
+                        </div>
+                        <div class="bg-emerald-50/70 rounded-2xl p-2.5 border border-emerald-200/80">
+                            <span class="text-[10px] font-semibold text-emerald-700 block">कुल किस्त जमा</span>
+                            <span id="wd-adv-total-paid" class="text-sm font-extrabold text-emerald-700 mt-0.5 block">₹0</span>
+                        </div>
+                        <div class="bg-rose-50/80 rounded-2xl p-2.5 border border-rose-200/80">
+                            <span class="text-[10px] font-semibold text-rose-600 block">बकाया एडवांस</span>
+                            <span id="wd-adv-remaining" class="text-sm font-extrabold text-rose-600 mt-0.5 block">₹0</span>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="wd-adv-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                     <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-hand-holding-dollar text-rose-500"></i> लिया गया एडवांस / खर्ची विवरण
+                        <i class="fa-solid fa-receipt text-indigo-600"></i> एडवांस व किस्त कटौती पासबुक (Passbook)
                     </h3>
                     <div id="wd-advance-list" class="space-y-2.5"></div>
                 </div>
@@ -1343,20 +1373,38 @@
     </div>
 
     <div id="modal-add-advance" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-amber-600 mr-1.5"></i>एडवांस / खर्ची दर्ज करें</h3>
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-amber-600 mr-1.5"></i>एडवांस दें या किस्त काटें</h3>
                 <button type="button" onclick="closeModal('modal-add-advance')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <form onsubmit="handleAddAdvance(event)" class="space-y-4">
+            <form onsubmit="handleAddAdvance(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">लेन-देन का प्रकार चुनें (Action Type)</label>
+                    <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-200">
+                        <button type="button" id="adv-type-btn-GIVEN" onclick="setAdvanceEntryType('GIVEN')" class="py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs">
+                            <i class="fa-solid fa-plus-circle mr-1"></i> नया एडवांस दें
+                        </button>
+                        <button type="button" id="adv-type-btn-DEDUCTED" onclick="setAdvanceEntryType('DEDUCTED')" class="py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
+                            <i class="fa-solid fa-scissors mr-1"></i> किस्त काटें (Deduct)
+                        </button>
+                    </div>
+                    <input type="hidden" id="adv-entry-type" value="GIVEN">
+                </div>
+
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1">वर्कर चुनें</label>
-                    <select id="adv-worker-select" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white"></select>
+                    <select id="adv-worker-select" required onchange="updateAdvanceModalBalanceHint()" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white"></select>
+                    <div id="adv-modal-balance-hint" class="mt-1.5 text-[11px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-1.5 flex items-center justify-between">
+                        <span>वर्तमान बकाया एडवांस:</span>
+                        <span id="adv-modal-rem-val" class="font-extrabold text-rose-600">₹0</span>
+                    </div>
                 </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">राशि (₹ में)</label>
-                        <input type="number" id="adv-amount" required min="1" placeholder="500" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold">
+                        <label id="adv-amount-label" class="block text-xs font-semibold text-slate-600 mb-1">एडवांस राशि (₹ में)</label>
+                        <input type="number" id="adv-amount" required min="1" placeholder="20000" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">तारीख</label>
@@ -1364,12 +1412,12 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">विवरण (वैकल्पिक)</label>
-                    <input type="text" id="adv-note" placeholder="उदा. साप्ताहिक खर्ची" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">विवरण / किस्त नोट (वैकल्पिक)</label>
+                    <input type="text" id="adv-note" placeholder="उदा. ₹20,000 एडवांस या पहली किस्त कटौती" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">एडवांस सेव करें</button>
+                    <button type="submit" id="adv-submit-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">नया एडवांस सेव करें</button>
                 </div>
             </form>
         </div>
@@ -2845,19 +2893,20 @@
                     }
                 });
 
-                const mAdvance = db.advances
-                    .filter(a => a.companyId === activeCompanyId && a.workerId === w.id && a.date.startsWith(selectedMonth))
-                    .reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+                const advStats = getWorkerAdvanceStats(activeCompanyId, w.id, selectedMonth);
+                const mDeducted = advStats.monthDeducted;
+                const remainingAdvance = advStats.remaining;
 
                 const grossPay = Math.round((mPresent * dailyRate) + (mOt * otRate));
-                const netPay = grossPay - mAdvance;
+                const netPay = grossPay - mDeducted;
 
-                totalMonthAdvance += mAdvance;
+                totalMonthAdvance += advStats.monthGiven;
                 totalMonthNetSalary += netPay;
 
                 if (payrollTable && isFullPlan) {
                     const netBadgeClass = netPay < 0 ? 'text-rose-600 bg-rose-50 border-rose-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200';
-                    const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nकुल हाज़िरी: ${mPresent} दिन (₹${dailyRate}/दिन)\nकुल OT: ${mOt} घंटे (₹${otRate}/hr)\nकुल कमाई: ₹${grossPay}\nएडवांस/खर्ची कटौती: -₹${mAdvance}\n*नेट देय सैलरी: ₹${netPay}*`;
+                    const remBadgeClass = remainingAdvance > 0 ? 'text-amber-800 bg-amber-50 border-amber-200' : 'text-slate-500 bg-slate-50 border-slate-200';
+                    const slipMsg = `*${comp.name} - Salary Slip (${selectedMonth})*\nवर्कर: ${w.name} (${w.id})\nकुल हाज़िरी: ${mPresent} दिन (₹${dailyRate}/दिन)\nकुल OT: ${mOt} घंटे (₹${otRate}/hr)\nकुल कमाई: ₹${grossPay}\nइस माह किस्त कटौती: -₹${mDeducted}\n*नेट देय सैलरी: ₹${netPay}*\n----------------\nकुल एडवांस: ₹${advStats.totalGiven} | कुल जमा: ₹${advStats.totalDeducted}\n*बकाया एडवांस शेष: ₹${remainingAdvance}*`;
 
                     payrollTable.innerHTML += `
                         <tr class="hover:bg-slate-50 transition">
@@ -2872,13 +2921,19 @@
                             </td>
                             <td class="py-3.5 px-5 text-xs font-semibold text-slate-700 whitespace-nowrap">${mPresent} दिन • ${mOt} hrs</td>
                             <td class="py-3.5 px-5 text-xs font-bold text-slate-800 whitespace-nowrap">₹${grossPay.toLocaleString('en-IN')}</td>
-                            <td class="py-3.5 px-5 text-xs font-bold text-rose-600 whitespace-nowrap">- ₹${mAdvance.toLocaleString('en-IN')}</td>
+                            <td class="py-3.5 px-5 text-xs font-bold text-rose-600 whitespace-nowrap">- ₹${mDeducted.toLocaleString('en-IN')}</td>
+                            <td class="py-3.5 px-5 whitespace-nowrap">
+                                <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${remBadgeClass}">₹${remainingAdvance.toLocaleString('en-IN')}</span>
+                            </td>
                             <td class="py-3.5 px-5 whitespace-nowrap">
                                 <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${netBadgeClass}">₹${netPay.toLocaleString('en-IN')}</span>
                             </td>
-                            <td class="py-3.5 px-5 text-right whitespace-nowrap">
-                                <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
-                                    <i class="fa-brands fa-whatsapp"></i> Slip भेजें
+                            <td class="py-3.5 px-5 text-right whitespace-nowrap space-x-1">
+                                <button type="button" onclick="openAdvanceModal('DEDUCTED', '${w.id}')" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1.5 rounded-lg transition" title="इस माह की किस्त काटें">
+                                    <i class="fa-solid fa-scissors"></i> किस्त काटें
+                                </button>
+                                <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm transition">
+                                    <i class="fa-brands fa-whatsapp"></i> Slip
                                 </a>
                             </td>
                         </tr>
@@ -2886,8 +2941,8 @@
 
                     if (payrollCards) {
                         payrollCards.innerHTML += `
-                            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm">
-                                <div class="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
+                            <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-3">
+                                <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
                                     <div class="flex items-center gap-2.5 min-w-0">
                                         <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
                                         <div class="min-w-0">
@@ -2895,27 +2950,32 @@
                                             <div class="text-[11px] text-slate-500">₹${dailyRate}/दिन • OT ₹${otRate}/hr</div>
                                         </div>
                                     </div>
-                                    <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="shrink-0 inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-2 rounded-xl shadow-sm transition">
-                                        <i class="fa-brands fa-whatsapp text-sm"></i> Slip
-                                    </a>
+                                    <div class="flex items-center gap-1.5 shrink-0">
+                                        <button type="button" onclick="openAdvanceModal('DEDUCTED', '${w.id}')" class="inline-flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-extrabold px-2.5 py-2 rounded-xl transition">
+                                            <i class="fa-solid fa-scissors"></i> किस्त काटें
+                                        </button>
+                                        <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold px-2.5 py-2 rounded-xl shadow-sm transition">
+                                            <i class="fa-brands fa-whatsapp text-sm"></i> Slip
+                                        </a>
+                                    </div>
                                 </div>
 
-                                <div class="grid grid-cols-3 gap-2 py-3 text-center">
-                                    <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
-                                        <span class="text-[10px] font-semibold text-slate-400 block">हाज़िरी / OT</span>
-                                        <span class="text-xs font-bold text-slate-800 mt-0.5 block">${mPresent} दिन • ${mOt}h</span>
-                                    </div>
+                                <div class="grid grid-cols-3 gap-2 text-center">
                                     <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
                                         <span class="text-[10px] font-semibold text-slate-400 block">कुल कमाई</span>
                                         <span class="text-xs font-bold text-slate-800 mt-0.5 block">₹${grossPay.toLocaleString('en-IN')}</span>
                                     </div>
                                     <div class="bg-rose-50/70 rounded-xl p-2 border border-rose-100">
-                                        <span class="text-[10px] font-semibold text-rose-500 block">एडवांस</span>
-                                        <span class="text-xs font-bold text-rose-600 mt-0.5 block">- ₹${mAdvance.toLocaleString('en-IN')}</span>
+                                        <span class="text-[10px] font-semibold text-rose-500 block">इस माह किस्त</span>
+                                        <span class="text-xs font-bold text-rose-600 mt-0.5 block">- ₹${mDeducted.toLocaleString('en-IN')}</span>
+                                    </div>
+                                    <div class="bg-amber-50/80 rounded-xl p-2 border border-amber-200/80">
+                                        <span class="text-[10px] font-semibold text-amber-700 block">बकाया एडवांस</span>
+                                        <span class="text-xs font-extrabold text-amber-800 mt-0.5 block">₹${remainingAdvance.toLocaleString('en-IN')}</span>
                                     </div>
                                 </div>
 
-                                <div class="flex items-center justify-between pt-2.5 border-t border-slate-100">
+                                <div class="flex items-center justify-between pt-2 border-t border-slate-100">
                                     <span class="text-xs font-semibold text-slate-500">नेट देय सैलरी (${selectedMonth}):</span>
                                     <span class="px-3 py-1 rounded-xl border text-sm font-extrabold ${netBadgeClass}">
                                         ₹${netPay.toLocaleString('en-IN')}
@@ -3318,19 +3378,105 @@
             window.open(`https://wa.me/91${w.phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
+        function getWorkerAdvanceStats(companyId, workerId, monthPrefix = null) {
+            const entries = db.advances.filter(a => a.companyId === companyId && a.workerId === workerId);
+            let totalGiven = 0;
+            let totalDeducted = 0;
+            let monthGiven = 0;
+            let monthDeducted = 0;
+
+            entries.forEach(a => {
+                const amt = parseFloat(a.amount || 0);
+                // Legacy records without 'type' are treated as 'GIVEN'
+                const entryType = a.type || 'GIVEN';
+                if (entryType === 'DEDUCTED') {
+                    totalDeducted += amt;
+                    if (monthPrefix && (a.date || '').startsWith(monthPrefix)) {
+                        monthDeducted += amt;
+                    }
+                } else {
+                    totalGiven += amt;
+                    if (monthPrefix && (a.date || '').startsWith(monthPrefix)) {
+                        monthGiven += amt;
+                    }
+                }
+            });
+
+            const remaining = Math.max(0, totalGiven - totalDeducted);
+            return { totalGiven, totalDeducted, remaining, monthGiven, monthDeducted, entries };
+        }
+
+        function setAdvanceEntryType(type) {
+            document.getElementById('adv-entry-type').value = type;
+            const btnGiven = document.getElementById('adv-type-btn-GIVEN');
+            const btnDeduct = document.getElementById('adv-type-btn-DEDUCTED');
+            const amtLabel = document.getElementById('adv-amount-label');
+            const amtInput = document.getElementById('adv-amount');
+            const submitBtn = document.getElementById('adv-submit-btn');
+
+            if (type === 'DEDUCTED') {
+                btnDeduct.className = 'py-2 px-3 rounded-xl text-xs font-extrabold transition bg-emerald-600 text-white shadow-xs';
+                btnGiven.className = 'py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                amtLabel.innerText = 'किस्त कटौती राशि (₹ में)';
+                amtInput.placeholder = '5000';
+                submitBtn.className = 'bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm';
+                submitBtn.innerText = 'किस्त कटौती सेव करें';
+            } else {
+                btnGiven.className = 'py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs';
+                btnDeduct.className = 'py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
+                amtLabel.innerText = 'नया एडवांस राशि (₹ में)';
+                amtInput.placeholder = '20000';
+                submitBtn.className = 'bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm';
+                submitBtn.innerText = 'नया एडवांस सेव करें';
+            }
+        }
+
+        function updateAdvanceModalBalanceHint() {
+            const workerId = document.getElementById('adv-worker-select')?.value;
+            const remValEl = document.getElementById('adv-modal-rem-val');
+            if (!workerId || !remValEl) return;
+            const stats = getWorkerAdvanceStats(activeCompanyId, workerId);
+            remValEl.innerText = `₹${stats.remaining.toLocaleString('en-IN')} (कुल लिया: ₹${stats.totalGiven.toLocaleString('en-IN')})`;
+        }
+
+        function openAdvanceModal(type = 'GIVEN', preselectWorkerId = null) {
+            const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
+            const advSelect = document.getElementById('adv-worker-select');
+            if (advSelect) {
+                advSelect.innerHTML = tenantWorkers.map(w => `<option value="${w.id}">${w.name} (${w.id})</option>`).join('');
+                if (preselectWorkerId) advSelect.value = preselectWorkerId;
+            }
+            document.getElementById('adv-date').value = today;
+            document.getElementById('adv-amount').value = '';
+            document.getElementById('adv-note').value = '';
+            setAdvanceEntryType(type);
+            updateAdvanceModalBalanceHint();
+            openModal('modal-add-advance');
+        }
+
         async function handleAddAdvance(e) {
             e.preventDefault();
+            const entryType = document.getElementById('adv-entry-type').value || 'GIVEN';
             const workerId = document.getElementById('adv-worker-select').value;
             const amount = parseFloat(document.getElementById('adv-amount').value) || 0;
             const date = document.getElementById('adv-date').value || today;
             const note = document.getElementById('adv-note').value.trim();
             const w = db.workers.find(x => x.id === workerId);
 
-            const advObj = { companyId: activeCompanyId, workerId, amount, date, note, createdAt: Date.now() };
+            const beforeStats = getWorkerAdvanceStats(activeCompanyId, workerId);
+            const afterRemaining = entryType === 'DEDUCTED'
+                ? Math.max(0, beforeStats.remaining - amount)
+                : beforeStats.remaining + amount;
+
+            const advObj = { companyId: activeCompanyId, workerId, type: entryType, amount, date, note, createdAt: Date.now() };
+            const logText = entryType === 'DEDUCTED'
+                ? `${w.name} (${w.id}) की सैलरी से ₹${amount} एडवांस किस्त काटी गई (शेष बकाया: ₹${afterRemaining})${note ? ` [${note}]` : ''}`
+                : `${w.name} (${w.id}) को ₹${amount} नया एडवांस दिया गया (कुल बकाया: ₹${afterRemaining})${note ? ` [${note}]` : ''}`;
+
             const logObj = {
                 companyId: activeCompanyId,
                 time: `${date} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
-                text: `${w.name} (${w.id}) को ₹${amount} एडवांस (खर्ची) दिया गया${note ? ` (${note})` : ''}`,
+                text: logText,
                 createdAt: Date.now()
             };
 
@@ -3345,9 +3491,11 @@
                 e.target.reset();
                 document.getElementById('adv-date').value = today;
                 closeModal('modal-add-advance');
-                showToast(`${w.name} के खाते में ₹${amount} एडवांस दर्ज हो गया!`);
+                showToast(entryType === 'DEDUCTED'
+                    ? `${w.name} की ₹${amount} किस्त कट गई! अब बकाया: ₹${afterRemaining}`
+                    : `${w.name} को ₹${amount} नया एडवांस दर्ज हो गया!`);
             } catch (err) {
-                showToast('एडवांस सेव करने में त्रुटि!', true);
+                showToast('एडवांस/किस्त सेव करने में त्रुटि!', true);
             }
         }
 
@@ -3511,22 +3659,45 @@
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
-            const workerAdvances = db.advances
-                .filter(a => a.companyId === worker.companyId && a.workerId === worker.id)
-                .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+            const currentMonthPrefix = today.slice(0, 7);
+            const advStats = getWorkerAdvanceStats(worker.companyId, worker.id, currentMonthPrefix);
 
-            const totalAdvance = workerAdvances.reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
             const advStatEl = document.getElementById('wd-stat-advance');
-            if (advStatEl) advStatEl.innerText = `₹${totalAdvance.toLocaleString('en-IN')}`;
+            if (advStatEl) advStatEl.innerText = `₹${advStats.remaining.toLocaleString('en-IN')}`;
 
-            const grossEarnings = Math.round((totalPresent * dailyRate) + (totalOt * otRate));
-            const netBalance = grossEarnings - totalAdvance;
+            const totalTakenEl = document.getElementById('wd-adv-total-taken');
+            const totalPaidEl = document.getElementById('wd-adv-total-paid');
+            const remAdvEl = document.getElementById('wd-adv-remaining');
+            const advPctEl = document.getElementById('wd-adv-progress-pct');
+            const advBarEl = document.getElementById('wd-adv-progress-bar');
+
+            if (totalTakenEl) totalTakenEl.innerText = `₹${advStats.totalGiven.toLocaleString('en-IN')}`;
+            if (totalPaidEl) totalPaidEl.innerText = `₹${advStats.totalDeducted.toLocaleString('en-IN')}`;
+            if (remAdvEl) remAdvEl.innerText = `₹${advStats.remaining.toLocaleString('en-IN')}`;
+
+            const paidPct = advStats.totalGiven > 0 ? Math.min(100, Math.round((advStats.totalDeducted / advStats.totalGiven) * 100)) : 100;
+            if (advPctEl) advPctEl.innerText = advStats.totalGiven > 0 ? `${paidPct}% चुकता` : 'कोई बकाया नहीं';
+            if (advBarEl) advBarEl.style.width = `${advStats.totalGiven > 0 ? paidPct : 0}%`;
+
+            // Current month attendance & earnings
+            let monthPresent = 0;
+            let monthOt = 0;
+            allRecords.forEach(rec => {
+                if (rec.date.startsWith(currentMonthPrefix)) {
+                    if (rec.status === 'Present') monthPresent += 1;
+                    if (rec.status === 'Half Day') monthPresent += 0.5;
+                    monthOt += parseFloat(rec.ot || 0);
+                }
+            });
+
+            const monthGrossEarnings = Math.round((monthPresent * dailyRate) + (monthOt * otRate));
+            const monthNetBalance = monthGrossEarnings - advStats.monthDeducted;
 
             const netBalEl = document.getElementById('wd-net-balance');
             const rateInfoEl = document.getElementById('wd-rate-info');
             if (netBalEl) {
-                netBalEl.innerText = `₹${netBalance.toLocaleString('en-IN')}`;
-                netBalEl.className = netBalance < 0 ? 'text-2xl font-extrabold text-rose-600' : 'text-2xl font-extrabold text-emerald-600';
+                netBalEl.innerText = `₹${monthNetBalance.toLocaleString('en-IN')}`;
+                netBalEl.className = monthNetBalance < 0 ? 'text-2xl font-extrabold text-rose-600' : 'text-2xl font-extrabold text-emerald-600';
             }
             if (rateInfoEl) rateInfoEl.innerText = `दैनिक दर: ₹${dailyRate} • OT: ₹${otRate}/hr`;
 
@@ -3534,30 +3705,40 @@
             const calcGrossEl = document.getElementById('wd-calc-gross');
             const calcAdvEl = document.getElementById('wd-calc-adv');
             const calcNetEl = document.getElementById('wd-calc-net');
-            if (calcDaysEl) calcDaysEl.innerText = `${totalPresent} दिन • ${totalOt} OT`;
-            if (calcGrossEl) calcGrossEl.innerText = `₹${grossEarnings.toLocaleString('en-IN')}`;
-            if (calcAdvEl) calcAdvEl.innerText = `- ₹${totalAdvance.toLocaleString('en-IN')}`;
-            if (calcNetEl) calcNetEl.innerText = `₹${netBalance.toLocaleString('en-IN')}`;
+            if (calcDaysEl) calcDaysEl.innerText = `${monthPresent} दिन • ${monthOt} OT`;
+            if (calcGrossEl) calcGrossEl.innerText = `₹${monthGrossEarnings.toLocaleString('en-IN')}`;
+            if (calcAdvEl) calcAdvEl.innerText = `- ₹${advStats.monthDeducted.toLocaleString('en-IN')}`;
+            if (calcNetEl) calcNetEl.innerText = `₹${monthNetBalance.toLocaleString('en-IN')}`;
 
+            const workerAdvances = [...advStats.entries].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
             const advListEl = document.getElementById('wd-advance-list');
             if (advListEl) {
                 if (workerAdvances.length === 0) {
-                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">कोई एडवांस / खर्ची दर्ज नहीं है।</p>`;
+                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">कोई एडवांस या किस्त रिकॉर्ड दर्ज नहीं है।</p>`;
                 } else {
-                    advListEl.innerHTML = workerAdvances.map(a => `
-                        <div class="flex items-center justify-between p-3 rounded-2xl border border-rose-100 bg-rose-50/40">
-                            <div>
-                                <div class="text-xs font-bold text-slate-800">${a.date}</div>
-                                <div class="text-[11px] text-slate-500">${a.note || 'एडवांस / खर्ची'}</div>
+                    advListEl.innerHTML = workerAdvances.map(a => {
+                        const isDeduction = (a.type || 'GIVEN') === 'DEDUCTED';
+                        const rowStyle = isDeduction ? 'border-emerald-200/80 bg-emerald-50/40' : 'border-rose-200/80 bg-rose-50/40';
+                        const badgeStyle = isDeduction ? 'text-emerald-700 bg-white border-emerald-200' : 'text-rose-600 bg-white border-rose-200';
+                        const typeLabel = isDeduction ? '✅ किस्त जमा (सैलरी से कटौती)' : '💰 नया एडवांस लिया';
+                        const sign = isDeduction ? '- ' : '+ ';
+
+                        return `
+                            <div class="flex items-center justify-between p-3 rounded-2xl border ${rowStyle}">
+                                <div>
+                                    <div class="text-[11px] font-extrabold ${isDeduction ? 'text-emerald-700' : 'text-rose-700'}">${typeLabel}</div>
+                                    <div class="text-xs font-bold text-slate-800 mt-0.5">${a.date}</div>
+                                    ${a.note ? `<div class="text-[11px] text-slate-500 mt-0.5">${a.note}</div>` : ''}
+                                </div>
+                                <span class="text-xs font-extrabold ${badgeStyle} px-3 py-1.5 rounded-xl border shrink-0">
+                                    ${sign}₹${parseFloat(a.amount || 0).toLocaleString('en-IN')}
+                                </span>
                             </div>
-                            <span class="text-xs font-extrabold text-rose-600 bg-white px-3 py-1 rounded-xl border border-rose-200">
-                                ₹${parseFloat(a.amount || 0).toLocaleString('en-IN')}
-                            </span>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
                 }
             }
         }
     </script>
 </body>
-    </html>
+                    </html>
