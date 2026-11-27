@@ -38,7 +38,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase Compat SDKs (App + Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <style>
@@ -66,7 +65,6 @@
     <!-- Premium Rich Branded App Top Header -->
     <header id="demo-top-bar" class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-white/10">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2.5">
-            <!-- Left: App Brand Icon, Name & Live Status Pill -->
             <div class="flex items-center gap-3 min-w-0">
                 <div class="relative shrink-0">
                     <img id="header-brand-icon" src="app-icon.png" alt="WorkTrack" onerror="this.src='icon-admin.png'" class="w-10 h-10 rounded-xl object-cover shadow-md ring-2 ring-white/20">
@@ -81,7 +79,6 @@
                 </div>
             </div>
 
-            <!-- Right Controls: Quick Portal Switch + Support + Language -->
             <div class="flex items-center gap-2 shrink-0">
                 <div id="portal-quick-tabs" class="flex items-center bg-white/10 backdrop-blur-sm p-0.5 rounded-xl border border-white/15">
                     <button type="button" onclick="switchRole('company_admin')" id="btn-role-company" class="role-btn px-2.5 py-1.5 rounded-lg text-[11px] font-bold transition flex items-center gap-1 bg-white text-indigo-950 shadow-xs">
@@ -92,13 +89,11 @@
                     </button>
                 </div>
 
-                <!-- 24x7 Support Quick Help Icon -->
                 <a id="header-support-btn" href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="hidden items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/30 rounded-xl px-2.5 py-1.5 text-[11px] font-semibold transition" title="WhatsApp Support">
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span class="hidden xs:inline">Help</span>
                 </a>
 
-                <!-- Language Switcher -->
                 <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl px-2.5 py-1.5">
                     <i class="fa-solid fa-globe text-indigo-300 text-xs mr-1.5"></i>
                     <select onchange="setAppLanguage(this.value)" class="lang-selector bg-transparent text-white text-[11px] font-bold focus:outline-none cursor-pointer">
@@ -143,7 +138,6 @@
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
-        <!-- Super Admin Password Lock Screen -->
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -176,13 +170,9 @@
             </div>
         </div>
 
-        <!-- Super Admin Main Dashboard -->
         <div id="sa-dashboard-wrapper" class="hidden pb-24">
-
-            <!-- SA TAB 1: PREMIER HOME OVERVIEW -->
+            <!-- SA TAB 1: HOME -->
             <div id="sa-content-home" class="sa-tab-content fade-in space-y-4">
-                
-                <!-- Luxury Obsidian & Gold Hero Owner Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950 text-white p-5 sm:p-6 shadow-xl border border-amber-400/25">
                     <div class="pointer-events-none absolute -top-12 -right-12 w-44 h-44 rounded-full bg-amber-500/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-indigo-500/15 blur-2xl"></div>
@@ -191,11 +181,9 @@
                         <div class="flex items-center gap-3.5 min-w-0">
                             <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-14 h-14 rounded-2xl object-cover shadow-lg shrink-0 ring-2 ring-amber-400/40">
                             <div class="min-w-0">
-                                <div class="flex flex-wrap items-center gap-1.5">
-                                    <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                                        <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> SaaS Founder & Owner
-                                    </span>
-                                </div>
+                                <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                    <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> SaaS Founder & Owner
+                                </span>
                                 <h1 class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-1 truncate">WorkTrack Control Center</h1>
                                 <p class="text-[11px] text-slate-300/90 mt-0.5 flex items-center gap-1.5">
                                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live Cloud Sync • All Systems Active
@@ -203,7 +191,7 @@
                             </div>
                         </div>
 
-                        <button type="button" onclick="logoutSuperAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="पैनल लॉक करें">
+                        <button type="button" onclick="logoutSuperAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm">
                             <i class="fa-solid fa-lock"></i>
                             <span class="hidden sm:inline" data-i18n="sa_lock_btn">लॉक करें</span>
                         </button>
@@ -221,7 +209,7 @@
                     </div>
 
                     <div class="relative mt-4 grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="openModal('modal-add-company')" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 py-2.5 px-3 rounded-xl text-xs font-extrabold shadow-md shadow-amber-950/50 transition flex items-center justify-center gap-1.5">
+                        <button type="button" onclick="openModal('modal-add-company')" class="bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 py-2.5 px-3 rounded-xl text-xs font-extrabold shadow-md transition flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
                         </button>
                         <button type="button" onclick="switchSaTab('companies')" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
@@ -230,7 +218,6 @@
                     </div>
                 </div>
 
-                <!-- Premier SaaS KPI Cards -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                     <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white p-4 rounded-2xl border border-emerald-200/80 shadow-sm hover:border-emerald-400 transition flex items-center justify-between">
                         <div>
@@ -268,7 +255,6 @@
                     </div>
                 </div>
 
-                <!-- Plan Distribution Breakdown Card -->
                 <div onclick="switchSaTab('revenue')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-amber-300 transition">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -292,7 +278,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Recent Companies List -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2.5">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -306,7 +291,7 @@
                 </div>
             </div>
 
-            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT -->
+            <!-- SA TAB 2: COMPANIES -->
             <div id="sa-content-companies" class="sa-tab-content hidden fade-in">
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
                     <div class="p-4 sm:p-5 border-b border-slate-100 space-y-3">
@@ -320,7 +305,6 @@
                             </button>
                         </div>
 
-                        <!-- Search & Filter Bar -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                             <div class="sm:col-span-2 relative">
                                 <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
@@ -334,10 +318,8 @@
                         </div>
                     </div>
 
-                    <!-- Mobile Company Cards View -->
                     <div id="sa-company-cards" class="md:hidden p-3.5 space-y-3 bg-slate-50/70"></div>
 
-                    <!-- Desktop Table View -->
                     <div class="hidden md:block overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -356,7 +338,7 @@
                 </div>
             </div>
 
-            <!-- SA TAB 3: REVENUE & PLAN ANALYTICS -->
+            <!-- SA TAB 3: REVENUE -->
             <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-emerald-400/20">
                     <div class="flex items-center justify-between">
@@ -379,7 +361,7 @@
                 </div>
             </div>
 
-            <!-- SA TAB 4: SECURITY, APKs & OWNER SETTINGS -->
+            <!-- SA TAB 4: SETTINGS -->
             <div id="sa-content-settings" class="sa-tab-content hidden fade-in space-y-4">
                 <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-4">
                     <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
@@ -402,7 +384,6 @@
                     </div>
                 </div>
 
-                <!-- 3 Dedicated Apps Download & Share Hub -->
                 <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
                     <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
                         <i class="fa-brands fa-android text-emerald-600 text-base"></i> तीनों समर्पित Android Apps (APK Links)
@@ -443,7 +424,6 @@
                 </div>
             </div>
 
-            <!-- Fixed Bottom Navigation Bar for Super Admin (4 Tabs) -->
             <nav id="sa-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
                 <div class="max-w-2xl mx-auto grid grid-cols-4 h-16 px-1">
                     <button type="button" onclick="switchSaTab('home')" id="tab-sa-home" class="sa-tab flex flex-col items-center justify-center gap-1 text-amber-600 font-bold transition">
@@ -483,7 +463,6 @@
     <!-- ========================================== -->
     <div id="view-company_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
-        <!-- Company Admin Login Card -->
         <div id="ca-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-admin.png" alt="WorkTrack Admin" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -506,7 +485,6 @@
                 </button>
             </form>
 
-            <!-- Company Admin APK Download Button -->
             <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk" download="WT-Admin.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Admin App डाउनलोड शुरू हो गया है!')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Admin App डाउनलोड करें (APK)
@@ -514,20 +492,14 @@
             </div>
         </div>
 
-        <!-- Company Admin Dashboard Wrapper -->
         <div id="ca-dashboard-wrapper" class="hidden pb-24">
-            <!-- Suspended Alert Banner -->
             <div id="ca-suspended-banner" class="hidden mb-6 bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-medium">
                 <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg"></i>
                 <span>यह कंपनी खाता फिलहाल <strong>Suspended</strong> है। नया डेटा सेव करने के लिए Super Admin से संपर्क करें।</span>
             </div>
 
-            <!-- ============================================== -->
-            <!-- TAB 0: PREMIER COMPANY ADMIN HOME DASHBOARD    -->
-            <!-- ============================================== -->
+            <!-- CA TAB 0: HOME -->
             <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
-                
-                <!-- Luxury Gradient Company Hero Card -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
                     <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-400/15 blur-2xl"></div>
@@ -551,13 +523,12 @@
                             </div>
                         </div>
 
-                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="लॉगआउट">
+                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <span class="hidden sm:inline" data-i18n="w_logout">लॉगआउट</span>
                         </button>
                     </div>
 
-                    <!-- Plan Worker Limit Progress Bar -->
                     <div class="relative mt-5 pt-4 border-t border-white/10">
                         <div class="flex items-center justify-between text-[11px] mb-1.5">
                             <span class="text-indigo-200 font-medium">प्लान वर्कर क्षमता (Worker Limit)</span>
@@ -568,7 +539,6 @@
                         </div>
                     </div>
 
-                    <!-- Subscription Expiry Date & Renewal Box -->
                     <div id="ca-expiry-box" class="relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <span id="ca-expiry-icon-wrap" class="w-9 h-9 rounded-xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center text-sm shrink-0">
@@ -584,15 +554,13 @@
                         </a>
                     </div>
 
-                    <!-- Super Admin Switcher (Only visible when Owner is inspecting) -->
                     <div id="ca-demo-selector-box" class="hidden relative mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                         <span class="text-[11px] text-amber-300 font-semibold"><i class="fa-solid fa-crown mr-1"></i> Owner View:</span>
                         <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="bg-slate-900/90 border border-white/20 rounded-xl px-3 py-1.5 text-xs font-semibold text-white focus:outline-none"></select>
                     </div>
 
-                    <!-- Primary Quick Action Buttons on Hero Card -->
                     <div class="relative mt-4 grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-500 hover:bg-indigo-400 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md shadow-indigo-950/40 transition flex items-center justify-center gap-1.5">
+                        <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-500 hover:bg-indigo-400 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md transition flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
                         </button>
                         <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
@@ -601,7 +569,6 @@
                     </div>
                 </div>
 
-                <!-- Today's Attendance Progress Summary Card -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
@@ -626,9 +593,8 @@
                     </div>
                 </div>
 
-                <!-- 4 Modern KPI Stat Cards (Clickable to jump to relevant tabs) -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-                    <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition active:scale-[0.99]">
+                    <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-users"></i>
@@ -639,7 +605,7 @@
                         <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_total">कुल वर्कर्स</span>
                     </div>
 
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition active:scale-[0.99]">
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-user-check"></i>
@@ -650,7 +616,7 @@
                         <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
                     </div>
 
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition active:scale-[0.99]">
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-user-xmark"></i>
@@ -661,7 +627,7 @@
                         <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
                     </div>
 
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition active:scale-[0.99]">
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
                                 <i class="fa-solid fa-clock"></i>
@@ -673,7 +639,6 @@
                     </div>
                 </div>
 
-                <!-- Monthly Payroll & Kharchi Snapshot Card -->
                 <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -693,7 +658,6 @@
                     </div>
                 </div>
 
-                <!-- Quick Action Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     <button type="button" onclick="openModal('modal-add-advance')" class="bg-white hover:bg-amber-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
                         <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm shrink-0">
@@ -726,7 +690,6 @@
                     </a>
                 </div>
 
-                <!-- Recent Activity Mini Preview -->
                 <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
                     <div class="flex items-center justify-between mb-2.5">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
@@ -740,7 +703,7 @@
                 </div>
             </div>
 
-            <!-- Main Content Card for Sub-Tabs (Attendance, Workers, Payroll, Audit) -->
+            <!-- Main Card for Attendance, Workers, Payroll & Audit -->
             <div id="ca-main-card" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
 
                 <!-- TAB 1: DAILY ATTENDANCE & OT -->
@@ -768,7 +731,7 @@
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
                                     <th class="py-3.5 px-3 w-10 text-center">
-                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="सभी चुनें">
+                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer">
                                     </th>
                                     <th class="py-3.5 px-4" data-i18n="th_worker">वर्कर (Worker)</th>
                                     <th class="py-3.5 px-4" data-i18n="th_dept">विभाग</th>
@@ -794,10 +757,8 @@
                         </button>
                     </div>
 
-                    <!-- Mobile-Friendly Worker Cards -->
                     <div id="ca-workers-cards" class="md:hidden space-y-3"></div>
 
-                    <!-- Desktop Table View -->
                     <div class="hidden md:block overflow-x-auto border border-slate-200 rounded-2xl">
                         <table class="w-full text-left border-collapse">
                             <thead>
@@ -838,10 +799,8 @@
                             </div>
                         </div>
 
-                        <!-- Mobile-Friendly Payroll Cards -->
                         <div id="ca-payroll-cards" class="md:hidden space-y-3"></div>
 
-                        <!-- Desktop Table View -->
                         <div class="hidden md:block overflow-x-auto border border-slate-200 rounded-2xl">
                             <table class="w-full text-left border-collapse">
                                 <thead>
@@ -860,9 +819,8 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: AUDIT LOGS (PREMIER TIMELINE & FILTER VIEW) -->
+                <!-- TAB 4: PREMIER AUDIT LOGS -->
                 <div id="ca-content-audit" class="ca-tab-content hidden fade-in">
-                    <!-- Premier Dark Header Banner for Audit Log -->
                     <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 border-b border-slate-800">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
@@ -870,7 +828,7 @@
                                     <i class="fa-solid fa-shield-halved"></i>
                                 </span>
                                 <div>
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex flex-wrap items-center gap-2">
                                         <h3 class="font-extrabold text-base sm:text-lg text-white tracking-tight">सिस्टम ऑडिट लॉग (Audit Trail)</h3>
                                         <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
                                             <i class="fa-solid fa-lock text-[9px]"></i> Tamper-Proof
@@ -884,7 +842,6 @@
                             </button>
                         </div>
 
-                        <!-- Search & Category Filter Pills -->
                         <div class="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-2.5">
                             <div class="relative flex-1">
                                 <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
@@ -899,7 +856,6 @@
                         </div>
                     </div>
 
-                    <!-- Premier Vertical Timeline List -->
                     <div class="p-4 sm:p-6 bg-slate-50/60">
                         <div class="flex items-center justify-between mb-3 px-1">
                             <span id="ca-audit-count-label" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">कुल 0 गतिविधियाँ दर्ज</span>
@@ -912,7 +868,6 @@
                 </div>
             </div>
 
-            <!-- Fixed Mobile/App Bottom Navigation Bar (5 Tabs) -->
             <nav id="ca-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
                 <div class="max-w-2xl mx-auto grid grid-cols-5 h-16 px-1">
                     <button type="button" onclick="switchCaTab('home')" id="tab-ca-home" class="ca-tab flex flex-col items-center justify-center gap-1 text-indigo-600 font-bold transition relative">
@@ -959,7 +914,6 @@
     <!-- ========================================== -->
     <div id="view-worker" class="role-view hidden max-w-md mx-auto p-4 sm:py-6 fade-in">
         
-        <!-- Worker Login Card -->
         <div id="worker-login-box" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8">
             <div class="text-center mb-6">
                 <img src="icon-worker.png" alt="WorkTrack Worker" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -982,7 +936,6 @@
                 </button>
             </form>
 
-            <!-- Worker APK Download Button -->
             <div id="w-download-box" class="mt-5 pt-4 border-t border-slate-100">
                 <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk" download="WT-Worker.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Worker App डाउनलोड शुरू हो गया है!')" class="w-full bg-emerald-950 hover:bg-emerald-900 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
                     <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Worker App डाउनलोड करें (APK)
@@ -990,12 +943,8 @@
             </div>
         </div>
 
-        <!-- Worker Premier Dashboard with 4-Tab Bottom Navigation -->
         <div id="worker-dashboard-box" class="hidden pb-24">
-
-            <!-- WORKER TAB 1: PREMIER HOME DASHBOARD -->
             <div id="w-content-home" class="w-tab-content fade-in space-y-4">
-                
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-950 to-teal-950 text-white p-5 shadow-xl border border-emerald-400/25">
                     <div class="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-emerald-400/20 blur-2xl"></div>
                     <div class="pointer-events-none absolute -bottom-12 -left-8 w-32 h-32 rounded-full bg-teal-400/15 blur-2xl"></div>
@@ -1029,7 +978,7 @@
                         <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                             <i class="fa-solid fa-wallet text-emerald-600"></i> अनुमानित नेट हिसाब (Est. Net Balance)
                         </span>
-                        <span id="wd-home-month-badge" class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">इस माह</span>
+                        <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">इस माह</span>
                     </div>
                     <div class="flex items-end justify-between">
                         <div>
@@ -1101,7 +1050,6 @@
                 </div>
             </div>
 
-            <!-- WORKER TAB 2: ATTENDANCE & OT HISTORY -->
             <div id="w-content-attendance" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                     <div class="flex items-center justify-between gap-2 mb-3">
@@ -1118,7 +1066,6 @@
                 </div>
             </div>
 
-            <!-- WORKER TAB 3: KHARCHI (ADVANCE) & SALARY -->
             <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
                     <div class="flex items-center justify-between">
@@ -1149,7 +1096,6 @@
                 </div>
             </div>
 
-            <!-- WORKER TAB 4: DIGITAL STAFF ID CARD -->
             <div id="w-content-idcard" class="w-tab-content hidden fade-in space-y-4">
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-b from-emerald-800 via-teal-900 to-slate-950 text-white p-6 shadow-xl border border-emerald-400/30 text-center">
                     <div class="text-[10px] font-extrabold uppercase tracking-widest text-emerald-300 mb-1" id="wd-card-company">WORKTRACK VERIFIED STAFF</div>
@@ -1184,7 +1130,6 @@
                 </div>
             </div>
 
-            <!-- Fixed Bottom Navigation Bar for Worker (4 Tabs) -->
             <nav id="w-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
                 <div class="max-w-md mx-auto grid grid-cols-4 h-16 px-1">
                     <button type="button" onclick="switchWTab('home')" id="tab-w-home" class="w-tab flex flex-col items-center justify-center gap-1 text-emerald-600 font-bold transition">
@@ -1220,18 +1165,13 @@
     </div>
     </main>
 
-    <!-- Subtle App Footer with Owner Access -->
     <footer id="app-footer" class="py-4 px-4 text-center text-[11px] text-slate-400">
         <span>© 2026 WorkTrack SaaS</span>
         <span id="footer-owner-sep" class="mx-1.5">•</span>
         <button id="footer-owner-btn" type="button" onclick="switchRole('super_admin')" class="hover:text-slate-600 font-medium transition">Owner Login</button>
     </footer>
 
-    <!-- ========================================== -->
-    <!-- MODALS                                     -->
-    <!-- ========================================== -->
-
-    <!-- Modal: Change Super Admin Password -->
+    <!-- MODALS -->
     <div id="modal-change-sa-pass" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-4">
@@ -1255,7 +1195,6 @@
         </div>
     </div>
     
-    <!-- Modal: Add New Company (Super Admin) -->
     <div id="modal-add-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
@@ -1299,7 +1238,6 @@
         </div>
     </div>
 
-    <!-- Modal: Company Shareable Links -->
     <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-2">
@@ -1343,7 +1281,6 @@
         </div>
     </div>
 
-    <!-- Modal: Add New Worker (Company Admin) -->
     <div id="modal-add-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-4">
@@ -1402,7 +1339,6 @@
         </div>
     </div>
 
-    <!-- Modal: Add Worker Advance / Kharchi -->
     <div id="modal-add-advance" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-4">
@@ -1436,7 +1372,6 @@
         </div>
     </div>
 
-    <!-- Modal: Confirm Delete Worker -->
     <div id="modal-delete-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
             <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-rose-100">
@@ -1451,9 +1386,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- JAVASCRIPT LOGIC (Firebase + i18n + 3 Apps) -->
-    <!-- ========================================== -->
     <script>
         const TRANSLATIONS = {
             hi: {
@@ -1486,7 +1418,7 @@
                 tab_payroll: "सैलरी व खर्ची",
                 tab_audit: "ऑडिट लॉग",
                 select_date: "तारीख चुनें:",
-                btn_mark_all: "सभी को Present करें",
+                btn_mark_all: "चुने हुए Present करें",
                 btn_export: "Excel/CSV रिपोर्ट",
                 btn_add_worker: "नया Worker जोड़ें",
                 th_worker: "वर्कर (Worker)",
@@ -1550,7 +1482,7 @@
                 tab_payroll: "Payroll",
                 tab_audit: "Audit Log",
                 select_date: "Select Date:",
-                btn_mark_all: "Mark All Present",
+                btn_mark_all: "Mark Selected Present",
                 btn_export: "Excel/CSV Report",
                 btn_add_worker: "Add New Worker",
                 th_worker: "Worker",
@@ -1614,7 +1546,7 @@
                 tab_payroll: "પગાર અને ખર્ચી",
                 tab_audit: "ઓડિટ લોગ",
                 select_date: "તારીખ પસંદ કરો:",
-                btn_mark_all: "બધાને Present કરો",
+                btn_mark_all: "પસંદ કરેલ Present કરો",
                 btn_export: "Excel/CSV રિપોર્ટ",
                 btn_add_worker: "નવો Worker ઉમેરો",
                 th_worker: "વર્કર (Worker)",
@@ -1697,10 +1629,12 @@
 
         let firestore = null;
         try {
-            if (!firebase.apps.length) {
-                firebase.initializeApp(firebaseConfig);
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                firestore = firebase.firestore();
             }
-            firestore = firebase.firestore();
         } catch (err) {
             console.error("Firebase init error:", err);
         }
@@ -1737,8 +1671,15 @@
         };
 
         let db = {
-            companies: [],
-            workers: [],
+            companies: [
+                { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', expiryDate: defaultExpiry, status: 'Active', color: 'bg-indigo-600' },
+                { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', expiryDate: defaultExpiry, status: 'Active', color: 'bg-emerald-600' }
+            ],
+            workers: [
+                { id: 'W-101', companyId: 'COMP-01', name: 'रमेश कुमार', dept: 'Fabrication', role: 'Senior Welder', phone: '9811223344', password: '123', photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK' },
+                { id: 'W-102', companyId: 'COMP-01', name: 'सुनील शर्मा', dept: 'Civil', role: 'Site Supervisor', phone: '9822334455', password: '123', photo: 'https://placehold.co/100x100/0284c7/ffffff?text=SS' },
+                { id: 'W-201', companyId: 'COMP-02', name: 'मनोज सिंह', dept: 'Assembly', role: 'Machine Operator', phone: '9844556677', password: '123', photo: 'https://placehold.co/100x100/059669/ffffff?text=MS' }
+            ],
             attendance: {},
             advances: [],
             auditLogs: []
@@ -1746,13 +1687,14 @@
 
         let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
         let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
-        let activeCompanyId = '';
+        let activeCompanyId = 'COMP-01';
         let isCompanyAdminLoggedIn = false;
         let loggedInWorkerId = null;
         let sharedPortalMode = null;
         let selectedLinksCompanyId = null;
         let initialRouteHandled = false;
         let activeAuditFilter = 'ALL';
+
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -1793,23 +1735,11 @@
                 const snap = await firestore.collection('wt_companies').limit(1).get();
                 if (snap.empty) {
                     const batch = firestore.batch();
-                    const sampleCompanies = [
-                        { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', expiryDate: defaultExpiry, status: 'Active', color: 'bg-indigo-600' },
-                        { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', expiryDate: defaultExpiry, status: 'Active', color: 'bg-emerald-600' }
-                    ];
-                    sampleCompanies.forEach(c => batch.set(firestore.collection('wt_companies').doc(c.id), c));
-
-                    const sampleWorkers = [
-                        { id: 'W-101', companyId: 'COMP-01', name: 'रमेश कुमार', dept: 'Fabrication', role: 'Senior Welder', phone: '9811223344', password: '123', photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK' },
-                        { id: 'W-102', companyId: 'COMP-01', name: 'सुनील शर्मा', dept: 'Civil', role: 'Site Supervisor', phone: '9822334455', password: '123', photo: 'https://placehold.co/100x100/0284c7/ffffff?text=SS' },
-                        { id: 'W-201', companyId: 'COMP-02', name: 'मनोज सिंह', dept: 'Assembly', role: 'Machine Operator', phone: '9844556677', password: '123', photo: 'https://placehold.co/100x100/059669/ffffff?text=MS' }
-                    ];
-                    sampleWorkers.forEach(w => batch.set(firestore.collection('wt_workers').doc(w.id), w));
-
+                    db.companies.forEach(c => batch.set(firestore.collection('wt_companies').doc(c.id), c));
+                    db.workers.forEach(w => batch.set(firestore.collection('wt_workers').doc(w.id), w));
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${today}`), { companyId: 'COMP-01', workerId: 'W-101', date: today, status: 'Present', ot: 2 });
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-102_${today}`), { companyId: 'COMP-01', workerId: 'W-102', date: today, status: 'Present', ot: 0 });
                     batch.set(firestore.collection('wt_attendance').doc(`COMP-01_W-101_${yesterday}`), { companyId: 'COMP-01', workerId: 'W-101', date: yesterday, status: 'Present', ot: 3.5 });
-
                     await batch.commit();
                 }
             } catch (e) {
@@ -1821,7 +1751,9 @@
             if (!firestore) return;
 
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
-                db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (!snapshot.empty) {
+                    db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
                 if (!activeCompanyId && db.companies.length > 0) {
                     activeCompanyId = db.companies[0].id;
                 }
@@ -1843,7 +1775,9 @@
             });
 
             firestore.collection('wt_workers').onSnapshot((snapshot) => {
-                db.workers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (!snapshot.empty) {
+                    db.workers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
                 renderSuperAdmin();
                 renderCompanyAdmin();
                 if (loggedInWorkerId) renderWorkerDashboard();
@@ -1970,12 +1904,17 @@
             return false;
         }
 
-        window.onload = () => {
-            document.getElementById('ca-date-picker').value = today;
-            document.getElementById('ca-month-picker').value = today.slice(0, 7);
-            document.getElementById('adv-date').value = today;
+        function initApp() {
+            const datePicker = document.getElementById('ca-date-picker');
+            const monthPicker = document.getElementById('ca-month-picker');
+            const advDate = document.getElementById('adv-date');
             const newExp = document.getElementById('new-comp-expiry');
+
+            if (datePicker) datePicker.value = today;
+            if (monthPicker) monthPicker.value = today.slice(0, 7);
+            if (advDate) advDate.value = today;
             if (newExp) newExp.value = defaultExpiry;
+
             setAppLanguage(currentLang);
             if (!applyDedicatedAppMode()) {
                 switchRole('company_admin');
@@ -1983,11 +1922,14 @@
             syncSuperAdminSettings();
             seedInitialDataIfEmpty();
             startRealtimeSync();
-        };
+        }
 
-        // ==========================================
-        // SUPER ADMIN SECURITY & TAB NAVIGATION
-        // ==========================================
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+
         function switchSaTab(tabName) {
             document.querySelectorAll('.sa-tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`sa-content-${tabName}`);
@@ -2067,9 +2009,6 @@
             }
         }
 
-        // ==========================================
-        // SHARED LINK SYSTEM (2 Links per Company)
-        // ==========================================
         function getBaseUrl() {
             return window.location.origin + window.location.pathname;
         }
@@ -2158,7 +2097,8 @@
 
         function switchRole(role) {
             document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`view-${role}`).classList.remove('hidden');
+            const viewEl = document.getElementById(`view-${role}`);
+            if (viewEl) viewEl.classList.remove('hidden');
 
             const btnCompany = document.getElementById('btn-role-company');
             const btnWorker = document.getElementById('btn-role-worker');
@@ -2176,9 +2116,6 @@
             if (role === 'company_admin') renderCompanyAdmin();
         }
 
-        // ==========================================
-        // SUPER ADMIN LOGIC (PREMIER OWNER)
-        // ==========================================
         function renderSuperAdmin() {
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
@@ -2533,9 +2470,6 @@
             switchRole('company_admin');
         }
 
-        // ==========================================
-        // COMPANY ADMIN LOGIC
-        // ==========================================
         function handleCompanyAdminLogin(e) {
             e.preventDefault();
             const idInput = document.getElementById('ca-login-id').value.trim();
@@ -2646,7 +2580,6 @@
             const logo = document.getElementById('ca-company-logo');
             logo.innerText = comp.name.charAt(0).toUpperCase();
 
-            // Render Subscription Expiry Info on Hero Card
             const expInfo = formatExpiryInfo(comp.expiryDate);
             const expTextEl = document.getElementById('ca-expiry-date-text');
             const expIconWrap = document.getElementById('ca-expiry-icon-wrap');
@@ -2777,7 +2710,6 @@
                     : `✅ आज सभी ${tenantWorkers.length} वर्कर्स की हाज़िरी दर्ज हो चुकी है`;
             }
 
-            // Render Workers Directory
             const wTable = document.getElementById('ca-workers-table');
             const wCards = document.getElementById('ca-workers-cards');
             wTable.innerHTML = '';
@@ -2854,7 +2786,6 @@
                 }
             });
 
-            // Calculate & Render Monthly Payroll
             const isFullPlan = PLANS[comp.plan] && PLANS[comp.plan].allFeatures;
             document.getElementById('payroll-plan-lock').classList.toggle('hidden', isFullPlan);
             document.getElementById('payroll-main-area').classList.toggle('hidden', !isFullPlan);
@@ -2980,6 +2911,7 @@
             if (homeNetEl) homeNetEl.innerText = `₹${totalMonthNetSalary.toLocaleString('en-IN')}`;
             if (homeAdvEl) homeAdvEl.innerText = `₹${totalMonthAdvance.toLocaleString('en-IN')}`;
 
+            // Render Premier Audit Logs
             const auditContainer = document.getElementById('ca-audit-list');
             const homeRecentEl = document.getElementById('ca-home-recent-activity');
             const auditCountLabel = document.getElementById('ca-audit-count-label');
@@ -3398,9 +3330,6 @@
             }
         }
 
-        // ==========================================
-        // WORKER PANEL LOGIC (PREMIER STAFF APP)
-        // ==========================================
         function switchWTab(tabName) {
             document.querySelectorAll('.w-tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById(`w-content-${tabName}`);
