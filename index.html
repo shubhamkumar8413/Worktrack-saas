@@ -557,11 +557,6 @@
                         </a>
                     </div>
 
-                    <div id="ca-demo-selector-box" class="hidden relative mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
-                        <span class="text-[11px] text-amber-300 font-semibold"><i class="fa-solid fa-crown mr-1"></i> Owner View:</span>
-                        <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="bg-slate-900/90 border border-white/20 rounded-xl px-3 py-1.5 text-xs font-semibold text-white focus:outline-none"></select>
-                    </div>
-
                     <div class="relative mt-4 grid grid-cols-2 gap-2.5">
                         <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-500 hover:bg-indigo-400 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md transition flex items-center justify-center gap-1.5">
                             <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
@@ -2339,7 +2334,6 @@
                 document.getElementById('view-company_admin').classList.remove('hidden');
                 document.getElementById('ca-login-comp-badge').innerText = comp.name;
                 document.getElementById('ca-login-comp-badge').classList.remove('hidden');
-                document.getElementById('ca-demo-selector-box').classList.add('hidden');
                 switchCaTab('home');
                 renderCompanyAdmin();
             } else if (role === 'worker') {
@@ -2760,9 +2754,12 @@
                 return;
             }
 
+            // Ensure complete tenant isolation: clear any lingering Super Admin unlock on this browser
+            isSuperAdminUnlocked = false;
+            sessionStorage.removeItem('wt_sa_unlocked');
+
             activeCompanyId = comp.id;
             isCompanyAdminLoggedIn = true;
-            updateCompanySelector();
             switchCaTab('home');
             renderCompanyAdmin();
             showToast(`${comp.name} Admin Panel में स्वागत है!`);
@@ -2875,8 +2872,6 @@
                     expBox.className = 'relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2';
                 }
             }
-
-            document.getElementById('ca-demo-selector-box').classList.toggle('hidden', !isSuperAdminUnlocked);
 
             const isSuspended = comp.status === 'Suspended';
             document.getElementById('ca-suspended-banner').classList.toggle('hidden', !isSuspended);
@@ -3945,4 +3940,4 @@
         }
     </script>
 </body>
-    </html>
+                                        </html>
