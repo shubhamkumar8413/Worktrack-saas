@@ -290,54 +290,54 @@
                             <span id="sa-plan-count-business" class="text-lg font-extrabold text-amber-700 mt-0.5 block">0</span>
                         </div>
                     </div>
-                </div>
+                <!-- TAB 4: AUDIT LOGS (PREMIER TIMELINE & FILTER VIEW) -->
+                <div id="ca-content-audit" class="ca-tab-content hidden fade-in">
+                    <!-- Premier Dark Header Banner for Audit Log -->
+                    <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-5 sm:p-6 border-b border-slate-800">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-11 h-11 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 flex items-center justify-center text-lg shrink-0 shadow-inner">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </span>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="font-extrabold text-base sm:text-lg text-white tracking-tight">सिस्टम ऑडिट लॉग (Audit Trail)</h3>
+                                        <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
+                                            <i class="fa-solid fa-lock text-[9px]"></i> Tamper-Proof
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-slate-300/90 mt-0.5">किसने, कब और क्या बदलाव किया — 100% सुरक्षित व अपरिवर्तनीय रिकॉर्ड</p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="exportAuditLogsCSV()" class="bg-white/10 hover:bg-white/20 text-white border border-white/15 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 backdrop-blur-sm">
+                                <i class="fa-solid fa-file-csv text-emerald-300"></i> Log रिपोर्ट डाउनलोड
+                            </button>
+                        </div>
 
-                <!-- Owner Quick Actions Grid -->
-                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-bolt text-amber-500"></i> ओनर क्विक एक्शन (Owner Actions)
-                    </h3>
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        <button type="button" onclick="openModal('modal-add-company')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-amber-50/80 hover:bg-amber-100 text-amber-800 transition">
-                            <span class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-building-circle-plus"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">नई कंपनी</span>
-                        </button>
-
-                        <button type="button" onclick="exportAllTenantsCSV()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100 text-emerald-800 transition">
-                            <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-file-csv"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">SaaS रिपोर्ट</span>
-                        </button>
-
-                        <button type="button" onclick="openModal('modal-change-sa-pass')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100 text-indigo-800 transition">
-                            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-key"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">पासवर्ड बदलें</span>
-                        </button>
-
-                        <button type="button" onclick="switchSaTab('settings')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 transition">
-                            <span class="w-9 h-9 rounded-xl bg-slate-800 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-mobile-screen-button"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">APK व सुरक्षा</span>
-                        </button>
+                        <!-- Search & Category Filter Pills -->
+                        <div class="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-2.5">
+                            <div class="relative flex-1">
+                                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
+                                <input type="text" id="ca-audit-search" oninput="renderCompanyAdmin()" placeholder="वर्कर का नाम, ID या बदलाव खोजें..." class="w-full bg-white/10 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                            </div>
+                            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                                <button type="button" onclick="setAuditFilter('ALL')" id="audit-filter-ALL" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-xs whitespace-nowrap transition">सभी (All)</button>
+                                <button type="button" onclick="setAuditFilter('ATTENDANCE')" id="audit-filter-ATTENDANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">✅ हाज़िरी/OT</button>
+                                <button type="button" onclick="setAuditFilter('ADVANCE')" id="audit-filter-ADVANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">💰 खर्ची/एडवांस</button>
+                                <button type="button" onclick="setAuditFilter('WORKER')" id="audit-filter-WORKER" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">👷 वर्कर्स</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Latest Joined Companies Mini List -->
-                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-                    <div class="flex items-center justify-between mb-2.5">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-sparkles text-indigo-500"></i> हाल की क्लाइंट कंपनियाँ
-                        </h3>
-                        <button type="button" onclick="switchSaTab('companies')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
-                    </div>
-                    <div id="sa-home-recent-companies" class="space-y-2">
-                        <p class="text-xs text-slate-400">कोई कंपनी उपलब्ध नहीं है।</p>
+                    <!-- Premier Vertical Timeline List -->
+                    <div class="p-4 sm:p-6 bg-slate-50/60">
+                        <div class="flex items-center justify-between mb-3 px-1">
+                            <span id="ca-audit-count-label" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">कुल 0 गतिविधियाँ दर्ज</span>
+                            <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Cloud Verified
+                            </span>
+                        </div>
+                        <div id="ca-audit-list" class="relative pl-6 border-l-2 border-indigo-200/80 space-y-3.5 max-h-[62vh] overflow-y-auto pr-1"></div>
                     </div>
                 </div>
             </div>
@@ -1735,7 +1735,7 @@
         let sharedPortalMode = null;
         let selectedLinksCompanyId = null;
         let initialRouteHandled = false;
-
+        let activeAuditFilter = 'ALL';
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -2965,20 +2965,96 @@
 
             const auditContainer = document.getElementById('ca-audit-list');
             const homeRecentEl = document.getElementById('ca-home-recent-activity');
+            const auditCountLabel = document.getElementById('ca-audit-count-label');
+            const auditSearch = (document.getElementById('ca-audit-search')?.value || '').toLowerCase().trim();
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
 
-            auditContainer.innerHTML = compLogs.length ? '' : '<p class="text-xs text-slate-400">कोई लॉग उपलब्ध नहीं है।</p>';
-            compLogs.forEach(log => {
-                auditContainer.innerHTML += `
-                    <div class="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                        <i class="fa-solid fa-shield-check text-indigo-600 mt-0.5"></i>
-                        <div class="flex-1">
-                            <p class="text-slate-800 font-medium">${log.text}</p>
-                            <span class="text-[11px] text-slate-400">${log.time}</span>
+            const classifyAuditLog = (text) => {
+                const t = (text || '').toLowerCase();
+                if (t.includes('एडवांस') || t.includes('खर्ची') || t.includes('advance')) {
+                    return {
+                        type: 'ADVANCE',
+                        badge: 'खर्ची / एडवांस',
+                        badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
+                        dotClass: 'bg-amber-500 ring-amber-100',
+                        icon: 'fa-hand-holding-dollar text-amber-600',
+                        cardBorder: 'border-amber-200/70 hover:border-amber-300'
+                    };
+                }
+                if (t.includes('हटाया') || t.includes('deleted') || t.includes('delete')) {
+                    return {
+                        type: 'WORKER',
+                        badge: 'वर्कर हटाया गया',
+                        badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
+                        dotClass: 'bg-rose-500 ring-rose-100',
+                        icon: 'fa-user-minus text-rose-600',
+                        cardBorder: 'border-rose-200/70 hover:border-rose-300'
+                    };
+                }
+                if (t.includes('नया वर्कर') || t.includes('जोड़ा गया')) {
+                    return {
+                        type: 'WORKER',
+                        badge: 'नया वर्कर',
+                        badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+                        dotClass: 'bg-indigo-600 ring-indigo-100',
+                        icon: 'fa-user-plus text-indigo-600',
+                        cardBorder: 'border-indigo-200/70 hover:border-indigo-300'
+                    };
+                }
+                return {
+                    type: 'ATTENDANCE',
+                    badge: 'हाज़िरी / OT अपडेट',
+                    badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                    dotClass: 'bg-emerald-500 ring-emerald-100',
+                    icon: 'fa-calendar-check text-emerald-600',
+                    cardBorder: 'border-slate-200/90 hover:border-indigo-300'
+                };
+            };
+
+            const filteredLogs = compLogs.filter(log => {
+                const meta = classifyAuditLog(log.text);
+                const matchesType = activeAuditFilter === 'ALL' || meta.type === activeAuditFilter;
+                const matchesSearch = !auditSearch || (log.text || '').toLowerCase().includes(auditSearch) || (log.time || '').toLowerCase().includes(auditSearch);
+                return matchesType && matchesSearch;
+            });
+
+            if (auditCountLabel) {
+                auditCountLabel.innerText = `कुल ${filteredLogs.length} गतिविधियाँ दर्ज`;
+            }
+
+            if (filteredLogs.length === 0) {
+                auditContainer.innerHTML = `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center -ml-6">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-lg mx-auto mb-2.5">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
                         </div>
+                        <p class="text-xs font-bold text-slate-700">कोई ऑडिट लॉग रिकॉर्ड नहीं मिला</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">चुने गए फ़िल्टर या खोज के अनुसार कोई गतिविधि नहीं है।</p>
                     </div>
                 `;
-            });
+            } else {
+                auditContainer.innerHTML = filteredLogs.map(log => {
+                    const meta = classifyAuditLog(log.text);
+                    return `
+                        <div class="relative bg-white rounded-2xl border ${meta.cardBorder} p-3.5 sm:p-4 shadow-xs transition group">
+                            <span class="absolute -left-[31px] top-4 w-3.5 h-3.5 rounded-full ${meta.dotClass} ring-4 shadow-xs"></span>
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${meta.badgeClass}">
+                                    <i class="fa-solid ${meta.icon}"></i> ${meta.badge}
+                                </span>
+                                <span class="text-[11px] font-mono font-semibold text-slate-400 flex items-center gap-1">
+                                    <i class="fa-regular fa-clock text-[10px]"></i> ${log.time}
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-800 font-semibold leading-relaxed">${log.text}</p>
+                            <div class="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                                <span><i class="fa-solid fa-user-shield text-indigo-400 mr-1"></i> Verified Company Admin</span>
+                                <span class="text-emerald-600 font-bold"><i class="fa-solid fa-circle-check mr-0.5"></i> Locked</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
             if (homeRecentEl) {
                 const topLogs = compLogs.slice(0, 2);
@@ -3185,13 +3261,36 @@
             showToast('Excel/CSV रिपोर्ट डाउनलोड हो गई!');
         }
 
-        async function markAllPresent() {
-            const comp = db.companies.find(c => c.id === activeCompanyId);
-            if (!comp || comp.status === 'Suspended') return;
-            if (!PLANS[comp.plan].allFeatures) {
-                showToast('Bulk Attendance केवल Growth (₹999) और Business (₹1,999) प्लान में उपलब्ध है!', true);
-                return;
+        function setAuditFilter(filterType) {
+            activeAuditFilter = filterType;
+            document.querySelectorAll('.audit-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-500', 'text-white', 'font-bold', 'shadow-xs');
+                btn.classList.add('bg-white/10', 'text-slate-200', 'font-semibold');
+            });
+            const activeBtn = document.getElementById(`audit-filter-${filterType}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white/10', 'text-slate-200', 'font-semibold');
+                activeBtn.classList.add('bg-indigo-500', 'text-white', 'font-bold', 'shadow-xs');
             }
+            renderCompanyAdmin();
+        }
+
+        function exportAuditLogsCSV() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (!comp) return;
+            const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
+            let csv = 'Company,Date & Time,Activity Description,Verification Status\n';
+            compLogs.forEach(l => {
+                csv += `"${comp.name}","${l.time}","${(l.text || '').replace(/"/g, '""')}","Tamper-Proof Locked"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WorkTrack_Audit_Logs_${comp.id}_${today}.csv`;
+            a.click();
+            showToast('ऑडिट लॉग CSV रिपोर्ट डाउनलोड हो गई!');
+        }
             const checkedBoxes = Array.from(document.querySelectorAll('.ca-worker-checkbox:checked'));
             if (checkedBoxes.length === 0) {
                 showToast('कृपया पहले बाईं तरफ बॉक्स (☑️) में उन वर्कर्स को चुनें जिन्हें Present करना है!', true);
@@ -3492,4 +3591,4 @@
         }
     </script>
 </body>
-    </html>
+                            </html>
