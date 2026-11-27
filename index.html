@@ -290,6 +290,576 @@
                             <span id="sa-plan-count-business" class="text-lg font-extrabold text-amber-700 mt-0.5 block">0</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Quick Recent Companies List -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i> हालिया क्लाइंट कंपनियाँ
+                        </h3>
+                        <button type="button" onclick="switchSaTab('companies')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
+                    </div>
+                    <div id="sa-home-recent-companies" class="space-y-2">
+                        <p class="text-xs text-slate-400">लोड हो रहा है...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT -->
+            <div id="sa-content-companies" class="sa-tab-content hidden fade-in">
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                    <div class="p-4 sm:p-5 border-b border-slate-100 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
+                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, लिंक कॉपी करें या पैनल खोलें</p>
+                            </div>
+                            <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
+                                <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
+                            </button>
+                        </div>
+
+                        <!-- Search & Filter Bar -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="sm:col-span-2 relative">
+                                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
+                                <input type="text" id="sa-company-search" oninput="renderSuperAdmin()" placeholder="कंपनी का नाम या Admin ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <select id="sa-company-filter" onchange="renderSuperAdmin()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <option value="ALL">सभी कंपनियाँ (All Status)</option>
+                                <option value="Active">✅ केवल Active</option>
+                                <option value="Suspended">⛔ केवल Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Company Cards View -->
+                    <div id="sa-company-cards" class="md:hidden p-3.5 space-y-3 bg-slate-50/70"></div>
+
+                    <!-- Desktop Table View -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/80 border-b border-slate-200/80 text-xs uppercase text-slate-500 font-semibold">
+                                    <th class="py-3.5 px-6">कंपनी का नाम व ID</th>
+                                    <th class="py-3.5 px-6">प्लान व एक्सपायरी</th>
+                                    <th class="py-3.5 px-6">वर्कर्स सीमा</th>
+                                    <th class="py-3.5 px-6">पोर्टल लिंक्स</th>
+                                    <th class="py-3.5 px-6">स्टेटस</th>
+                                    <th class="py-3.5 px-6 text-right">नियंत्रण</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SA TAB 3: REVENUE & PLAN ANALYTICS -->
+            <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
+                <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-emerald-400/20">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300">कुल मासिक आवर्ती आय (MRR)</span>
+                            <h2 id="sa-rev-mrr-big" class="text-3xl font-extrabold text-white mt-1">₹0 / माह</h2>
+                            <p id="sa-rev-arr-sub" class="text-xs text-emerald-200 mt-1">वार्षिक अनुमानित आय (ARR): ₹0</p>
+                        </div>
+                        <button type="button" onclick="exportAllTenantsCSV()" class="bg-white/15 hover:bg-white/25 text-white border border-white/20 px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-csv text-emerald-300"></i> CSV रिपोर्ट
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group text-amber-500"></i> प्लान-वार मासिक आय विवरण
+                    </h3>
+                    <div id="sa-revenue-breakdown" class="space-y-2.5"></div>
+                </div>
+            </div>
+
+            <!-- SA TAB 4: SECURITY, APKs & OWNER SETTINGS -->
+            <div id="sa-content-settings" class="sa-tab-content hidden fade-in space-y-4">
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                        <span class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg border border-amber-200">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-900">Owner सुरक्षा और मास्टर पासवर्ड</h3>
+                            <p class="text-[11px] text-slate-500">अपने Super Admin कंट्रोल सेंटर की सुरक्षा प्रबंधित करें</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <button type="button" onclick="openModal('modal-change-sa-pass')" class="bg-slate-900 hover:bg-slate-800 text-white py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-key text-amber-400"></i> <span data-i18n="sa_change_pass">Super Admin पासवर्ड बदलें</span>
+                        </button>
+                        <button type="button" onclick="logoutSuperAdmin()" class="bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-lock"></i> कंट्रोल सेंटर तुरंत लॉक करें
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3 Dedicated Apps Download & Share Hub -->
+                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
+                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                        <i class="fa-brands fa-android text-emerald-600 text-base"></i> तीनों समर्पित Android Apps (APK Links)
+                    </h3>
+                    <p class="text-[11px] text-slate-500">क्लाइंट्स या वर्कर्स को भेजने के लिए सीधे APK डाउनलोड लिंक कॉपी करें:</p>
+
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-amber-50/60 border border-amber-200/80">
+                            <div>
+                                <div class="text-xs font-extrabold text-slate-900">1. WorkTrack Owner App</div>
+                                <div class="text-[10px] text-slate-500">केवल आपके (SaaS Owner) लिए</div>
+                            </div>
+                            <button type="button" onclick="copyRawText('https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Owner.apk', 'WT Owner APK लिंक')" class="bg-slate-900 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy APK
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-indigo-50/60 border border-indigo-200/80">
+                            <div>
+                                <div class="text-xs font-extrabold text-indigo-950">2. WorkTrack Admin App</div>
+                                <div class="text-[10px] text-slate-500">क्लाइंट कंपनियों के मालिक / HR के लिए</div>
+                            </div>
+                            <button type="button" onclick="copyRawText('https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk', 'WT Admin APK लिंक')" class="bg-indigo-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy APK
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
+                            <div>
+                                <div class="text-xs font-extrabold text-emerald-950">3. WorkTrack Worker App</div>
+                                <div class="text-[10px] text-slate-500">कंपनी के सभी कर्मचारियों (Workers) के लिए</div>
+                            </div>
+                            <button type="button" onclick="copyRawText('https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk', 'WT Worker APK लिंक')" class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold">
+                                <i class="fa-regular fa-copy mr-1"></i> Copy APK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fixed Bottom Navigation Bar for Super Admin (4 Tabs) -->
+            <nav id="sa-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
+                <div class="max-w-2xl mx-auto grid grid-cols-4 h-16 px-1">
+                    <button type="button" onclick="switchSaTab('home')" id="tab-sa-home" class="sa-tab flex flex-col items-center justify-center gap-1 text-amber-600 font-bold transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-crown text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">Home</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('companies')" id="tab-sa-companies" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-building text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">कंपनियाँ</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('revenue')" id="tab-sa-revenue" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-chart-line text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">आय (MRR)</span>
+                    </button>
+
+                    <button type="button" onclick="switchSaTab('settings')" id="tab-sa-settings" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
+                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                        </span>
+                        <span class="text-[10px] leading-none tracking-tight">सुरक्षा व APK</span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. COMPANY ADMIN PANEL VIEW                -->
+    <!-- ========================================== -->
+    <div id="view-company_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
+        
+        <!-- Company Admin Login Card -->
+        <div id="ca-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
+            <div class="text-center mb-6">
+                <img src="icon-admin.png" alt="WorkTrack Admin" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
+                <span id="ca-login-comp-badge" class="hidden inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
+                <h2 class="text-xl font-bold text-slate-900" data-i18n="ca_login_title">Company Admin लॉगिन</h2>
+                <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">अपनी Admin ID और Password डालकर डैशबोर्ड खोलें</p>
+            </div>
+
+            <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin ID</label>
+                    <input type="text" id="ca-login-id" required placeholder="admin@apex" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Password</label>
+                    <input type="password" id="ca-login-pass" required placeholder="••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
+                    <span data-i18n="ca_login_btn">Admin Panel खोलें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </form>
+
+            <!-- Company Admin APK Download Button -->
+            <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100">
+                <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk" download="WT-Admin.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Admin App डाउनलोड शुरू हो गया है!')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Admin App डाउनलोड करें (APK)
+                </a>
+            </div>
+        </div>
+
+        <!-- Company Admin Dashboard Wrapper -->
+        <div id="ca-dashboard-wrapper" class="hidden pb-24">
+            <!-- Suspended Alert Banner -->
+            <div id="ca-suspended-banner" class="hidden mb-6 bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-medium">
+                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg"></i>
+                <span>यह कंपनी खाता फिलहाल <strong>Suspended</strong> है। नया डेटा सेव करने के लिए Super Admin से संपर्क करें।</span>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- TAB 0: PREMIER COMPANY ADMIN HOME DASHBOARD    -->
+            <!-- ============================================== -->
+            <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
+                
+                <!-- Luxury Gradient Company Hero Card -->
+                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
+                    <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
+                    <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-400/15 blur-2xl"></div>
+
+                    <div class="relative flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-3.5 min-w-0">
+                            <div id="ca-company-logo" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-blue-600 text-white flex items-center justify-center text-2xl font-extrabold shadow-lg shrink-0 ring-2 ring-white/25">
+                                A
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                        <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> Growth Plan
+                                    </span>
+                                    <span class="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Live
+                                    </span>
+                                </div>
+                                <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-1 truncate">Company Name</h1>
+                                <p class="text-[11px] text-indigo-200/80 mt-0.5 truncate" data-i18n="ca_header_sub">Company Admin Dashboard • हाज़िरी और ओवरटाइम प्रबंधन</p>
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/30 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="लॉगआउट">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span class="hidden sm:inline" data-i18n="w_logout">लॉगआउट</span>
+                        </button>
+                    </div>
+
+                    <!-- Plan Worker Limit Progress Bar -->
+                    <div class="relative mt-5 pt-4 border-t border-white/10">
+                        <div class="flex items-center justify-between text-[11px] mb-1.5">
+                            <span class="text-indigo-200 font-medium">प्लान वर्कर क्षमता (Worker Limit)</span>
+                            <span id="ca-home-capacity-text" class="font-bold text-white">0 / 100 Workers</span>
+                        </div>
+                        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                            <div id="ca-home-capacity-bar" class="h-full bg-gradient-to-r from-emerald-400 to-teal-300 rounded-full transition-all duration-500" style="width: 10%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Expiry Date & Renewal Box -->
+                    <div id="ca-expiry-box" class="relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span id="ca-expiry-icon-wrap" class="w-9 h-9 rounded-xl bg-emerald-400/20 text-emerald-300 flex items-center justify-center text-sm shrink-0">
+                                <i class="fa-regular fa-calendar-check"></i>
+                            </span>
+                            <div class="min-w-0">
+                                <span class="text-[10px] text-indigo-200 uppercase font-semibold tracking-wider block">सब्सक्रिप्शन वैधता (Expiry Date)</span>
+                                <span id="ca-expiry-date-text" class="text-xs sm:text-sm font-extrabold text-white block truncate">--</span>
+                            </div>
+                        </div>
+                        <a id="ca-renew-wa-btn" href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20WorkTrack%20Subscription%20Plan%20Renew%20/%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%BE%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="shrink-0 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-[11px] px-3 py-2 rounded-xl shadow-sm transition flex items-center gap-1">
+                            <i class="fa-brands fa-whatsapp text-xs"></i> Renew
+                        </a>
+                    </div>
+
+                    <!-- Super Admin Switcher (Only visible when Owner is inspecting) -->
+                    <div id="ca-demo-selector-box" class="hidden relative mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+                        <span class="text-[11px] text-amber-300 font-semibold"><i class="fa-solid fa-crown mr-1"></i> Owner View:</span>
+                        <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="bg-slate-900/90 border border-white/20 rounded-xl px-3 py-1.5 text-xs font-semibold text-white focus:outline-none"></select>
+                    </div>
+
+                    <!-- Primary Quick Action Buttons on Hero Card -->
+                    <div class="relative mt-4 grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-500 hover:bg-indigo-400 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md shadow-indigo-950/40 transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
+                        </button>
+                        <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
+                            <i class="fa-solid fa-share-nodes text-emerald-300"></i> <span data-i18n="ca_share_worker">Worker Link शेयर</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Today's Attendance Progress Summary Card -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </span>
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-800">आज की हाज़िरी प्रगति (Attendance Rate)</h3>
+                                <p id="ca-home-date-label" class="text-[11px] text-slate-400">आज का लाइव अपडेट</p>
+                            </div>
+                        </div>
+                        <span id="ca-home-att-percent" class="text-lg font-extrabold text-emerald-600">0%</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div id="ca-home-att-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between mt-2.5 text-[11px]">
+                        <span id="ca-home-unmarked-note" class="text-slate-500 font-medium">सभी वर्कर्स की स्थिति</span>
+                        <button type="button" onclick="switchCaTab('attendance')" class="text-indigo-600 font-bold hover:underline">
+                            हाज़िरी लगाएं →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 Modern KPI Stat Cards (Clickable to jump to relevant tabs) -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+                    <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition active:scale-[0.99]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-users"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">STAFF</span>
+                        </div>
+                        <p id="ca-stat-total" class="text-2xl font-extrabold text-slate-900">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_total">कुल वर्कर्स</span>
+                    </div>
+
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition active:scale-[0.99]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-user-check"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">PRESENT</span>
+                        </div>
+                        <p id="ca-stat-present" class="text-2xl font-extrabold text-emerald-600">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
+                    </div>
+
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition active:scale-[0.99]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-user-xmark"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full">ABSENT</span>
+                        </div>
+                        <p id="ca-stat-absent" class="text-2xl font-extrabold text-rose-500">0</p>
+                        <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
+                    </div>
+
+                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition active:scale-[0.99]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-clock"></i>
+                            </span>
+                            <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">OT HRS</span>
+                        </div>
+                        <p id="ca-stat-ot" class="text-2xl font-extrabold text-amber-600">0 hrs</p>
+                        <span class="text-[11px] font-semibold text-slate-500 mt-0.5 block" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
+                    </div>
+                </div>
+
+                <!-- Monthly Payroll & Kharchi Snapshot Card -->
+                <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-wallet text-indigo-600"></i> इस माह का सैलरी व खर्ची सारांश
+                        </h3>
+                        <span class="text-[11px] font-semibold text-indigo-600">पूरा हिसाब देखें →</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
+                            <span class="text-[10px] font-semibold text-slate-400 block">कुल एडवांस / खर्ची दी गई</span>
+                            <span id="ca-home-total-advance" class="text-base font-extrabold text-rose-600 mt-0.5 block">₹0</span>
+                        </div>
+                        <div class="bg-emerald-50/70 rounded-xl p-3 border border-emerald-100">
+                            <span class="text-[10px] font-semibold text-emerald-700 block">कुल नेट देय सैलरी (अनुमानित)</span>
+                            <span id="ca-home-net-salary" class="text-base font-extrabold text-emerald-700 mt-0.5 block">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                    <button type="button" onclick="openModal('modal-add-advance')" class="bg-white hover:bg-amber-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">खर्ची / एडवांस</div>
+                            <div class="text-[10px] text-slate-400">तुरंत दर्ज करें</div>
+                        </div>
+                    </button>
+
+                    <button type="button" onclick="exportCSV()" class="bg-white hover:bg-indigo-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-solid fa-file-excel"></i>
+                        </span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Excel रिपोर्ट</div>
+                            <div class="text-[10px] text-slate-400">CSV डाउनलोड करें</div>
+                        </div>
+                    </button>
+
+                    <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="col-span-2 sm:col-span-1 bg-white hover:bg-emerald-50/60 border border-slate-200/90 p-3.5 rounded-2xl text-left shadow-sm transition flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm shrink-0">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                        </span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">24x7 WhatsApp हेल्प</div>
+                            <div class="text-[10px] text-slate-400">+91 6200889059</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Recent Activity Mini Preview -->
+                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
+                    <div class="flex items-center justify-between mb-2.5">
+                        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-clock-rotate-left text-slate-500"></i> हाल की गतिविधियाँ (Recent Logs)
+                        </h3>
+                        <button type="button" onclick="switchCaTab('audit')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
+                    </div>
+                    <div id="ca-home-recent-activity" class="space-y-2">
+                        <p class="text-xs text-slate-400">अभी कोई गतिविधि दर्ज नहीं है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Card for Sub-Tabs (Attendance, Workers, Payroll, Audit) -->
+            <div id="ca-main-card" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+
+                <!-- TAB 1: DAILY ATTENDANCE & OT -->
+                <div id="ca-content-attendance" class="ca-tab-content fade-in">
+                    <div class="p-4 sm:p-5 bg-slate-50/50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex items-center gap-2.5">
+                            <label class="text-xs font-bold text-slate-600 uppercase" data-i18n="select_date">तारीख चुनें:</label>
+                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-1.5 text-sm font-semibold text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="markAllPresent()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-check-double mr-1"></i> <span data-i18n="btn_mark_all">चुने हुए Present करें</span>
+                            </button>
+                            <button type="button" onclick="exportCSV()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-file-excel text-emerald-600 mr-1"></i> <span data-i18n="btn_export">Excel/CSV रिपोर्ट</span>
+                            </button>
+                            <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition">
+                                <i class="fa-solid fa-user-plus mr-1"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
+                                    <th class="py-3.5 px-3 w-10 text-center">
+                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="सभी चुनें">
+                                    </th>
+                                    <th class="py-3.5 px-4" data-i18n="th_worker">वर्कर (Worker)</th>
+                                    <th class="py-3.5 px-4" data-i18n="th_dept">विभाग</th>
+                                    <th class="py-3.5 px-4" data-i18n="th_status">हाज़िरी (Status)</th>
+                                    <th class="py-3.5 px-4" data-i18n="th_ot">ओवरटाइम (OT घंटे)</th>
+                                    <th class="py-3.5 px-4 text-right" data-i18n="th_save">एक्शन</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 2: WORKERS DIRECTORY -->
+                <div id="ca-content-workers" class="ca-tab-content hidden fade-in p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900" data-i18n="workers_dir_title">रजिस्टर्ड कर्मचारियों की सूची</h3>
+                            <p class="text-xs text-slate-500" data-i18n="workers_dir_sub">सभी वर्कर्स की लॉगिन ID, पासवर्ड और प्रोफ़ाइल विवरण</p>
+                        </div>
+                        <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-sm self-start sm:self-auto">
+                            <i class="fa-solid fa-plus mr-1"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
+                        </button>
+                    </div>
+
+                    <!-- Mobile-Friendly Worker Cards -->
+                    <div id="ca-workers-cards" class="md:hidden space-y-3"></div>
+
+                    <!-- Desktop Table View -->
+                    <div class="hidden md:block overflow-x-auto border border-slate-200 rounded-2xl">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
+                                    <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_name_photo">नाम व फोटो</th>
+                                    <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_id_pass">Worker ID व Password</th>
+                                    <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_dept">विभाग / दर</th>
+                                    <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_mobile">मोबाइल नंबर</th>
+                                    <th class="py-3 px-5 text-right whitespace-nowrap" data-i18n="th_actions">एक्शन</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ca-workers-table" class="divide-y divide-slate-100 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 3: PAYROLL & KHARCHI -->
+                <div id="ca-content-payroll" class="ca-tab-content hidden fade-in p-4 sm:p-6">
+                    <div id="payroll-plan-lock" class="hidden text-center py-10 px-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-amber-200">
+                            <i class="fa-solid fa-crown"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">सैलरी कैलकुलेटर और खर्ची (Advance)</h3>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto mt-1">यह प्रीमियम फीचर <strong>Growth (₹999/माह)</strong> और <strong>Business (₹1,999/माह)</strong> प्लान में उपलब्ध है।</p>
+                    </div>
+
+                    <div id="payroll-main-area">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">मासिक सैलरी और खर्ची (Advance) हिसाब</h3>
+                                <p class="text-xs text-slate-500">ऑटो सैलरी = (हाज़िरी × दैनिक दर) + (OT × OT दर) − एडवांस/खर्ची</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <input type="month" id="ca-month-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold bg-white">
+                                <button type="button" onclick="openModal('modal-add-advance')" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i> एडवांस / खर्ची दें
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mobile-Friendly Payroll Cards -->
+                        <div id="ca-payroll-cards" class="md:hidden space-y-3"></div>
+
+                        <!-- Desktop Table View -->
+                        <div class="hidden md:block overflow-x-auto border border-slate-200 rounded-2xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
+                                        <th class="py-3 px-5 whitespace-nowrap">वर्कर व दर</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">मासिक हाज़िरी / OT</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">कुल कमाई (Gross)</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">एडवांस / खर्ची</th>
+                                        <th class="py-3 px-5 whitespace-nowrap">नेट देय सैलरी</th>
+                                        <th class="py-3 px-5 text-right whitespace-nowrap">WhatsApp Slip</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ca-payroll-table" class="divide-y divide-slate-100 text-sm"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- TAB 4: AUDIT LOGS (PREMIER TIMELINE & FILTER VIEW) -->
                 <div id="ca-content-audit" class="ca-tab-content hidden fade-in">
                     <!-- Premier Dark Header Banner for Audit Log -->
@@ -339,559 +909,6 @@
                         </div>
                         <div id="ca-audit-list" class="relative pl-6 border-l-2 border-indigo-200/80 space-y-3.5 max-h-[62vh] overflow-y-auto pr-1"></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- SA TAB 2: ALL TENANT COMPANIES MANAGEMENT -->
-            <div id="sa-content-companies" class="sa-tab-content hidden fade-in">
-                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-                    <div class="p-4 sm:p-5 border-b border-slate-100 space-y-3">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                            <div>
-                                <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
-                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, लिंक कॉपी करें या पैनल खोलें</p>
-                            </div>
-                            <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
-                                <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
-                            </button>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <div class="relative flex-1">
-                                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
-                                <input type="text" id="sa-company-search" oninput="renderSuperAdmin()" placeholder="कंपनी का नाम या Admin ID खोजें..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </div>
-                            <select id="sa-company-filter" onchange="renderSuperAdmin()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none">
-                                <option value="ALL">सभी स्टेटस (All)</option>
-                                <option value="Active">✅ Active Only</option>
-                                <option value="Suspended">⛔ Suspended Only</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="sa-company-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
-
-                    <div class="hidden md:block overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                    <th class="py-3.5 px-6 font-semibold">कंपनी का नाम व ID</th>
-                                    <th class="py-3.5 px-6 font-semibold">प्लान व एक्सपायरी डेट</th>
-                                    <th class="py-3.5 px-6 font-semibold">Worker सीमा उपयोग</th>
-                                    <th class="py-3.5 px-6 font-semibold">Client Portal Links (2 Links)</th>
-                                    <th class="py-3.5 px-6 font-semibold">स्टेटस</th>
-                                    <th class="py-3.5 px-6 font-semibold text-right">एक्शन</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sa-company-list" class="divide-y divide-slate-100 text-sm">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SA TAB 3: REVENUE & PLANS ANALYTICS -->
-            <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
-                <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-lg border border-emerald-400/20">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300">WorkTrack SaaS Revenue</span>
-                            <h2 id="sa-rev-mrr-big" class="text-3xl font-extrabold text-white mt-1">₹0 / माह</h2>
-                            <p id="sa-rev-arr-sub" class="text-xs text-emerald-200/80 mt-1">वार्षिक अनुमानित आय (ARR): ₹0</p>
-                        </div>
-                        <button type="button" onclick="exportAllTenantsCSV()" class="bg-white/15 hover:bg-white/25 text-white border border-white/20 px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> CSV रिपोर्ट
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm">
-                    <h3 class="text-sm font-bold text-slate-900 mb-3">सब्सक्रिप्शन प्लान्स और मासिक आय विवरण</h3>
-                    <div id="sa-revenue-breakdown" class="space-y-3"></div>
-                </div>
-            </div>
-
-            <!-- SA TAB 4: OWNER SECURITY & APK SETTINGS -->
-            <div id="sa-content-settings" class="sa-tab-content hidden fade-in space-y-4">
-                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-4">
-                    <div class="flex items-center gap-3">
-                        <span class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg border border-amber-200">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </span>
-                        <div>
-                            <h3 class="text-base font-bold text-slate-900">Owner सुरक्षा व नियंत्रण</h3>
-                            <p class="text-xs text-slate-500">मास्टर पासवर्ड बदलें या कंट्रोल सेंटर लॉक करें</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                        <button type="button" onclick="openModal('modal-change-sa-pass')" class="w-full bg-slate-900 hover:bg-slate-800 text-white py-3 px-4 rounded-2xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-key text-amber-400"></i> <span data-i18n="sa_change_pass">Super Admin पासवर्ड बदलें</span>
-                        </button>
-                        <button type="button" onclick="logoutSuperAdmin()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 py-3 px-4 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-lock"></i> <span data-i18n="sa_lock_btn">कंट्रोल सेंटर लॉक करें</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
-                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-brands fa-android text-emerald-600 text-base"></i> तीनों Android Apps (APK) डाउनलोड व शेयर करें
-                    </h3>
-                    <p class="text-xs text-slate-500">अपने नए क्लाइंट्स को सीधे उनके ऐप का डाउनलोड लिंक भेजें:</p>
-
-                    <div class="space-y-2.5 pt-1">
-                        <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-                            <div>
-                                <div class="text-xs font-bold text-slate-900">1. WorkTrack Owner APK</div>
-                                <div class="text-[11px] text-slate-500">केवल आपके (SaaS Owner) लिए</div>
-                            </div>
-                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Owner.apk", "WT Owner APK लिंक")' class="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
-                                <i class="fa-regular fa-copy mr-1"></i> Copy
-                            </button>
-                        </div>
-
-                        <div class="flex items-center justify-between p-3 rounded-2xl bg-indigo-50/60 border border-indigo-200/80">
-                            <div>
-                                <div class="text-xs font-bold text-indigo-950">2. WorkTrack Admin APK</div>
-                                <div class="text-[11px] text-indigo-700">क्लाइंट कंपनी के मालिक/HR के लिए</div>
-                            </div>
-                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk", "WT Admin APK लिंक")' class="bg-indigo-600 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
-                                <i class="fa-regular fa-copy mr-1"></i> Copy
-                            </button>
-                        </div>
-
-                        <div class="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
-                            <div>
-                                <div class="text-xs font-bold text-emerald-950">3. WorkTrack Worker APK</div>
-                                <div class="text-[11px] text-emerald-700">कंपनी के सभी कर्मचारियों के लिए</div>
-                            </div>
-                            <button type="button" onclick='copyRawText("https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk", "WT Worker APK लिंक")' class="bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
-                                <i class="fa-regular fa-copy mr-1"></i> Copy
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fixed Bottom Navigation Bar for Owner (4 Tabs) -->
-            <nav id="sa-bottom-nav" class="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-6px_24px_-6px_rgba(15,23,42,0.12)] pb-safe">
-                <div class="max-w-xl mx-auto grid grid-cols-4 h-16 px-1">
-                    <button type="button" onclick="switchSaTab('home')" id="tab-sa-home" class="sa-tab flex flex-col items-center justify-center gap-1 text-amber-600 font-bold transition">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-house text-sm"></i>
-                        </span>
-                        <span class="text-[10px] leading-none tracking-tight">Home</span>
-                    </button>
-
-                    <button type="button" onclick="switchSaTab('companies')" id="tab-sa-companies" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-building text-sm"></i>
-                        </span>
-                        <span class="text-[10px] leading-none tracking-tight">कंपनियाँ</span>
-                    </button>
-
-                    <button type="button" onclick="switchSaTab('revenue')" id="tab-sa-revenue" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
-                        </span>
-                        <span class="text-[10px] leading-none tracking-tight">आय व प्लान</span>
-                    </button>
-
-                    <button type="button" onclick="switchSaTab('settings')" id="tab-sa-settings" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
-                        <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
-                            <i class="fa-solid fa-shield-halved text-sm"></i>
-                        </span>
-                        <span class="text-[10px] leading-none tracking-tight">सुरक्षा व APK</span>
-                    </button>
-                </div>
-            </nav>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2. COMPANY ADMIN PANEL VIEW                -->
-    <!-- ========================================== -->
-    <div id="view-company_admin" class="role-view max-w-7xl mx-auto p-4 sm:p-6 fade-in">
-        
-        <!-- Company Admin Login Box -->
-        <div id="ca-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-8 mt-4">
-            <div class="text-center mb-6">
-                <img src="icon-admin.png" alt="WorkTrack Admin" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
-                <span id="ca-login-comp-badge" class="hidden inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-2"></span>
-                <h2 class="text-xl font-bold text-slate-900" data-i18n="ca_login_title">Company Admin लॉगिन</h2>
-                <p class="text-xs text-slate-500 mt-1" data-i18n="ca_login_sub">अपनी Admin ID और Password डालकर डैशबोर्ड खोलें</p>
-            </div>
-
-            <form onsubmit="handleCompanyAdminLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin ID / Email</label>
-                    <input type="text" id="ca-login-id" required placeholder="admin@company.com" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password</label>
-                    <input type="password" id="ca-login-pass" required placeholder="••••••" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-sm transition text-sm">
-                    <span data-i18n="ca_login_btn">Admin Panel खोलें</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
-            </form>
-
-            <!-- Company Admin APK Download Button -->
-            <div id="ca-download-box" class="mt-5 pt-4 border-t border-slate-100 space-y-2">
-                <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Admin.apk" download="WT-Admin.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Admin App डाउनलोड शुरू हो गया है!')" class="w-full bg-blue-950 hover:bg-blue-900 text-white py-3 px-4 rounded-xl text-xs font-bold shadow-sm transition flex items-center justify-center gap-2">
-                    <i class="fa-brands fa-android text-emerald-400 text-base"></i> WorkTrack Admin App डाउनलोड करें (APK)
-                </a>
-                <a href="https://github.com/shubhamkumar8413/Worktrack-saas/raw/main/WT%20Worker.apk" download="WT-Worker.apk" target="_blank" rel="noopener noreferrer" onclick="showToast('WT Worker App डाउनलोड शुरू हो गया है!')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl text-[11px] font-semibold transition flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-download text-emerald-600"></i> Worker App (APK) डाउनलोड करें
-                </a>
-            </div>
-        </div>
-
-        <!-- Company Admin Dashboard -->
-        <div id="ca-dashboard-wrapper" class="hidden pb-24">
-
-            <div id="ca-suspended-banner" class="hidden bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3 rounded-xl mb-6 flex items-center gap-3">
-                <i class="fa-solid fa-ban text-rose-600 text-lg"></i>
-                <div class="text-sm">
-                    <strong>अकाउंट सस्पेंड है!</strong> Super Admin द्वारा इस कंपनी की सेवा अस्थायी रूप से रोक दी गई है। आप नया डेटा नहीं जोड़ सकते।
-                </div>
-            </div>
-
-            <!-- TAB 0: PREMIUM HOME OVERVIEW DASHBOARD -->
-            <div id="ca-content-home" class="ca-tab-content fade-in space-y-4">
-                
-                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 text-white p-5 sm:p-6 shadow-xl border border-indigo-400/20">
-                    <div class="pointer-events-none absolute -top-12 -right-12 w-40 h-40 rounded-full bg-indigo-500/20 blur-2xl"></div>
-                    <div class="pointer-events-none absolute -bottom-14 -left-10 w-36 h-36 rounded-full bg-emerald-500/15 blur-2xl"></div>
-
-                    <div class="relative flex items-start justify-between gap-3">
-                        <div class="flex items-center gap-3.5 min-w-0">
-                            <div id="ca-company-logo" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white flex items-center justify-center font-extrabold text-2xl shadow-lg shadow-emerald-950/50 shrink-0 ring-2 ring-white/25">O</div>
-                            <div class="min-w-0">
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <h1 id="ca-company-name" class="text-lg sm:text-xl font-extrabold text-white tracking-tight truncate">Company Name</h1>
-                                </div>
-                                <div class="flex flex-wrap items-center gap-2 mt-1.5">
-                                    <span id="ca-plan-badge" class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                                        <i class="fa-solid fa-crown text-amber-400 text-[9px]"></i> Business Plan
-                                    </span>
-                                    <span id="ca-home-date-label" class="text-[11px] text-indigo-200/80 font-medium">
-                                        <i class="fa-regular fa-calendar mr-1"></i> आज की रिपोर्ट
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="button" onclick="logoutCompanyAdmin()" class="bg-white/10 hover:bg-rose-500/25 text-rose-200 hover:text-white border border-white/15 px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shrink-0 backdrop-blur-sm" title="लॉगआउट करें">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span class="hidden sm:inline" data-i18n="w_logout">लॉगआउट</span>
-                        </button>
-                    </div>
-
-                    <!-- Subscription Expiry Banner inside Hero Card -->
-                    <div id="ca-expiry-box" class="relative mt-4 bg-white/10 backdrop-blur-sm rounded-2xl p-3 border border-white/15 flex items-center justify-between gap-2">
-                        <div class="flex items-center gap-2.5 min-w-0">
-                            <span id="ca-expiry-icon-wrap" class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-sm shrink-0">
-                                <i class="fa-solid fa-hourglass-half"></i>
-                            </span>
-                            <div class="min-w-0">
-                                <span class="text-[10px] text-indigo-200 uppercase font-semibold block">सब्सक्रिप्शन वैधता (Plan Expiry)</span>
-                                <span id="ca-expiry-date-text" class="text-xs sm:text-sm font-extrabold text-white block truncate">31 Dec 2026 (30 दिन शेष)</span>
-                            </div>
-                        </div>
-                        <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20Subscription%20Plan%20Renew%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-extrabold px-3 py-1.5 rounded-xl shrink-0 transition shadow-xs">
-                            Renew
-                        </a>
-                    </div>
-
-                    <div id="ca-demo-selector-box" class="relative mt-3 flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-xl border border-white/15">
-                        <label class="text-xs font-semibold text-indigo-200 whitespace-nowrap">कंपनी बदलें:</label>
-                        <select id="ca-company-selector" onchange="changeActiveCompany(this.value)" class="w-full bg-slate-900/90 border border-white/20 text-white text-xs font-semibold rounded-lg px-2.5 py-1.5 focus:outline-none">
-                        </select>
-                    </div>
-
-                    <div class="relative mt-3.5 pt-3.5 border-t border-white/10">
-                        <div class="flex items-center justify-between text-[11px] mb-1.5">
-                            <span class="text-indigo-200/90 font-medium"><i class="fa-solid fa-users-gear mr-1 text-indigo-300"></i> प्लान वर्कर लिमिट उपयोग</span>
-                            <span id="ca-home-capacity-text" class="font-bold text-white font-mono">0 / 500 Workers</span>
-                        </div>
-                        <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
-                            <div id="ca-home-capacity-bar" class="h-full bg-gradient-to-r from-emerald-400 via-teal-400 to-indigo-400 rounded-full transition-all duration-500" style="width: 5%"></div>
-                        </div>
-                    </div>
-
-                    <div class="relative mt-4 grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="openCompanyLinksModal(activeCompanyId, true)" class="bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-400 hover:to-blue-500 text-white py-2.5 px-3 rounded-xl text-xs font-bold shadow-md shadow-indigo-950/50 transition flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-share-nodes"></i> <span data-i18n="ca_share_worker">Worker Link शेयर करें</span>
-                        </button>
-                        <button type="button" onclick="switchCaTab('attendance')" class="bg-white/15 hover:bg-white/20 text-white border border-white/15 py-2.5 px-3 rounded-xl text-xs font-bold backdrop-blur-sm transition flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-clipboard-check text-emerald-300"></i> <span>आज की हाज़िरी भरें</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="text-xs font-bold text-slate-800">आज की हाज़िरी प्रोग्रेस (Attendance Rate)</span>
-                        </div>
-                        <span id="ca-home-att-percent" class="text-xs font-extrabold text-emerald-600 bg-emerald-50 border border-emerald-200/70 px-2.5 py-0.5 rounded-full">0%</span>
-                    </div>
-                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
-                        <div id="ca-home-att-bar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-500" style="width: 0%"></div>
-                    </div>
-                    <p id="ca-home-unmarked-note" class="text-[11px] text-slate-400 mt-1.5">सभी वर्कर्स का आज का लाइव स्टेटस</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3.5">
-                    <div onclick="switchCaTab('workers')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-indigo-300 transition relative overflow-hidden group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
-                                <i class="fa-solid fa-users"></i>
-                            </span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-500"></i>
-                        </div>
-                        <p id="ca-stat-total" class="text-2xl font-extrabold text-slate-900">0</p>
-                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_total">कुल वर्कर्स</span>
-                    </div>
-
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-emerald-300 transition relative overflow-hidden group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
-                                <i class="fa-solid fa-user-check"></i>
-                            </span>
-                            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">LIVE</span>
-                        </div>
-                        <p id="ca-stat-present" class="text-2xl font-extrabold text-emerald-600">0</p>
-                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_present">आज हाज़िर (Present)</span>
-                    </div>
-
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-rose-300 transition relative overflow-hidden group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-sm group-hover:scale-105 transition">
-                                <i class="fa-solid fa-user-xmark"></i>
-                            </span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-rose-500"></i>
-                        </div>
-                        <p id="ca-stat-absent" class="text-2xl font-extrabold text-rose-500">0</p>
-                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_absent">अनुपस्थित / छुट्टी</span>
-                    </div>
-
-                    <div onclick="switchCaTab('attendance')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm hover:border-amber-300 transition relative overflow-hidden group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm group-hover:scale-105 transition">
-                                <i class="fa-solid fa-clock"></i>
-                            </span>
-                            <span class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">OT</span>
-                        </div>
-                        <p id="ca-stat-ot" class="text-2xl font-extrabold text-amber-600">0 hrs</p>
-                        <span class="text-[11px] font-semibold text-slate-500 block mt-0.5" data-i18n="ca_stat_ot">आज का कुल OT (घंटे)</span>
-                    </div>
-                </div>
-
-                <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
-                                <i class="fa-solid fa-wallet"></i>
-                            </span>
-                            <span class="text-xs font-bold text-slate-800">इस महीने का सैलरी व खर्ची हिसाब</span>
-                        </div>
-                        <span class="text-[11px] font-semibold text-indigo-600">पूरा देखें →</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
-                            <span class="text-[10px] font-semibold text-slate-400 uppercase block">अनुमानित नेट सैलरी</span>
-                            <span id="ca-home-net-salary" class="text-base font-extrabold text-slate-900 mt-0.5 block">₹0</span>
-                        </div>
-                        <div class="bg-rose-50/60 rounded-xl p-3 border border-rose-100">
-                            <span class="text-[10px] font-semibold text-rose-500 uppercase block">कुल दिया गया एडवांस</span>
-                            <span id="ca-home-total-advance" class="text-base font-extrabold text-rose-600 mt-0.5 block">₹0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-bolt text-amber-500"></i> क्विक एक्शन (Quick Actions)
-                    </h3>
-                    <div class="grid grid-cols-4 gap-2 text-center">
-                        <button type="button" onclick="openAddWorkerModal()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-indigo-50/70 hover:bg-indigo-100/80 text-indigo-700 transition">
-                            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-user-plus"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">नया Worker</span>
-                        </button>
-
-                        <button type="button" onclick="openModal('modal-add-advance')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-amber-50/70 hover:bg-amber-100/80 text-amber-800 transition">
-                            <span class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-hand-holding-dollar"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">खर्ची लिखें</span>
-                        </button>
-
-                        <button type="button" onclick="exportCSV()" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-800 transition">
-                            <span class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-file-excel"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">Excel रिपोर्ट</span>
-                        </button>
-
-                        <button type="button" onclick="switchCaTab('audit')" class="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-700 transition">
-                            <span class="w-9 h-9 rounded-xl bg-slate-700 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                            </span>
-                            <span class="text-[10px] font-bold leading-tight">ऑडिट लॉग</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm">
-                    <div class="flex items-center justify-between mb-2.5">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-bell text-indigo-500"></i> हाल की गतिविधियाँ (Recent Activity)
-                        </h3>
-                        <button type="button" onclick="switchCaTab('audit')" class="text-[11px] font-semibold text-indigo-600 hover:underline">सभी देखें</button>
-                    </div>
-                    <div id="ca-home-recent-activity" class="space-y-2">
-                        <p class="text-xs text-slate-400">कोई हालिया गतिविधि नहीं है।</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Main Tab Content Container -->
-            <div id="ca-main-card" class="hidden bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-
-                <!-- TAB 1: DAILY ATTENDANCE & OT -->
-                <div id="ca-content-attendance" class="ca-tab-content hidden">
-                    <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs font-semibold text-slate-500" data-i18n="select_date">तारीख चुनें:</label>
-                            <input type="date" id="ca-date-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 bg-white rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <button type="button" onclick="markAllPresent()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-check-double"></i> <span data-i18n="btn_mark_all">सभी को Present करें</span>
-                            </button>
-                            <button type="button" onclick="exportCSV()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-file-excel"></i> <span data-i18n="btn_export">Excel/CSV रिपोर्ट</span>
-                            </button>
-                            <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                    <th class="py-3.5 px-3 w-10 text-center">
-                                        <input type="checkbox" id="ca-select-all-workers" onchange="toggleSelectAllWorkers(this.checked)" class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" title="सभी को चुनें">
-                                    </th>
-                                    <th class="py-3.5 px-4 font-semibold" data-i18n="th_worker">वर्कर (Worker)</th>
-                                    <th class="py-3.5 px-4 font-semibold" data-i18n="th_dept">विभाग</th>
-                                    <th class="py-3.5 px-4 font-semibold" data-i18n="th_status">हाज़िरी (Status)</th>
-                                    <th class="py-3.5 px-4 font-semibold" data-i18n="th_ot">ओवरटाइम (OT घंटे)</th>
-                                    <th class="py-3.5 px-4 font-semibold text-right" data-i18n="th_save">एक्शन</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ca-attendance-list" class="divide-y divide-slate-100 text-sm">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 2: WORKERS DIRECTORY -->
-                <div id="ca-content-workers" class="ca-tab-content hidden">
-                    <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-2">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm sm:text-base" data-i18n="workers_dir_title">रजिस्टर्ड कर्मचारियों की सूची</h3>
-                            <p class="text-[11px] text-slate-400" data-i18n="workers_dir_sub">सभी वर्कर्स की लॉगिन ID, पासवर्ड और प्रोफ़ाइल विवरण</p>
-                        </div>
-                        <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition whitespace-nowrap flex items-center gap-1.5">
-                            <i class="fa-solid fa-user-plus"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
-                        </button>
-                    </div>
-                    <div id="ca-workers-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
-                    <div class="hidden md:block overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                    <th class="py-3.5 px-5" data-i18n="th_name_photo">नाम व फोटो</th>
-                                    <th class="py-3.5 px-5" data-i18n="th_id_pass">Worker ID व Password</th>
-                                    <th class="py-3.5 px-5" data-i18n="th_dept">विभाग व दैनिक दर</th>
-                                    <th class="py-3.5 px-5" data-i18n="th_mobile">मोबाइल नंबर</th>
-                                    <th class="py-3.5 px-5 text-right" data-i18n="th_actions">एक्शन</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ca-workers-table" class="divide-y divide-slate-100 text-sm"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TAB 3: PAYROLL & ADVANCE (KHARCHI) TRACKER -->
-                <div id="ca-content-payroll" class="ca-tab-content hidden">
-                    <div id="payroll-plan-lock" class="hidden p-5 sm:p-8">
-                        <div class="max-w-lg mx-auto relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-xl border border-amber-400/30 text-center">
-                            <div class="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-300 via-amber-400 to-amber-600 text-slate-950 text-2xl shadow-lg shadow-amber-500/25 mb-4 ring-4 ring-amber-400/20">
-                                <i class="fa-solid fa-crown"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-extrabold text-white tracking-tight mt-2">
-                                Growth (₹999) या Business (₹1,999) प्लान में अपग्रेड करें
-                            </h3>
-                            <p class="text-xs text-slate-300 max-w-md mx-auto mt-2 leading-relaxed">
-                                अपनी कंपनी का हिसाब-किताब 100% ऑटोमैटिक बनाएं। ऑटो सैलरी, एडवांस/खर्ची और 1-क्लिक WhatsApp Slip पाएं।
-                            </p>
-                            <div class="mt-6 pt-5 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3">
-                                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A4%BE%20%E0%A4%AA%E0%A5%8D%E0%A4%B2%E0%A4%BE%E0%A4%A8%20Growth%20(%E2%82%B9999)%20%E0%A4%AF%E0%A4%A6%20Business%20(%E2%82%B91%2C999)%20%E0%A4%AE%E0%A5%87%E0%A4%82%20Upgrade%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg shadow-amber-500/20 transition">
-                                    <i class="fa-brands fa-whatsapp text-base"></i> अभी प्लान अपग्रेड करें
-                                </a>
-                                <span class="text-[11px] text-slate-400 font-medium">
-                                    <i class="fa-solid fa-headset text-amber-400 mr-1"></i> 24x7 Support: 6200889059
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="payroll-main-area">
-                        <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm sm:text-base">मासिक सैलरी कैलकुलेटर व एडवांस (खर्ची)</h3>
-                                <p class="text-[11px] text-slate-400">कुल सैलरी = (हाज़िरी × दैनिक दर) + (OT घंटे × OT दर) − कुल एडवांस</p>
-                            </div>
-                            <div class="flex flex-wrap items-center gap-2">
-                                <input type="month" id="ca-month-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 bg-white rounded-xl px-3 py-1.5 text-xs font-semibold text-slate-700">
-                                <button type="button" onclick="openModal('modal-add-advance')" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-hand-holding-dollar"></i> एडवांस (खर्ची) लिखें
-                                </button>
-                            </div>
-                        </div>
-                        <div id="ca-payroll-cards" class="p-4 space-y-3 md:hidden bg-slate-50/50"></div>
-                        <div class="hidden md:block overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
-                                        <th class="py-3.5 px-5">वर्कर</th>
-                                        <th class="py-3.5 px-5">हाज़िरी / OT</th>
-                                        <th class="py-3.5 px-5">कुल कमाई</th>
-                                        <th class="py-3.5 px-5 text-rose-600">एडवांस (खर्ची)</th>
-                                        <th class="py-3.5 px-5 text-emerald-700">नेट देय सैलरी</th>
-                                        <th class="py-3.5 px-5 text-right">Salary Slip</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ca-payroll-table" class="divide-y divide-slate-100 text-sm"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 4: AUDIT LOGS -->
-                <div id="ca-content-audit" class="ca-tab-content hidden p-4 sm:p-5">
-                    <h3 class="font-bold text-slate-800 text-sm mb-3">सिस्टम ऑडिट लॉग (किसने और कब बदलाव किया)</h3>
-                    <div id="ca-audit-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
                 </div>
             </div>
 
@@ -3291,6 +3308,8 @@
             a.click();
             showToast('ऑडिट लॉग CSV रिपोर्ट डाउनलोड हो गई!');
         }
+
+        async function markAllPresent() {
             const checkedBoxes = Array.from(document.querySelectorAll('.ca-worker-checkbox:checked'));
             if (checkedBoxes.length === 0) {
                 showToast('कृपया पहले बाईं तरफ बॉक्स (☑️) में उन वर्कर्स को चुनें जिन्हें Present करना है!', true);
@@ -3591,4 +3610,4 @@
         }
     </script>
 </body>
-                            </html>
+    </html>
