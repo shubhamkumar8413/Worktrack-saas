@@ -11,8 +11,11 @@
     <script>
         (function() {
             const p = new URLSearchParams(window.location.search);
-            const appMode = p.get('app') || localStorage.getItem('wt_locked_app');
-            if (p.get('app')) localStorage.setItem('wt_locked_app', p.get('app'));
+            const appParam = p.get('app');
+            if (appParam) {
+                localStorage.setItem('wt_locked_app', appParam);
+            }
+            const appMode = appParam;
 
             if (appMode === 'owner') {
                 document.title = 'WorkTrack Owner';
@@ -1168,7 +1171,7 @@
     <footer id="app-footer" class="py-4 px-4 text-center text-[11px] text-slate-400">
         <span>© 2026 WorkTrack SaaS</span>
         <span id="footer-owner-sep" class="mx-1.5">•</span>
-        <button id="footer-owner-btn" type="button" onclick="switchRole('super_admin')" class="hover:text-slate-600 font-medium transition">Owner Login</button>
+        <button id="footer-owner-btn" type="button" onclick="switchRole('super_admin')" class="hover:text-slate-600 font-medium transition cursor-pointer">Owner Login</button>
     </footer>
 
     <!-- MODALS -->
@@ -1841,8 +1844,11 @@
 
         function applyDedicatedAppMode() {
             const params = new URLSearchParams(window.location.search);
-            const appMode = params.get('app') || localStorage.getItem('wt_locked_app');
-            if (!appMode) return false;
+            const appMode = params.get('app');
+            if (!appMode) {
+                localStorage.removeItem('wt_locked_app');
+                return false;
+            }
 
             dedicatedAppMode = appMode;
             const quickTabs = document.getElementById('portal-quick-tabs');
@@ -2107,13 +2113,28 @@
                     b.classList.remove('bg-white', 'text-indigo-950', 'shadow-xs', 'font-bold');
                     b.classList.add('text-slate-200', 'font-semibold');
                 });
-                const activeBtn = role === 'worker' ? btnWorker : btnCompany;
-                activeBtn.classList.add('bg-white', 'text-indigo-950', 'shadow-xs', 'font-bold');
-                activeBtn.classList.remove('text-slate-200', 'font-semibold');
+                if (role !== 'super_admin') {
+                    const activeBtn = role === 'worker' ? btnWorker : btnCompany;
+                    activeBtn.classList.add('bg-white', 'text-indigo-950', 'shadow-xs', 'font-bold');
+                    activeBtn.classList.remove('text-slate-200', 'font-semibold');
+                }
             }
 
-            if (role === 'super_admin') renderSuperAdmin();
-            if (role === 'company_admin') renderCompanyAdmin();
+            if (role === 'super_admin') {
+                renderSuperAdmin();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => {
+                    const passEl = document.getElementById('sa-login-pass');
+                    if (passEl && !isSuperAdminUnlocked) passEl.focus();
+                }, 150);
+            }
+            if (role === 'company_admin') {
+                renderCompanyAdmin();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            if (role === 'worker') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function renderSuperAdmin() {
