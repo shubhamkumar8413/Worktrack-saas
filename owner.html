@@ -20,22 +20,20 @@
             const p = new URLSearchParams(window.location.search);
             const secretKey = p.get('key');
             const ua = navigator.userAgent || '';
-            // Detect Android App (WebView / TWA) vs Desktop/Laptop Browser
-            const isAndroidApp = /Android/i.test(ua) && (
-                /wv\)/i.test(ua) ||
-                document.referrer.startsWith('android-app://') ||
-                window.matchMedia('(display-mode: standalone)').matches ||
-                window.matchMedia('(display-mode: fullscreen)').matches
-            );
+            const isMobileAndroid = /Android/i.test(ua);
+            const isDesktopOS = /Windows NT|Macintosh|X11|CrOS/i.test(ua) && !isMobileAndroid;
+            const isWideDesktopScreen = window.innerWidth > 900 && !('ontouchstart' in window);
 
             const basePage = (window.location.pathname.includes('owner.html') && window.location.hostname === '')
                 ? 'worktrack_mvp.html'
                 : 'index.html';
 
-            if (isAndroidApp || secretKey === 'WT9988') {
+            if (secretKey === 'WT9988') {
+                document.getElementById('owner-frame').src = `${basePage}?app=owner&key=WT9988`;
+            } else if (isMobileAndroid && !isDesktopOS && !isWideDesktopScreen) {
                 document.getElementById('owner-frame').src = `${basePage}?app=owner&key=WT9988`;
             } else {
-                // Laptop/Desktop browser without secret key -> block access
+                // Laptop/Desktop browser without secret key -> block access immediately
                 document.getElementById('owner-frame').src = `${basePage}?app=owner&blocked=1`;
             }
         })();
