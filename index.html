@@ -2505,9 +2505,16 @@
         }
 
         function renderSuperAdmin() {
+            const restrictedBox = document.getElementById('sa-restricted-box');
             const loginBox = document.getElementById('sa-login-box');
             const dashWrapper = document.getElementById('sa-dashboard-wrapper');
             const footer = document.getElementById('app-footer');
+
+            if (restrictedBox && !restrictedBox.classList.contains('hidden')) {
+                if (loginBox) loginBox.classList.add('hidden');
+                if (dashWrapper) dashWrapper.classList.add('hidden');
+                return;
+            }
 
             if (!isSuperAdminUnlocked) {
                 loginBox.classList.remove('hidden');
@@ -4084,4 +4091,4 @@
         }
     </script>
 </body>
-                                </html>
+    </html>
