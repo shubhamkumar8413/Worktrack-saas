@@ -440,21 +440,21 @@
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-building text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">कंपनियाँ</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="sa_tab_companies">कंपनियाँ</span>
                     </button>
 
                     <button type="button" onclick="switchSaTab('revenue')" id="tab-sa-revenue" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-chart-line text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">आय (MRR)</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="sa_tab_revenue">आय (MRR)</span>
                     </button>
 
                     <button type="button" onclick="switchSaTab('settings')" id="tab-sa-settings" class="sa-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-shield-halved text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">सुरक्षा व APK</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="sa_tab_settings">सुरक्षा व APK</span>
                     </button>
                 </div>
             </nav>
@@ -784,20 +784,20 @@
                         <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-amber-200">
                             <i class="fa-solid fa-crown"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900">सैलरी कैलकुलेटर और खर्ची (Advance)</h3>
-                        <p class="text-xs text-slate-500 max-w-md mx-auto mt-1">यह प्रीमियम फीचर <strong>Growth (₹999/माह)</strong> और <strong>Business (₹1,999/माह)</strong> प्लान में उपलब्ध है।</p>
+                        <h3 class="text-lg font-bold text-slate-900" data-i18n="pay_lock_title">सैलरी कैलकुलेटर और खर्ची (Advance)</h3>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto mt-1" data-i18n="pay_lock_desc">यह प्रीमियम फीचर Growth (₹999/माह) और Business (₹1,999/माह) प्लान में उपलब्ध है।</p>
                     </div>
 
                     <div id="payroll-main-area">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                             <div>
-                                <h3 class="font-bold text-slate-900 text-base">मासिक सैलरी और एडवांस किस्त (Installment) हिसाब</h3>
-                                <p class="text-xs text-slate-500">ऑटो सैलरी = कुल कमाई − इस माह की एडवांस कटौती (बकाया एडवांस अलग से ट्रैक होता है)</p>
+                                <h3 class="font-bold text-slate-900 text-base" data-i18n="pay_title">मासिक सैलरी और एडवांस किस्त (Installment) हिसाब</h3>
+                                <p class="text-xs text-slate-500" data-i18n="pay_sub">ऑटो सैलरी = कुल कमाई − इस माह की एडवांस कटौती (बकाया एडवांस अलग से ट्रैक होता है)</p>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <input type="month" id="ca-month-picker" onchange="renderCompanyAdmin()" class="border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold bg-white">
                                 <button type="button" onclick="openAdvanceModal('GIVEN')" class="bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5">
-                                    <i class="fa-solid fa-hand-holding-dollar"></i> एडवांस दें / किस्त काटें
+                                    <i class="fa-solid fa-hand-holding-dollar"></i> <span data-i18n="btn_adv_manage">एडवांस दें / किस्त काटें</span>
                                 </button>
                             </div>
                         </div>
@@ -808,13 +808,13 @@
                             <table class="w-full text-left border-collapse">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-semibold">
-                                        <th class="py-3 px-5 whitespace-nowrap">वर्कर व दर</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">मासिक हाज़िरी / OT</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">कुल कमाई (Gross)</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">इस माह की किस्त कटौती</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">बकाया एडवांस (Remaining)</th>
-                                        <th class="py-3 px-5 whitespace-nowrap">नेट देय सैलरी</th>
-                                        <th class="py-3 px-5 text-right whitespace-nowrap">एक्शन / Slip</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_worker">वर्कर व दर</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_att">मासिक हाज़िरी / OT</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_gross">कुल कमाई (Gross)</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_deduct">इस माह की किस्त कटौती</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_rem">बकाया एडवांस (Remaining)</th>
+                                        <th class="py-3 px-5 whitespace-nowrap" data-i18n="th_pay_net">नेट देय सैलरी</th>
+                                        <th class="py-3 px-5 text-right whitespace-nowrap" data-i18n="th_pay_act">एक्शन / Slip</th>
                                     </tr>
                                 </thead>
                                 <tbody id="ca-payroll-table" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -833,29 +833,29 @@
                                 </span>
                                 <div>
                                     <div class="flex flex-wrap items-center gap-2">
-                                        <h3 class="font-extrabold text-base sm:text-lg text-white tracking-tight">सिस्टम ऑडिट लॉग (Audit Trail)</h3>
+                                        <h3 class="font-extrabold text-base sm:text-lg text-white tracking-tight" data-i18n="audit_title">सिस्टम ऑडिट लॉग (Audit Trail)</h3>
                                         <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 border border-emerald-400/30">
                                             <i class="fa-solid fa-lock text-[9px]"></i> Tamper-Proof
                                         </span>
                                     </div>
-                                    <p class="text-xs text-slate-300/90 mt-0.5">किसने, कब और क्या बदलाव किया — 100% सुरक्षित व अपरिवर्तनीय रिकॉर्ड</p>
+                                    <p class="text-xs text-slate-300/90 mt-0.5" data-i18n="audit_sub">किसने, कब और क्या बदलाव किया — 100% सुरक्षित व अपरिवर्तनीय रिकॉर्ड</p>
                                 </div>
                             </div>
                             <button type="button" onclick="exportAuditLogsCSV()" class="bg-white/10 hover:bg-white/20 text-white border border-white/15 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shrink-0 backdrop-blur-sm">
-                                <i class="fa-solid fa-file-csv text-emerald-300"></i> Log रिपोर्ट डाउनलोड
+                                <i class="fa-solid fa-file-csv text-emerald-300"></i> <span data-i18n="audit_dl_btn">Log रिपोर्ट डाउनलोड</span>
                             </button>
                         </div>
 
                         <div class="mt-4 pt-4 border-t border-white/10 flex flex-col sm:flex-row gap-2.5">
                             <div class="relative flex-1">
                                 <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-3"></i>
-                                <input type="text" id="ca-audit-search" oninput="renderCompanyAdmin()" placeholder="वर्कर का नाम, ID या बदलाव खोजें..." class="w-full bg-white/10 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                                <input type="text" id="ca-audit-search" oninput="renderCompanyAdmin()" data-i18n-placeholder="audit_search_ph" placeholder="वर्कर का नाम, ID या बदलाव खोजें..." class="w-full bg-white/10 border border-white/15 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-indigo-400">
                             </div>
                             <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-                                <button type="button" onclick="setAuditFilter('ALL')" id="audit-filter-ALL" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-xs whitespace-nowrap transition">सभी (All)</button>
-                                <button type="button" onclick="setAuditFilter('ATTENDANCE')" id="audit-filter-ATTENDANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">✅ हाज़िरी/OT</button>
-                                <button type="button" onclick="setAuditFilter('ADVANCE')" id="audit-filter-ADVANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">💰 खर्ची/एडवांस</button>
-                                <button type="button" onclick="setAuditFilter('WORKER')" id="audit-filter-WORKER" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition">👷 वर्कर्स</button>
+                                <button type="button" onclick="setAuditFilter('ALL')" id="audit-filter-ALL" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-xs whitespace-nowrap transition" data-i18n="audit_f_all">सभी (All)</button>
+                                <button type="button" onclick="setAuditFilter('ATTENDANCE')" id="audit-filter-ATTENDANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition" data-i18n="audit_f_att">✅ हाज़िरी/OT</button>
+                                <button type="button" onclick="setAuditFilter('ADVANCE')" id="audit-filter-ADVANCE" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition" data-i18n="audit_f_adv">💰 खर्ची/एडवांस</button>
+                                <button type="button" onclick="setAuditFilter('WORKER')" id="audit-filter-WORKER" class="audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition" data-i18n="audit_f_wrk">👷 वर्कर्स</button>
                             </div>
                         </div>
                     </div>
@@ -867,7 +867,9 @@
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Live Cloud Verified
                             </span>
                         </div>
-                        <div id="ca-audit-list" class="relative pl-6 border-l-2 border-indigo-200/80 space-y-3.5 max-h-[62vh] overflow-y-auto pr-1"></div>
+                        <div class="max-h-[62vh] overflow-y-auto pl-3 pr-1 py-1">
+                            <div id="ca-audit-list" class="relative pl-5 border-l-2 border-indigo-200/80 space-y-3.5"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1032,19 +1034,19 @@
                             <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xs">
                                 <i class="fa-solid fa-hand-holding-dollar"></i>
                             </span>
-                            <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">बकाया</span>
+                            <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full" data-i18n="w_due_badge">बकाया</span>
                         </div>
                         <span id="wd-stat-advance" class="text-2xl font-extrabold text-rose-600 block">₹0</span>
-                        <span class="text-[11px] font-semibold text-rose-700 block mt-0.5">बकाया एडवांस (Remaining)</span>
+                        <span class="text-[11px] font-semibold text-rose-700 block mt-0.5" data-i18n="w_rem_adv_lbl">बकाया एडवांस (Remaining)</span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2.5">
                     <button type="button" onclick="switchWTab('idcard')" class="bg-white hover:bg-slate-50 border border-slate-200/90 p-3 rounded-2xl text-xs font-bold text-slate-800 shadow-sm flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-id-card text-emerald-600 text-sm"></i> मेरा ID Card देखें
+                        <i class="fa-solid fa-id-card text-emerald-600 text-sm"></i> <span data-i18n="w_view_id_btn">मेरा ID Card देखें</span>
                     </button>
                     <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Support%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20%E0%A4%85%E0%A4%AA%E0%A4%A8%E0%A5%80%20%E0%A4%B9%E0%A4%BE%E0%A4%9C%E0%A4%BC%E0%A4%BF%E0%A4%B0%E0%A5%80%20%E0%A4%AE%E0%A5%87%E0%A4%82%20%E0%A4%B8%E0%A4%B9%E0%A4%BE%E0%A4%AF%E0%A4%A4%E0%A4%BE%20%E0%A4%9A%E0%A4%BE%E0%A4%B9%E0%A4%BF%E0%A4%8F%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 p-3 rounded-2xl text-xs font-bold text-emerald-800 shadow-sm flex items-center justify-center gap-2 transition">
-                        <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> हेल्प / सपोर्ट
+                        <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i> <span data-i18n="w_help_btn">हेल्प / सपोर्ट</span>
                     </a>
                 </div>
 
@@ -1061,7 +1063,7 @@
                             <i class="fa-solid fa-calendar-days text-emerald-600"></i> हाल की हाज़िरी और ओवरटाइम
                         </h3>
                         <select id="wd-att-filter" onchange="renderWorkerDashboard()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700">
-                            <option value="ALL">सभी दिन (All)</option>
+                            <option value="ALL" data-i18n="w_filter_all">सभी दिन (All)</option>
                             <option value="Present">✅ Present</option>
                             <option value="Absent">❌ Absent</option>
                         </select>
@@ -1073,20 +1075,20 @@
             <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider">इस माह सैलरी व किस्त हिसाब</span>
+                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider" data-i18n="w_sal_box_title">इस माह सैलरी व किस्त हिसाब</span>
                         <span id="wd-calc-days-badge" class="text-[11px] bg-white/15 px-2.5 py-0.5 rounded-full font-semibold">0 दिन • 0 OT</span>
                     </div>
                     <div class="space-y-1.5 text-xs pt-1 border-t border-white/10">
                         <div class="flex justify-between text-slate-300">
-                            <span>इस माह हाज़िरी व OT कमाई:</span>
+                            <span data-i18n="w_sal_gross_lbl">इस माह हाज़िरी व OT कमाई:</span>
                             <span id="wd-calc-gross" class="font-bold text-white">₹0</span>
                         </div>
                         <div class="flex justify-between text-amber-300">
-                            <span>इस माह सैलरी से किस्त कटौती:</span>
+                            <span data-i18n="w_sal_ded_lbl">इस माह सैलरी से किस्त कटौती:</span>
                             <span id="wd-calc-adv" class="font-bold">- ₹0</span>
                         </div>
                         <div class="flex justify-between text-sm pt-2 border-t border-white/15 font-extrabold text-emerald-300">
-                            <span>इस माह नेट देय सैलरी:</span>
+                            <span data-i18n="w_sal_net_lbl">इस माह नेट देय सैलरी:</span>
                             <span id="wd-calc-net">₹0</span>
                         </div>
                     </div>
@@ -1096,22 +1098,22 @@
                 <div class="bg-white rounded-3xl border border-amber-200/90 shadow-sm p-5 space-y-3">
                     <div class="flex items-center justify-between">
                         <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-scale-balanced text-amber-600"></i> एडवांस लोन व बकाया बैलेंस
+                            <i class="fa-solid fa-scale-balanced text-amber-600"></i> <span data-i18n="w_loan_title">एडवांस लोन व बकाया बैलेंस</span>
                         </h3>
                         <span id="wd-adv-progress-pct" class="text-[11px] font-extrabold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">0% चुकता</span>
                     </div>
 
                     <div class="grid grid-cols-3 gap-2 text-center">
                         <div class="bg-slate-50 rounded-2xl p-2.5 border border-slate-200/80">
-                            <span class="text-[10px] font-semibold text-slate-500 block">कुल लिया एडवांस</span>
+                            <span class="text-[10px] font-semibold text-slate-500 block" data-i18n="w_loan_taken">कुल लिया एडवांस</span>
                             <span id="wd-adv-total-taken" class="text-sm font-extrabold text-slate-900 mt-0.5 block">₹0</span>
                         </div>
                         <div class="bg-emerald-50/70 rounded-2xl p-2.5 border border-emerald-200/80">
-                            <span class="text-[10px] font-semibold text-emerald-700 block">कुल किस्त जमा</span>
+                            <span class="text-[10px] font-semibold text-emerald-700 block" data-i18n="w_loan_paid">कुल किस्त जमा</span>
                             <span id="wd-adv-total-paid" class="text-sm font-extrabold text-emerald-700 mt-0.5 block">₹0</span>
                         </div>
                         <div class="bg-rose-50/80 rounded-2xl p-2.5 border border-rose-200/80">
-                            <span class="text-[10px] font-semibold text-rose-600 block">बकाया एडवांस</span>
+                            <span class="text-[10px] font-semibold text-rose-600 block" data-i18n="w_loan_rem">बकाया एडवांस</span>
                             <span id="wd-adv-remaining" class="text-sm font-extrabold text-rose-600 mt-0.5 block">₹0</span>
                         </div>
                     </div>
@@ -1123,7 +1125,7 @@
 
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
                     <h3 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-receipt text-indigo-600"></i> एडवांस व किस्त कटौती पासबुक (Passbook)
+                        <i class="fa-solid fa-receipt text-indigo-600"></i> <span data-i18n="w_passbook_title">एडवांस व किस्त कटौती पासबुक (Passbook)</span>
                     </h3>
                     <div id="wd-advance-list" class="space-y-2.5"></div>
                 </div>
@@ -1169,28 +1171,28 @@
                         <span class="nav-pill w-12 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center transition-all">
                             <i class="fa-solid fa-house text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">Home</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_home">Home</span>
                     </button>
 
                     <button type="button" onclick="switchWTab('attendance')" id="tab-w-attendance" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-calendar-check text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">हाज़िरी व OT</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_att">हाज़िरी व OT</span>
                     </button>
 
                     <button type="button" onclick="switchWTab('kharchi')" id="tab-w-kharchi" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-indian-rupee-sign text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">खर्ची व सैलरी</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="tab_payroll">खर्ची व सैलरी</span>
                     </button>
 
                     <button type="button" onclick="switchWTab('idcard')" id="tab-w-idcard" class="w-tab flex flex-col items-center justify-center gap-1 text-slate-500 hover:text-slate-800 font-medium transition">
                         <span class="nav-pill w-12 h-7 rounded-full bg-transparent flex items-center justify-center transition-all">
                             <i class="fa-solid fa-id-card text-sm"></i>
                         </span>
-                        <span class="text-[10px] leading-none tracking-tight">ID Card</span>
+                        <span class="text-[10px] leading-none tracking-tight" data-i18n="w_tab_idcard">ID Card</span>
                     </button>
                 </div>
             </nav>
@@ -1375,49 +1377,49 @@
     <div id="modal-add-advance" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
             <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-amber-600 mr-1.5"></i>एडवांस दें या किस्त काटें</h3>
+                <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-amber-600 mr-1.5"></i><span data-i18n="adv_modal_title">एडवांस दें या किस्त काटें</span></h3>
                 <button type="button" onclick="closeModal('modal-add-advance')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <form onsubmit="handleAddAdvance(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">लेन-देन का प्रकार चुनें (Action Type)</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_action_type_lbl">लेन-देन का प्रकार चुनें (Action Type)</label>
                     <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-200">
                         <button type="button" id="adv-type-btn-GIVEN" onclick="setAdvanceEntryType('GIVEN')" class="py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs">
-                            <i class="fa-solid fa-plus-circle mr-1"></i> नया एडवांस दें
+                            <i class="fa-solid fa-plus-circle mr-1"></i> <span data-i18n="adv_btn_give">नया एडवांस दें</span>
                         </button>
                         <button type="button" id="adv-type-btn-DEDUCTED" onclick="setAdvanceEntryType('DEDUCTED')" class="py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                            <i class="fa-solid fa-scissors mr-1"></i> किस्त काटें (Deduct)
+                            <i class="fa-solid fa-scissors mr-1"></i> <span data-i18n="adv_btn_deduct">किस्त काटें (Deduct)</span>
                         </button>
                     </div>
                     <input type="hidden" id="adv-entry-type" value="GIVEN">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">वर्कर चुनें</label>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_select_worker">वर्कर चुनें</label>
                     <select id="adv-worker-select" required onchange="updateAdvanceModalBalanceHint()" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white"></select>
                     <div id="adv-modal-balance-hint" class="mt-1.5 text-[11px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-1.5 flex items-center justify-between">
-                        <span>वर्तमान बकाया एडवांस:</span>
+                        <span data-i18n="adv_curr_rem">वर्तमान बकाया एडवांस:</span>
                         <span id="adv-modal-rem-val" class="font-extrabold text-rose-600">₹0</span>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label id="adv-amount-label" class="block text-xs font-semibold text-slate-600 mb-1">एडवांस राशि (₹ में)</label>
+                        <label id="adv-amount-label" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_amt_give_lbl">नया एडवांस राशि (₹ में)</label>
                         <input type="number" id="adv-amount" required min="1" placeholder="20000" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">तारीख</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_date_lbl">तारीख</label>
                         <input type="date" id="adv-date" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">विवरण / किस्त नोट (वैकल्पिक)</label>
-                    <input type="text" id="adv-note" placeholder="उदा. ₹20,000 एडवांस या पहली किस्त कटौती" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_note_lbl">विवरण / किस्त नोट (वैकल्पिक)</label>
+                    <input type="text" id="adv-note" data-i18n-placeholder="adv_note_ph" placeholder="उदा. ₹20,000 एडवांस या पहली किस्त कटौती" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
-                    <button type="submit" id="adv-submit-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">नया एडवांस सेव करें</button>
+                    <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
+                    <button type="submit" id="adv-submit-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="adv_save_give">नया एडवांस सेव करें</button>
                 </div>
             </form>
         </div>
@@ -1454,6 +1456,9 @@
                 sa_kpi_workers_sub: "सभी कंपनियों के कर्मचारी मिलाकर",
                 sa_kpi_mrr: "मासिक सब्सक्रिप्शन आय (MRR)",
                 sa_kpi_mrr_sub: "एक्टिव प्लान्स से अनुमानित आय",
+                sa_tab_companies: "कंपनियाँ",
+                sa_tab_revenue: "आय (MRR)",
+                sa_tab_settings: "सुरक्षा व APK",
                 ca_login_title: "Company Admin लॉगिन",
                 ca_login_sub: "अपनी Admin ID और Password डालकर डैशबोर्ड खोलें",
                 ca_login_btn: "Admin Panel खोलें",
@@ -1483,6 +1488,35 @@
                 th_id_pass: "Worker ID व Password",
                 th_mobile: "मोबाइल नंबर",
                 th_actions: "एक्शन",
+                pay_lock_title: "सैलरी कैलकुलेटर और खर्ची (Advance)",
+                pay_lock_desc: "यह प्रीमियम फीचर Growth (₹999/माह) और Business (₹1,999/माह) प्लान में उपलब्ध है।",
+                pay_title: "मासिक सैलरी और एडवांस किस्त (Installment) हिसाब",
+                pay_sub: "ऑटो सैलरी = कुल कमाई − इस माह की एडवांस कटौती (बकाया एडवांस अलग से ट्रैक होता है)",
+                btn_adv_manage: "एडवांस दें / किस्त काटें",
+                th_pay_worker: "वर्कर व दर",
+                th_pay_att: "मासिक हाज़िरी / OT",
+                th_pay_gross: "कुल कमाई (Gross)",
+                th_pay_deduct: "इस माह की किस्त कटौती",
+                th_pay_rem: "बकाया एडवांस (Remaining)",
+                th_pay_net: "नेट देय सैलरी",
+                th_pay_act: "एक्शन / Slip",
+                card_gross: "कुल कमाई",
+                card_month_inst: "इस माह किस्त",
+                card_rem_adv: "बकाया एडवांस",
+                card_net_sal: "नेट देय सैलरी",
+                btn_deduct_inst: "किस्त काटें",
+                audit_title: "सिस्टम ऑडिट लॉग (Audit Trail)",
+                audit_sub: "किसने, कब और क्या बदलाव किया — 100% सुरक्षित व अपरिवर्तनीय रिकॉर्ड",
+                audit_dl_btn: "Log रिपोर्ट डाउनलोड",
+                audit_search_ph: "वर्कर का नाम, ID या बदलाव खोजें...",
+                audit_f_all: "सभी (All)",
+                audit_f_att: "✅ हाज़िरी/OT",
+                audit_f_adv: "💰 खर्ची/एडवांस",
+                audit_f_wrk: "👷 वर्कर्स",
+                audit_badge_adv: "खर्ची / एडवांस",
+                audit_badge_del: "वर्कर हटाया गया",
+                audit_badge_add: "नया वर्कर",
+                audit_badge_att: "हाज़िरी / OT अपडेट",
                 w_login_title: "Worker पोर्टल लॉगिन",
                 w_login_sub: "अपनी हाज़िरी और ओवरटाइम देखने के लिए लॉगिन करें",
                 w_login_btn: "लॉगिन करें",
@@ -1490,10 +1524,40 @@
                 w_stat_present: "कुल हाज़िरी",
                 w_stat_absent: "अनुपस्थित",
                 w_stat_ot: "कुल ओवरटाइम",
+                w_due_badge: "बकाया",
+                w_rem_adv_lbl: "बकाया एडवांस (Remaining)",
+                w_view_id_btn: "मेरा ID Card देखें",
+                w_help_btn: "हेल्प / सपोर्ट",
+                w_filter_all: "सभी दिन (All)",
+                w_sal_box_title: "इस माह सैलरी व किस्त हिसाब",
+                w_sal_gross_lbl: "इस माह हाज़िरी व OT कमाई:",
+                w_sal_ded_lbl: "इस माह सैलरी से किस्त कटौती:",
+                w_sal_net_lbl: "इस माह नेट देय सैलरी:",
+                w_loan_title: "एडवांस लोन व बकाया बैलेंस",
+                w_loan_taken: "कुल लिया एडवांस",
+                w_loan_paid: "कुल किस्त जमा",
+                w_loan_rem: "बकाया एडवांस",
+                w_passbook_title: "एडवांस व किस्त कटौती पासबुक (Passbook)",
+                w_pb_paid: "✅ किस्त जमा (सैलरी से कटौती)",
+                w_pb_taken: "💰 नया एडवांस लिया",
+                w_tab_idcard: "ID Card",
                 unit_days: "दिन",
                 unit_hours: "घंटे",
                 w_readonly_note: "यह रिकॉर्ड Read-Only है। किसी त्रुटि के लिए अपने Company Admin से संपर्क करें।",
                 w_history_title: "हाल की हाज़िरी और ओवरटाइम रिकॉर्ड",
+                adv_modal_title: "एडवांस दें या किस्त काटें",
+                adv_action_type_lbl: "लेन-देन का प्रकार चुनें (Action Type)",
+                adv_btn_give: "नया एडवांस दें",
+                adv_btn_deduct: "किस्त काटें (Deduct)",
+                adv_select_worker: "वर्कर चुनें",
+                adv_curr_rem: "वर्तमान बकाया एडवांस:",
+                adv_amt_give_lbl: "नया एडवांस राशि (₹ में)",
+                adv_amt_ded_lbl: "किस्त कटौती राशि (₹ में)",
+                adv_date_lbl: "तारीख",
+                adv_note_lbl: "विवरण / किस्त नोट (वैकल्पिक)",
+                adv_note_ph: "उदा. ₹20,000 एडवांस या पहली किस्त कटौती",
+                adv_save_give: "नया एडवांस सेव करें",
+                adv_save_ded: "किस्त कटौती सेव करें",
                 modal_add_w_title: "नया वर्कर (Worker) जोड़ें",
                 lbl_full_name: "पूरा नाम",
                 lbl_dept: "विभाग (Department)",
@@ -1518,6 +1582,9 @@
                 sa_kpi_workers_sub: "Combined workers across all companies",
                 sa_kpi_mrr: "Monthly Subscription Revenue (MRR)",
                 sa_kpi_mrr_sub: "Estimated revenue from active plans",
+                sa_tab_companies: "Companies",
+                sa_tab_revenue: "Revenue (MRR)",
+                sa_tab_settings: "Security & APK",
                 ca_login_title: "Company Admin Login",
                 ca_login_sub: "Enter Admin ID and Password to open dashboard",
                 ca_login_btn: "Open Admin Panel",
@@ -1547,6 +1614,35 @@
                 th_id_pass: "Worker ID & Password",
                 th_mobile: "Mobile Number",
                 th_actions: "Actions",
+                pay_lock_title: "Salary Calculator & Advance Tracker",
+                pay_lock_desc: "This premium feature is available in Growth (₹999/mo) and Business (₹1,999/mo) plans.",
+                pay_title: "Monthly Salary & Advance Installment Ledger",
+                pay_sub: "Net Salary = Gross Earnings − Monthly Installment Deduction (Remaining advance tracked separately)",
+                btn_adv_manage: "Give Advance / Deduct EMI",
+                th_pay_worker: "Worker & Rate",
+                th_pay_att: "Monthly Attendance / OT",
+                th_pay_gross: "Gross Earnings",
+                th_pay_deduct: "This Month Deduction",
+                th_pay_rem: "Remaining Advance",
+                th_pay_net: "Net Payable Salary",
+                th_pay_act: "Action / Slip",
+                card_gross: "Gross Pay",
+                card_month_inst: "Month EMI",
+                card_rem_adv: "Remaining Adv",
+                card_net_sal: "Net Payable Salary",
+                btn_deduct_inst: "Deduct EMI",
+                audit_title: "System Audit Trail",
+                audit_sub: "Who changed what and when — 100% secure & tamper-proof logs",
+                audit_dl_btn: "Download Log CSV",
+                audit_search_ph: "Search worker name, ID or change...",
+                audit_f_all: "All Logs",
+                audit_f_att: "✅ Attendance/OT",
+                audit_f_adv: "💰 Advance/EMI",
+                audit_f_wrk: "👷 Workers",
+                audit_badge_adv: "Advance / EMI",
+                audit_badge_del: "Worker Deleted",
+                audit_badge_add: "Worker Added",
+                audit_badge_att: "Attendance / OT",
                 w_login_title: "Worker Portal Login",
                 w_login_sub: "Login to view your attendance and overtime records",
                 w_login_btn: "Login",
@@ -1554,10 +1650,40 @@
                 w_stat_present: "Total Present",
                 w_stat_absent: "Absent",
                 w_stat_ot: "Total Overtime",
+                w_due_badge: "Due",
+                w_rem_adv_lbl: "Remaining Advance",
+                w_view_id_btn: "View My ID Card",
+                w_help_btn: "Help / Support",
+                w_filter_all: "All Days",
+                w_sal_box_title: "Monthly Salary & Installment Summary",
+                w_sal_gross_lbl: "This Month Attendance & OT Earnings:",
+                w_sal_ded_lbl: "This Month Installment Deducted:",
+                w_sal_net_lbl: "This Month Net Payable Salary:",
+                w_loan_title: "Advance Loan & Remaining Balance",
+                w_loan_taken: "Total Advance Taken",
+                w_loan_paid: "Total EMI Paid",
+                w_loan_rem: "Remaining Balance",
+                w_passbook_title: "Advance & Installment Passbook",
+                w_pb_paid: "✅ Installment Paid (Deducted from Salary)",
+                w_pb_taken: "💰 New Advance Taken",
+                w_tab_idcard: "ID Card",
                 unit_days: "Days",
                 unit_hours: "Hours",
                 w_readonly_note: "This record is Read-Only. Contact your Company Admin for any corrections.",
                 w_history_title: "Recent Attendance & Overtime History",
+                adv_modal_title: "Give Advance or Deduct Installment",
+                adv_action_type_lbl: "Select Transaction Type",
+                adv_btn_give: "Give New Advance",
+                adv_btn_deduct: "Deduct Installment",
+                adv_select_worker: "Select Worker",
+                adv_curr_rem: "Current Remaining Advance:",
+                adv_amt_give_lbl: "New Advance Amount (₹)",
+                adv_amt_ded_lbl: "Installment Deduction Amount (₹)",
+                adv_date_lbl: "Date",
+                adv_note_lbl: "Note / Installment Remark (Optional)",
+                adv_note_ph: "e.g. ₹20,000 advance or 1st EMI deduction",
+                adv_save_give: "Save New Advance",
+                adv_save_ded: "Save Installment Deduction",
                 modal_add_w_title: "Add New Worker",
                 lbl_full_name: "Full Name",
                 lbl_dept: "Department",
@@ -1582,6 +1708,9 @@
                 sa_kpi_workers_sub: "બધી કંપનીઓના કર્મચારીઓ મળીને",
                 sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
                 sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
+                sa_tab_companies: "કંપનીઓ",
+                sa_tab_revenue: "આવક (MRR)",
+                sa_tab_settings: "સુરક્ષા અને APK",
                 ca_login_title: "Company Admin લોગિન",
                 ca_login_sub: "Admin ID અને Password નાખીને ડેશબોર્ડ ખોલો",
                 ca_login_btn: "Admin Panel ખોલો",
@@ -1611,6 +1740,35 @@
                 th_id_pass: "Worker ID અને Password",
                 th_mobile: "મોબાઇલ નંબર",
                 th_actions: "એક્શન",
+                pay_lock_title: "પગાર કેલ્ક્યુલેટર અને ખર્ચી (Advance)",
+                pay_lock_desc: "આ પ્રીમિયમ ફીચર Growth (₹999/માસ) અને Business (₹1,999/માસ) પ્લાનમાં ઉપલબ્ધ છે.",
+                pay_title: "માસિક પગાર અને એડવાન્સ હપ્તા (Installment) હિસાબ",
+                pay_sub: "ઓટો પગાર = કુલ કમાણી − આ મહિનાનો હપ્તો (બાકી એડવાન્સ અલગથી ટ્રેક થાય છે)",
+                btn_adv_manage: "એડવાન્સ આપો / હપ્તો કાપો",
+                th_pay_worker: "વર્કર અને દર",
+                th_pay_att: "માસિક હાજરી / OT",
+                th_pay_gross: "કુલ કમાણી (Gross)",
+                th_pay_deduct: "આ મહિનાનો હપ્તો",
+                th_pay_rem: "બાકી એડવાન્સ (Remaining)",
+                th_pay_net: "નેટ ચૂકવવાપાત્ર પગાર",
+                th_pay_act: "એક્શન / Slip",
+                card_gross: "કુલ કમાણી",
+                card_month_inst: "માસિક હપ્તો",
+                card_rem_adv: "બાકી એડવાન્સ",
+                card_net_sal: "નેટ ચૂકવવાપાત્ર પગાર",
+                btn_deduct_inst: "હપ્તો કાપો",
+                audit_title: "સિસ્ટમ ઓડિટ લોગ (Audit Trail)",
+                audit_sub: "કોણે, ક્યારે અને શું ફેરફાર કર્યો — 100% સુરક્ષિત રેકોર્ડ",
+                audit_dl_btn: "Log રિપોર્ટ ડાઉનલોડ",
+                audit_search_ph: "વર્કરનું નામ, ID અથવા ફેરફાર શોધો...",
+                audit_f_all: "બધા (All)",
+                audit_f_att: "✅ હાજરી/OT",
+                audit_f_adv: "💰 ખર્ચી/એડવાન્સ",
+                audit_f_wrk: "👷 વર્કર્સ",
+                audit_badge_adv: "ખર્ચી / એડવાન્સ",
+                audit_badge_del: "વર્કર દૂર કર્યા",
+                audit_badge_add: "નવો વર્કર",
+                audit_badge_att: "હાજરી / OT અપડેટ",
                 w_login_title: "Worker પોર્ટલ લોગિન",
                 w_login_sub: "તમારી હાજરી અને ઓવરટાઇમ જોવા માટે લોગિન કરો",
                 w_login_btn: "લોગિન કરો",
@@ -1618,10 +1776,40 @@
                 w_stat_present: "કુલ હાજરી",
                 w_stat_absent: "ગેરહાજર",
                 w_stat_ot: "કુલ ઓવરટાઇમ",
+                w_due_badge: "બાકી",
+                w_rem_adv_lbl: "બાકી એડવાન્સ (Remaining)",
+                w_view_id_btn: "મારું ID Card જુઓ",
+                w_help_btn: "હેલ્પ / સપોર્ટ",
+                w_filter_all: "બધા દિવસ (All)",
+                w_sal_box_title: "આ મહિનાનો પગાર અને હપ્તા હિસાબ",
+                w_sal_gross_lbl: "આ મહિનાની હાજરી અને OT કમાણી:",
+                w_sal_ded_lbl: "આ મહિનાના પગારમાંથી હપ્તો કપાયો:",
+                w_sal_net_lbl: "આ મહિનાનો નેટ પગાર:",
+                w_loan_title: "એડવાન્સ લોન અને બાકી બેલેન્સ",
+                w_loan_taken: "કુલ લીધેલ એડવાન્સ",
+                w_loan_paid: "કુલ હપ્તા જમા",
+                w_loan_rem: "બાકી એડવાન્સ",
+                w_passbook_title: "એડવાન્સ અને હપ્તા કપાત પાસબુક (Passbook)",
+                w_pb_paid: "✅ હપ્તો જમા (પગારમાંથી કપાત)",
+                w_pb_taken: "💰 નવો એડવાન્સ લીધો",
+                w_tab_idcard: "ID Card",
                 unit_days: "દિવસ",
                 unit_hours: "કલાક",
                 w_readonly_note: "આ રેકોર્ડ Read-Only છે. કોઈ ભૂલ માટે તમારા Company Admin નો સંપર્ક કરો.",
                 w_history_title: "તાજેતરની હાજરી અને ઓવરટાઇમ રેકોર્ડ",
+                adv_modal_title: "એડવાન્સ આપો અથવા હપ્તો કાપો",
+                adv_action_type_lbl: "વ્યવહારનો પ્રકાર પસંદ કરો (Action Type)",
+                adv_btn_give: "નવો એડવાન્સ આપો",
+                adv_btn_deduct: "હપ્તો કાપો (Deduct)",
+                adv_select_worker: "વર્કર પસંદ કરો",
+                adv_curr_rem: "વર્તમાન બાકી એડવાન્સ:",
+                adv_amt_give_lbl: "નવો એડવાન્સ રકમ (₹ માં)",
+                adv_amt_ded_lbl: "હપ્તા કપાત રકમ (₹ માં)",
+                adv_date_lbl: "તારીખ",
+                adv_note_lbl: "વિગત / હપ્તા નોંધ (વૈકલ્પિક)",
+                adv_note_ph: "દા.ત. ₹20,000 એડવાન્સ અથવા પ્રથમ હપ્તો",
+                adv_save_give: "નવો એડવાન્સ સેવ કરો",
+                adv_save_ded: "હપ્તા કપાત સેવ કરો",
                 modal_add_w_title: "નવો વર્કર (Worker) ઉમેરો",
                 lbl_full_name: "પૂરું નામ",
                 lbl_dept: "વિભાગ (Department)",
@@ -1636,6 +1824,10 @@
         let currentLang = localStorage.getItem('wt_lang') || 'hi';
         let workerIdToDelete = null;
         let dedicatedAppMode = null;
+
+        function t(key) {
+            return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.hi[key] || key;
+        }
 
         function setAppLanguage(lang) {
             if (!TRANSLATIONS[lang]) return;
@@ -1653,6 +1845,18 @@
                     el.innerText = dict[key];
                 }
             });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (dict[key]) {
+                    el.setAttribute('placeholder', dict[key]);
+                }
+            });
+
+            // Re-render active views so dynamic cards, tables & badges switch language immediately
+            if (isSuperAdminUnlocked) renderSuperAdmin();
+            if (isCompanyAdminLoggedIn) renderCompanyAdmin();
+            if (loggedInWorkerId) renderWorkerDashboard();
         }
 
         function enforceTenDigitPhone(input) {
@@ -2915,11 +3119,11 @@
                                     <img src="${w.photo}" class="w-9 h-9 rounded-full object-cover border border-slate-200 shrink-0">
                                     <div>
                                         <div class="font-bold text-slate-800">${w.name}</div>
-                                        <div class="text-[11px] text-slate-400">₹${dailyRate}/दिन • OT ₹${otRate}/hr</div>
+                                        <div class="text-[11px] text-slate-400">₹${dailyRate}/${t('unit_days')} • OT ₹${otRate}/hr</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-3.5 px-5 text-xs font-semibold text-slate-700 whitespace-nowrap">${mPresent} दिन • ${mOt} hrs</td>
+                            <td class="py-3.5 px-5 text-xs font-semibold text-slate-700 whitespace-nowrap">${mPresent} ${t('unit_days')} • ${mOt} hrs</td>
                             <td class="py-3.5 px-5 text-xs font-bold text-slate-800 whitespace-nowrap">₹${grossPay.toLocaleString('en-IN')}</td>
                             <td class="py-3.5 px-5 text-xs font-bold text-rose-600 whitespace-nowrap">- ₹${mDeducted.toLocaleString('en-IN')}</td>
                             <td class="py-3.5 px-5 whitespace-nowrap">
@@ -2929,8 +3133,8 @@
                                 <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${netBadgeClass}">₹${netPay.toLocaleString('en-IN')}</span>
                             </td>
                             <td class="py-3.5 px-5 text-right whitespace-nowrap space-x-1">
-                                <button type="button" onclick="openAdvanceModal('DEDUCTED', '${w.id}')" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1.5 rounded-lg transition" title="इस माह की किस्त काटें">
-                                    <i class="fa-solid fa-scissors"></i> किस्त काटें
+                                <button type="button" onclick="openAdvanceModal('DEDUCTED', '${w.id}')" class="inline-flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1.5 rounded-lg transition">
+                                    <i class="fa-solid fa-scissors"></i> ${t('btn_deduct_inst')}
                                 </button>
                                 <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg shadow-sm transition">
                                     <i class="fa-brands fa-whatsapp"></i> Slip
@@ -2947,12 +3151,12 @@
                                         <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
                                         <div class="min-w-0">
                                             <div class="font-bold text-slate-900 text-sm truncate">${w.name}</div>
-                                            <div class="text-[11px] text-slate-500">₹${dailyRate}/दिन • OT ₹${otRate}/hr</div>
+                                            <div class="text-[11px] text-slate-500">₹${dailyRate}/${t('unit_days')} • OT ₹${otRate}/hr</div>
                                         </div>
                                     </div>
                                     <div class="flex items-center gap-1.5 shrink-0">
                                         <button type="button" onclick="openAdvanceModal('DEDUCTED', '${w.id}')" class="inline-flex items-center gap-1 bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-extrabold px-2.5 py-2 rounded-xl transition">
-                                            <i class="fa-solid fa-scissors"></i> किस्त काटें
+                                            <i class="fa-solid fa-scissors"></i> ${t('btn_deduct_inst')}
                                         </button>
                                         <a href="https://wa.me/91${w.phone}?text=${encodeURIComponent(slipMsg)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-semibold px-2.5 py-2 rounded-xl shadow-sm transition">
                                             <i class="fa-brands fa-whatsapp text-sm"></i> Slip
@@ -2962,21 +3166,21 @@
 
                                 <div class="grid grid-cols-3 gap-2 text-center">
                                     <div class="bg-slate-50 rounded-xl p-2 border border-slate-100">
-                                        <span class="text-[10px] font-semibold text-slate-400 block">कुल कमाई</span>
+                                        <span class="text-[10px] font-semibold text-slate-400 block">${t('card_gross')}</span>
                                         <span class="text-xs font-bold text-slate-800 mt-0.5 block">₹${grossPay.toLocaleString('en-IN')}</span>
                                     </div>
                                     <div class="bg-rose-50/70 rounded-xl p-2 border border-rose-100">
-                                        <span class="text-[10px] font-semibold text-rose-500 block">इस माह किस्त</span>
+                                        <span class="text-[10px] font-semibold text-rose-500 block">${t('card_month_inst')}</span>
                                         <span class="text-xs font-bold text-rose-600 mt-0.5 block">- ₹${mDeducted.toLocaleString('en-IN')}</span>
                                     </div>
                                     <div class="bg-amber-50/80 rounded-xl p-2 border border-amber-200/80">
-                                        <span class="text-[10px] font-semibold text-amber-700 block">बकाया एडवांस</span>
+                                        <span class="text-[10px] font-semibold text-amber-700 block">${t('card_rem_adv')}</span>
                                         <span class="text-xs font-extrabold text-amber-800 mt-0.5 block">₹${remainingAdvance.toLocaleString('en-IN')}</span>
                                     </div>
                                 </div>
 
                                 <div class="flex items-center justify-between pt-2 border-t border-slate-100">
-                                    <span class="text-xs font-semibold text-slate-500">नेट देय सैलरी (${selectedMonth}):</span>
+                                    <span class="text-xs font-semibold text-slate-500">${t('card_net_sal')} (${selectedMonth}):</span>
                                     <span class="px-3 py-1 rounded-xl border text-sm font-extrabold ${netBadgeClass}">
                                         ₹${netPay.toLocaleString('en-IN')}
                                     </span>
@@ -3000,31 +3204,31 @@
             const compLogs = db.auditLogs.filter(l => l.companyId === activeCompanyId);
 
             const classifyAuditLog = (text) => {
-                const t = (text || '').toLowerCase();
-                if (t.includes('एडवांस') || t.includes('खर्ची') || t.includes('advance')) {
+                const lt = (text || '').toLowerCase();
+                if (lt.includes('एडवांस') || lt.includes('खर्ची') || lt.includes('advance') || lt.includes('किस्त')) {
                     return {
                         type: 'ADVANCE',
-                        badge: 'खर्ची / एडवांस',
+                        badge: t('audit_badge_adv'),
                         badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
                         dotClass: 'bg-amber-500 ring-amber-100',
                         icon: 'fa-hand-holding-dollar text-amber-600',
                         cardBorder: 'border-amber-200/70 hover:border-amber-300'
                     };
                 }
-                if (t.includes('हटाया') || t.includes('deleted') || t.includes('delete')) {
+                if (lt.includes('हटाया') || lt.includes('deleted') || lt.includes('delete')) {
                     return {
                         type: 'WORKER',
-                        badge: 'वर्कर हटाया गया',
+                        badge: t('audit_badge_del'),
                         badgeClass: 'bg-rose-50 text-rose-700 border-rose-200',
                         dotClass: 'bg-rose-500 ring-rose-100',
                         icon: 'fa-user-minus text-rose-600',
                         cardBorder: 'border-rose-200/70 hover:border-rose-300'
                     };
                 }
-                if (t.includes('नया वर्कर') || t.includes('जोड़ा गया')) {
+                if (lt.includes('नया वर्कर') || lt.includes('जोड़ा गया')) {
                     return {
                         type: 'WORKER',
-                        badge: 'नया वर्कर',
+                        badge: t('audit_badge_add'),
                         badgeClass: 'bg-indigo-50 text-indigo-700 border-indigo-200',
                         dotClass: 'bg-indigo-600 ring-indigo-100',
                         icon: 'fa-user-plus text-indigo-600',
@@ -3033,7 +3237,7 @@
                 }
                 return {
                     type: 'ATTENDANCE',
-                    badge: 'हाज़िरी / OT अपडेट',
+                    badge: t('audit_badge_att'),
                     badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
                     dotClass: 'bg-emerald-500 ring-emerald-100',
                     icon: 'fa-calendar-check text-emerald-600',
@@ -3054,7 +3258,7 @@
 
             if (filteredLogs.length === 0) {
                 auditContainer.innerHTML = `
-                    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center -ml-6">
+                    <div class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center -ml-5">
                         <div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center text-lg mx-auto mb-2.5">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                         </div>
@@ -3067,7 +3271,7 @@
                     const meta = classifyAuditLog(log.text);
                     return `
                         <div class="relative bg-white rounded-2xl border ${meta.cardBorder} p-3.5 sm:p-4 shadow-xs transition group">
-                            <span class="absolute -left-[31px] top-4 w-3.5 h-3.5 rounded-full ${meta.dotClass} ring-4 shadow-xs"></span>
+                            <span class="absolute -left-[27px] top-4 w-3.5 h-3.5 rounded-full ${meta.dotClass} ring-4 shadow-xs"></span>
                             <div class="flex items-center justify-between gap-2 mb-1.5">
                                 <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${meta.badgeClass}">
                                     <i class="fa-solid ${meta.icon}"></i> ${meta.badge}
@@ -3417,17 +3621,17 @@
             if (type === 'DEDUCTED') {
                 btnDeduct.className = 'py-2 px-3 rounded-xl text-xs font-extrabold transition bg-emerald-600 text-white shadow-xs';
                 btnGiven.className = 'py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
-                amtLabel.innerText = 'किस्त कटौती राशि (₹ में)';
+                amtLabel.innerText = t('adv_amt_ded_lbl');
                 amtInput.placeholder = '5000';
                 submitBtn.className = 'bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm';
-                submitBtn.innerText = 'किस्त कटौती सेव करें';
+                submitBtn.innerText = t('adv_save_ded');
             } else {
                 btnGiven.className = 'py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs';
                 btnDeduct.className = 'py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900';
-                amtLabel.innerText = 'नया एडवांस राशि (₹ में)';
+                amtLabel.innerText = t('adv_amt_give_lbl');
                 amtInput.placeholder = '20000';
                 submitBtn.className = 'bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm';
-                submitBtn.innerText = 'नया एडवांस सेव करें';
+                submitBtn.innerText = t('adv_save_give');
             }
         }
 
@@ -3705,7 +3909,7 @@
             const calcGrossEl = document.getElementById('wd-calc-gross');
             const calcAdvEl = document.getElementById('wd-calc-adv');
             const calcNetEl = document.getElementById('wd-calc-net');
-            if (calcDaysEl) calcDaysEl.innerText = `${monthPresent} दिन • ${monthOt} OT`;
+            if (calcDaysEl) calcDaysEl.innerText = `${monthPresent} ${t('unit_days')} • ${monthOt} OT`;
             if (calcGrossEl) calcGrossEl.innerText = `₹${monthGrossEarnings.toLocaleString('en-IN')}`;
             if (calcAdvEl) calcAdvEl.innerText = `- ₹${advStats.monthDeducted.toLocaleString('en-IN')}`;
             if (calcNetEl) calcNetEl.innerText = `₹${monthNetBalance.toLocaleString('en-IN')}`;
@@ -3714,13 +3918,13 @@
             const advListEl = document.getElementById('wd-advance-list');
             if (advListEl) {
                 if (workerAdvances.length === 0) {
-                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">कोई एडवांस या किस्त रिकॉर्ड दर्ज नहीं है।</p>`;
+                    advListEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-3">—</p>`;
                 } else {
                     advListEl.innerHTML = workerAdvances.map(a => {
                         const isDeduction = (a.type || 'GIVEN') === 'DEDUCTED';
                         const rowStyle = isDeduction ? 'border-emerald-200/80 bg-emerald-50/40' : 'border-rose-200/80 bg-rose-50/40';
                         const badgeStyle = isDeduction ? 'text-emerald-700 bg-white border-emerald-200' : 'text-rose-600 bg-white border-rose-200';
-                        const typeLabel = isDeduction ? '✅ किस्त जमा (सैलरी से कटौती)' : '💰 नया एडवांस लिया';
+                        const typeLabel = isDeduction ? t('w_pb_paid') : t('w_pb_taken');
                         const sign = isDeduction ? '- ' : '+ ';
 
                         return `
@@ -3741,4 +3945,4 @@
         }
     </script>
 </body>
-                    </html>
+    </html>
