@@ -141,6 +141,18 @@
     <!-- ========================================== -->
     <div id="view-super_admin" class="role-view hidden max-w-7xl mx-auto p-4 sm:p-6 fade-in">
         
+        <div id="sa-restricted-box" class="hidden max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-8 mt-6 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 border border-rose-100">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span class="inline-block bg-rose-50 text-rose-700 text-[11px] font-extrabold px-3 py-0.5 rounded-full mb-2">404 • RESTRICTED ACCESS</span>
+            <h2 class="text-xl font-extrabold text-slate-900">पेज उपलब्ध नहीं है</h2>
+            <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">यह क्षेत्र केवल अधिकृत सिस्टम एडमिनिस्ट्रेटर के लिए सुरक्षित है।</p>
+            <button type="button" onclick="window.location.href=getBaseUrl()" class="mt-5 w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-xs transition">
+                मुख्य पोर्टल पर वापस जाएं
+            </button>
+        </div>
+
         <div id="sa-login-box" class="max-w-md mx-auto bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-8 mt-4">
             <div class="text-center mb-6">
                 <img src="icon-owner.png" alt="WorkTrack Owner" onerror="this.src='app-icon.png'" class="w-16 h-16 rounded-2xl object-cover mx-auto shadow-md mb-3 border border-slate-200">
@@ -2195,6 +2207,16 @@
             }
 
             if (appMode === 'owner') {
+                const secretKey = params.get('key');
+                const isBlocked = params.get('blocked') === '1';
+                const ua = navigator.userAgent || '';
+                const isAndroidApp = /Android/i.test(ua) && (
+                    /wv\)/i.test(ua) ||
+                    document.referrer.startsWith('android-app://') ||
+                    window.matchMedia('(display-mode: standalone)').matches ||
+                    window.matchMedia('(display-mode: fullscreen)').matches
+                );
+
                 if (headerBar) headerBar.className = 'bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950 text-white shadow-md px-4 py-3 sticky top-0 z-50 border-b border-amber-500/20';
                 if (headerIcon) headerIcon.src = 'icon-owner.png';
                 if (headerTitle) headerTitle.innerText = 'WorkTrack Owner';
@@ -2205,6 +2227,17 @@
                 }
                 const backBtn = document.getElementById('sa-back-btn-box');
                 if (backBtn) backBtn.classList.add('hidden');
+
+                // Block Desktop/Laptop browsers unless secret key (?key=WT9988) is present
+                if (isBlocked || (!isAndroidApp && secretKey !== 'WT9988')) {
+                    document.getElementById('sa-restricted-box').classList.remove('hidden');
+                    document.getElementById('sa-login-box').classList.add('hidden');
+                    document.getElementById('sa-dashboard-wrapper').classList.add('hidden');
+                    document.querySelectorAll('.role-view').forEach(el => el.classList.add('hidden'));
+                    document.getElementById('view-super_admin').classList.remove('hidden');
+                    return true;
+                }
+
                 switchRole('super_admin');
                 return true;
             } else if (appMode === 'admin') {
@@ -4054,4 +4087,4 @@
         }
     </script>
 </body>
-    </html>
+                            </html>
