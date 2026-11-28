@@ -1433,56 +1433,71 @@
             <form onsubmit="handleAddAdvance(event)" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_action_type_lbl">लेन-देन का प्रकार चुनें (Action Type)</label>
-                    <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl border border-slate-200">
-                        <button type="button" id="adv-type-btn-GIVEN" onclick="setAdvanceEntryType('GIVEN')" class="py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs">
-                            <i class="fa-solid fa-plus-circle mr-1"></i> <span data-i18n="adv_btn_give">नया एडवांस दें</span>
-                        </button>
-                        <button type="button" id="adv-type-btn-DEDUCTED" onclick="setAdvanceEntryType('DEDUCTED')" class="py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900">
-                            <i class="fa-solid fa-scissors mr-1"></i> <span data-i18n="adv_btn_deduct">किस्त काटें (Deduct)</span>
-                        </button>
-                    </div>
-                    <input type="hidden" id="adv-entry-type" value="GIVEN">
-                </div>
+                    <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- EDIT WORKER MODAL -->
+    <div id="modal-edit-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_select_worker">वर्कर चुनें</label>
-                    <select id="adv-worker-select" required onchange="updateAdvanceModalBalanceHint()" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white"></select>
-                    <div id="adv-modal-balance-hint" class="mt-1.5 text-[11px] font-semibold text-slate-600 bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-1.5 flex items-center justify-between">
-                        <span data-i18n="adv_curr_rem">वर्तमान बकाया एडवांस:</span>
-                        <span id="adv-modal-rem-val" class="font-extrabold text-rose-600">₹0</span>
-                    </div>
+                    <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-user-pen text-indigo-600 mr-1.5"></i><span data-i18n="modal_edit_w_title">वर्कर विवरण एडिट करें</span></h3>
+                    <p id="edit-w-id-badge" class="text-xs font-mono font-bold text-indigo-600 mt-0.5">ID: W-101</p>
                 </div>
-
+                <button type="button" onclick="closeModal('modal-edit-worker')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleEditWorker(event)" class="space-y-3.5">
+                <input type="hidden" id="edit-w-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="lbl_full_name">पूरा नाम</label>
+                    <input type="text" id="edit-w-name" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="lbl_dept">विभाग (Department)</label>
+                    <input type="text" id="edit-w-dept" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label id="adv-amount-label" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_amt_give_lbl">नया एडवांस राशि (₹ में)</label>
-                        <input type="number" id="adv-amount" required min="1" placeholder="20000" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">दैनिक मज़दूरी (₹ / दिन)</label>
+                        <input type="number" id="edit-w-daily-rate" required min="0" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold text-indigo-700">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_date_lbl">तारीख</label>
-                        <input type="date" id="adv-date" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">OT दर (₹ / घंटा)</label>
+                        <input type="number" id="edit-w-ot-rate" required min="0" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold text-amber-700">
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_note_lbl">विवरण / किस्त नोट (वैकल्पिक)</label>
-                    <input type="text" id="adv-note" data-i18n-placeholder="adv_note_ph" placeholder="उदा. ₹20,000 एडवांस या पहली किस्त कटौती" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-semibold text-slate-600" data-i18n="lbl_phone">मोबाइल (10 अंक)</label>
+                            <span id="edit-phone-digit-counter" class="text-[11px] font-mono font-semibold text-emerald-600">10/10</span>
+                        </div>
+                        <input type="tel" id="edit-w-phone" required maxlength="10" oninput="enforceEditTenDigitPhone(this)" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Password / PIN</label>
+                        <input type="text" id="edit-w-pass" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold">
+                    </div>
                 </div>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
-                    <button type="submit" id="adv-submit-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="adv_save_give">नया एडवांस सेव करें</button>
+                    <button type="button" onclick="closeModal('modal-edit-worker')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="btn_update_worker">बदलाव सेव करें</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- DELETE WORKER CONFIRMATION MODAL -->
     <div id="modal-delete-worker" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
-            <div class="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-3 border border-rose-100">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3 border border-rose-200">
                 <i class="fa-solid fa-trash-can"></i>
             </div>
             <h3 class="text-lg font-bold text-slate-900" data-i18n="del_w_title">वर्कर को हटाएं (Delete)?</h3>
-            <p id="del-worker-desc" class="text-xs text-slate-500 mt-1.5 leading-relaxed">क्या आप वाकई इस वर्कर को हटाना चाहते हैं?</p>
-            <div class="flex items-center justify-center gap-2.5 mt-5">
+            <p id="del-worker-desc" class="text-xs text-slate-500 mt-1.5 leading-relaxed"></p>
+            <div class="flex items-center gap-2.5 mt-5">
                 <button type="button" onclick="closeModal('modal-delete-worker')" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition" data-i18n="btn_cancel">रद्द करें</button>
                 <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
             </div>
@@ -1490,6 +1505,205 @@
     </div>
 
     <script>
+        // ============================================================
+        // FIREBASE INITIALIZATION & CORE SAAS STATE
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-WorkTrackSaaS-DemoKey",
+            authDomain: "worktrack-saas-b70ae.firebaseapp.com",
+            projectId: "worktrack-saas-b70ae",
+            storageBucket: "worktrack-saas-b70ae.appspot.com",
+            messagingSenderId: "102938475612",
+            appId: "1:102938475612:web:abcdef123456"
+        };
+
+        let firestore = null;
+        try {
+            if (typeof firebase !== 'undefined') {
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+                firestore = firebase.firestore();
+            }
+        } catch (err) {
+            console.warn("Running in local fallback mode:", err);
+            firestore = null;
+        }
+
+        function getToday() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function getPlusDays(days, baseDateStr = null) {
+            const base = baseDateStr ? new Date(baseDateStr + 'T00:00:00') : new Date();
+            base.setDate(base.getDate() + days);
+            const yyyy = base.getFullYear();
+            const mm = String(base.getMonth() + 1).padStart(2, '0');
+            const dd = String(base.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function formatExpiryInfo(expiryDateStr) {
+            const expStr = expiryDateStr || getPlusDays(30);
+            const todayMidnight = new Date(getToday() + 'T00:00:00');
+            const expMidnight = new Date(expStr + 'T00:00:00');
+            const diffDays = Math.round((expMidnight - todayMidnight) / (1000 * 60 * 60 * 24));
+            const parts = expStr.split('-');
+            const formattedDate = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : expStr;
+            return {
+                expStr,
+                formattedDate,
+                diffDays,
+                isExpired: diffDays < 0
+            };
+        }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const inp = document.getElementById(inputId);
+            if (!inp) return;
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                if (btn) btn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+            } else {
+                inp.type = 'password';
+                if (btn) btn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            }
+        }
+
+        const today = getToday();
+        const yesterday = getPlusDays(-1);
+
+        const PLANS = {
+            Starter: { price: 499, limit: 25, allFeatures: false },
+            Growth: { price: 999, limit: 100, allFeatures: true },
+            Business: { price: 1999, limit: 500, allFeatures: true }
+        };
+
+        let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
+        let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
+        let activeCompanyId = 'COMP-01';
+        let isCompanyAdminLoggedIn = false;
+        let loggedInWorkerId = null;
+        let sharedPortalMode = null;
+        let selectedLinksCompanyId = null;
+        let initialRouteHandled = false;
+        let activeAuditFilter = 'ALL';
+
+        const db = {
+            companies: [
+                {
+                    id: 'COMP-01',
+                    name: 'Apex Manufacturing Pvt Ltd',
+                    adminId: 'admin@apex',
+                    adminPass: '1234',
+                    plan: 'Growth',
+                    expiryDate: getPlusDays(24),
+                    status: 'Active',
+                    color: 'bg-indigo-600'
+                },
+                {
+                    id: 'COMP-02',
+                    name: 'Shree Balaji Construction',
+                    adminId: 'admin@balaji',
+                    adminPass: '1234',
+                    plan: 'Business',
+                    expiryDate: getPlusDays(15),
+                    status: 'Active',
+                    color: 'bg-emerald-600'
+                }
+            ],
+            workers: [
+                {
+                    id: 'W-101',
+                    companyId: 'COMP-01',
+                    name: 'राजेश कुमार',
+                    dept: 'Production',
+                    role: 'Machine Operator',
+                    phone: '9876543210',
+                    dailyRate: 600,
+                    otRate: 90,
+                    password: '1234',
+                    photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK'
+                },
+                {
+                    id: 'W-102',
+                    companyId: 'COMP-01',
+                    name: 'सुनील शर्मा',
+                    dept: 'Packaging',
+                    role: 'Supervisor',
+                    phone: '9876543211',
+                    dailyRate: 550,
+                    otRate: 80,
+                    password: '1234',
+                    photo: 'https://placehold.co/100x100/059669/ffffff?text=SS'
+                },
+                {
+                    id: 'W-201',
+                    companyId: 'COMP-02',
+                    name: 'अमित वर्मा',
+                    dept: 'Site Civil',
+                    role: 'Foreman',
+                    phone: '9876543212',
+                    dailyRate: 700,
+                    otRate: 100,
+                    password: '1234',
+                    photo: 'https://placehold.co/100x100/d97706/ffffff?text=AV'
+                }
+            ],
+            attendance: {
+                [`COMP-01_W-101_${today}`]: { companyId: 'COMP-01', workerId: 'W-101', date: today, status: 'Present', ot: 2 },
+                [`COMP-01_W-102_${today}`]: { companyId: 'COMP-01', workerId: 'W-102', date: today, status: 'Present', ot: 0 },
+                [`COMP-01_W-101_${yesterday}`]: { companyId: 'COMP-01', workerId: 'W-101', date: yesterday, status: 'Present', ot: 3.5 }
+            },
+            advances: [
+                { id: 'ADV-1', companyId: 'COMP-01', workerId: 'W-101', type: 'GIVEN', amount: 2000, date: yesterday, note: 'घर खर्ची एडवांस' },
+                { id: 'ADV-2', companyId: 'COMP-01', workerId: 'W-101', type: 'DEDUCTED', amount: 500, date: today, note: 'पहली किस्त कटौती' }
+            ],
+            auditLogs: [
+                {
+                    companyId: 'COMP-01',
+                    time: `${today} (09:30 AM)`,
+                    text: 'Admin ने राजेश कुमार (W-101) का रिकॉर्ड अपडेट किया: Status = Present, OT = 2 hrs'
+                }
+            ]
+        };
+
+        async function confirmDeleteWorker() {
+            if (!workerIdToDelete) return;
+            const worker = db.workers.find(w => w.id === workerIdToDelete);
+            if (!worker) {
+                closeModal('modal-delete-worker');
+                return;
+            }
+            const logObj = {
+                companyId: activeCompanyId,
+                time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
+                text: `Admin ने वर्कर ${worker.name} (${worker.id}) को हटाया (Deleted)`,
+                createdAt: Date.now()
+            };
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_workers').doc(workerIdToDelete).delete();
+                    await firestore.collection('wt_audit_logs').add(logObj);
+                } else {
+                    db.workers = db.workers.filter(w => w.id !== workerIdToDelete);
+                    db.auditLogs.unshift(logObj);
+                }
+                closeModal('modal-delete-worker');
+                renderCompanyAdmin();
+                showToast(`वर्कर ${worker.name} को हटा दिया गया है।`);
+            } catch (err) {
+                console.error(err);
+                showToast('वर्कर हटाने में त्रुटि!', true);
+            } finally {
+                workerIdToDelete = null;
+            }
+        }
+
         const TRANSLATIONS = {
             hi: {
                 role_super: "Super Admin (आप)",
@@ -1612,6 +1826,8 @@
                 adv_save_give: "नया एडवांस सेव करें",
                 adv_save_ded: "किस्त कटौती सेव करें",
                 modal_add_w_title: "नया वर्कर (Worker) जोड़ें",
+                modal_edit_w_title: "वर्कर विवरण एडिट करें",
+                btn_update_worker: "बदलाव सेव करें",
                 lbl_full_name: "पूरा नाम",
                 lbl_dept: "विभाग (Department)",
                 lbl_phone: "मोबाइल नंबर (10 अंक)",
@@ -1741,6 +1957,8 @@
                 adv_save_give: "Save New Advance",
                 adv_save_ded: "Save Installment Deduction",
                 modal_add_w_title: "Add New Worker",
+                modal_edit_w_title: "Edit Worker Details",
+                btn_update_worker: "Save Changes",
                 lbl_full_name: "Full Name",
                 lbl_dept: "Department",
                 lbl_phone: "Mobile Number (10 Digits)",
@@ -1870,6 +2088,8 @@
                 adv_save_give: "નવો એડવાન્સ સેવ કરો",
                 adv_save_ded: "હપ્તા કપાત સેવ કરો",
                 modal_add_w_title: "નવો વર્કર (Worker) ઉમેરો",
+                modal_edit_w_title: "વર્કરની વિગતો એડિટ કરો",
+                btn_update_worker: "ફેરફારો સેવ કરો",
                 lbl_full_name: "પૂરું નામ",
                 lbl_dept: "વિભાગ (Department)",
                 lbl_phone: "મોબાઇલ નંબર (10 અંક)",
@@ -2008,101 +2228,16 @@
             }
         }
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDjaUQX7cXwMWwscB0Yi1LZeJCbHnhbe6Y",
-            authDomain: "worktrack-saas-b70ae.firebaseapp.com",
-            projectId: "worktrack-saas-b70ae",
-            storageBucket: "worktrack-saas-b70ae.firebasestorage.app",
-            messagingSenderId: "179984418436",
-            appId: "1:179984418436:web:74b2dbf66086e84012e4d1",
-            measurementId: "G-GPNXDKLT3P"
-        };
+        function enforceEditTenDigitPhone(input) {
+            let cleaned = input.value.replace(/\D/g, '').slice(0, 10);
+            input.value = cleaned;
 
-        let firestore = null;
-        try {
-            if (typeof firebase !== 'undefined') {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                }
-                firestore = firebase.firestore();
-            }
-        } catch (err) {
-            console.error("Firebase init error:", err);
-        }
-
-        // Local-timezone safe YYYY-MM-DD formatter (prevents UTC date shift bugs)
-        function formatLocalYYYYMMDD(dateObj) {
-            const y = dateObj.getFullYear();
-            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-            const d = String(dateObj.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        const getToday = () => formatLocalYYYYMMDD(new Date());
-        const getYesterday = () => {
-            const d = new Date();
-            d.setDate(d.getDate() - 1);
-            return formatLocalYYYYMMDD(d);
-        };
-        const getPlusDays = (days, baseDateStr = null) => {
-            const d = baseDateStr ? new Date(baseDateStr + 'T00:00:00') : new Date();
-            d.setDate(d.getDate() + days);
-            return formatLocalYYYYMMDD(d);
-        };
-
-        const today = getToday();
-        const yesterday = getYesterday();
-        const defaultExpiry = getPlusDays(30);
-
-        // True day-by-day countdown calculator based on stored company expiryDate
-        function formatExpiryInfo(expiryDateStr) {
-            const expStr = (expiryDateStr && /^\d{4}-\d{2}-\d{2}$/.test(expiryDateStr)) ? expiryDateStr : defaultExpiry;
-            const todayDate = new Date(getToday() + 'T00:00:00');
-            const expDate = new Date(expStr + 'T00:00:00');
-            const diffDays = Math.round((expDate - todayDate) / (1000 * 60 * 60 * 24));
-            const formattedDate = expDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            return { expStr, formattedDate, diffDays, isExpired: diffDays < 0 };
-        }
-
-        const PLANS = {
-            'Starter': { limit: 25, price: 499, color: 'bg-slate-100 text-slate-700', allFeatures: false },
-            'Growth': { limit: 100, price: 999, color: 'bg-indigo-50 text-indigo-700', allFeatures: true },
-            'Business': { limit: 500, price: 1999, color: 'bg-purple-50 text-purple-700', allFeatures: true }
-        };
-
-        let db = {
-            companies: [
-                { id: 'COMP-01', name: 'Apex Construction Pvt Ltd', slug: 'apex', adminId: 'admin@apex', adminPass: '1234', plan: 'Growth', expiryDate: defaultExpiry, status: 'Active', color: 'bg-indigo-600' },
-                { id: 'COMP-02', name: 'Bharat Auto Parts Ltd', slug: 'bharat', adminId: 'admin@bharat', adminPass: '1234', plan: 'Starter', expiryDate: defaultExpiry, status: 'Active', color: 'bg-emerald-600' }
-            ],
-            workers: [
-                { id: 'W-101', companyId: 'COMP-01', name: 'रमेश कुमार', dept: 'Fabrication', role: 'Senior Welder', phone: '9811223344', password: '123', photo: 'https://placehold.co/100x100/4f46e5/ffffff?text=RK' },
-                { id: 'W-102', companyId: 'COMP-01', name: 'सुनील शर्मा', dept: 'Civil', role: 'Site Supervisor', phone: '9822334455', password: '123', photo: 'https://placehold.co/100x100/0284c7/ffffff?text=SS' },
-                { id: 'W-201', companyId: 'COMP-02', name: 'मनोज सिंह', dept: 'Assembly', role: 'Machine Operator', phone: '9844556677', password: '123', photo: 'https://placehold.co/100x100/059669/ffffff?text=MS' }
-            ],
-            attendance: {},
-            advances: [],
-            auditLogs: []
-        };
-
-        let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
-        let isSuperAdminUnlocked = sessionStorage.getItem('wt_sa_unlocked') === 'true';
-        let activeCompanyId = 'COMP-01';
-        let isCompanyAdminLoggedIn = false;
-        let loggedInWorkerId = null;
-        let sharedPortalMode = null;
-        let selectedLinksCompanyId = null;
-        let initialRouteHandled = false;
-        let activeAuditFilter = 'ALL';
-
-        function togglePasswordVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
-            } else {
-                input.type = 'password';
-                btn.innerHTML = '<i class="fa-regular fa-eye"></i>';
+            const counter = document.getElementById('edit-phone-digit-counter');
+            if (counter) {
+                counter.innerText = `${cleaned.length}/10`;
+                counter.className = cleaned.length === 10
+                    ? 'text-[11px] font-mono font-bold text-emerald-600'
+                    : 'text-[11px] font-mono font-semibold text-rose-500';
             }
         }
 
@@ -2991,6 +3126,48 @@
             }
         }
 
+        function openEditCompanyModal(compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            document.getElementById('edit-comp-id').value = comp.id;
+            document.getElementById('edit-comp-id-badge').innerText = `Tenant ID: ${comp.id}`;
+            document.getElementById('edit-comp-name').value = comp.name || '';
+            document.getElementById('edit-comp-admin-id').value = comp.adminId || '';
+            document.getElementById('edit-comp-admin-pass').value = comp.adminPass || '';
+            document.getElementById('edit-comp-plan').value = comp.plan || 'Growth';
+            document.getElementById('edit-comp-expiry').value = comp.expiryDate || getPlusDays(30);
+            openModal('modal-edit-company');
+        }
+
+        async function handleEditCompany(e) {
+            e.preventDefault();
+            const compId = document.getElementById('edit-comp-id').value;
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+
+            const name = document.getElementById('edit-comp-name').value.trim();
+            const adminId = document.getElementById('edit-comp-admin-id').value.trim();
+            const adminPass = document.getElementById('edit-comp-admin-pass').value.trim();
+            const plan = document.getElementById('edit-comp-plan').value;
+            const expiryDate = document.getElementById('edit-comp-expiry').value || comp.expiryDate;
+
+            const updatedFields = { name, adminId, adminPass, plan, expiryDate };
+
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update(updatedFields);
+                } else {
+                    Object.assign(comp, updatedFields);
+                }
+                closeModal('modal-edit-company');
+                renderSuperAdmin();
+                showToast(`कंपनी "${name}" की सभी डिटेल्स सफलतापूर्वक अपडेट हो गईं!`);
+            } catch (err) {
+                console.error(err);
+                showToast('कंपनी विवरण अपडेट करने में त्रुटि!', true);
+            }
+        }
+
         function inspectCompany(compId) {
             activeCompanyId = compId;
             isCompanyAdminLoggedIn = true;
@@ -3305,8 +3482,11 @@
                         </td>
                         <td class="py-3.5 px-5 text-slate-600 font-mono text-xs whitespace-nowrap">${w.phone}</td>
                         <td class="py-3.5 px-5 text-right whitespace-nowrap space-x-1.5">
+                            <button type="button" onclick="openEditWorkerModal('${w.id}')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1" title="वर्कर एडिट करें (Edit)">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
                             <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} की Login डिटेल्स")' class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-semibold px-3 py-1.5 rounded-lg transition inline-flex items-center gap-1.5">
-                                <i class="fa-regular fa-copy"></i> Copy Login
+                                <i class="fa-regular fa-copy"></i> Copy
                             </button>
                             <button type="button" onclick="openDeleteWorkerModal('${w.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold px-2.5 py-1.5 rounded-lg transition inline-flex items-center gap-1" title="वर्कर हटाएं">
                                 <i class="fa-solid fa-trash-can"></i>
@@ -3323,10 +3503,13 @@
                                     <img src="${w.photo}" class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0">
                                     <div class="min-w-0">
                                         <div class="font-bold text-slate-900 text-sm truncate">${w.name}</div>
-                                        <div class="text-[11px] text-slate-500 truncate">${w.dept} • ₹${w.dailyRate || 500}/दिन</div>
+                                        <div class="text-[11px] text-slate-500 truncate">${w.dept} • ₹${w.dailyRate || 500}/दिन • OT ₹${w.otRate || 75}/hr</div>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick="openEditWorkerModal('${w.id}')" class="text-[11px] bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </button>
                                     <button type="button" onclick='copyRawText(${JSON.stringify(shareMsg)}, "${w.name} की Login डिटेल्स")' class="text-[11px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-2.5 py-1.5 rounded-xl shadow-sm transition flex items-center gap-1">
                                         <i class="fa-regular fa-copy"></i> Copy
                                     </button>
@@ -3740,33 +3923,81 @@
             openModal('modal-delete-worker');
         }
 
-        async function confirmDeleteWorker() {
-            if (!workerIdToDelete) return;
-            const worker = db.workers.find(w => w.id === workerIdToDelete);
-            const wName = worker ? worker.name : workerIdToDelete;
-            const wId = workerIdToDelete;
+        function openEditWorkerModal(workerId) {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! वर्कर एडिट नहीं कर सकते।', true);
+                return;
+            }
+            const worker = db.workers.find(w => w.id === workerId);
+            if (!worker) return;
+
+            document.getElementById('edit-w-id').value = worker.id;
+            document.getElementById('edit-w-id-badge').innerText = `Worker ID: ${worker.id}`;
+            document.getElementById('edit-w-name').value = worker.name || '';
+            document.getElementById('edit-w-dept').value = worker.dept || '';
+            document.getElementById('edit-w-daily-rate').value = worker.dailyRate !== undefined ? worker.dailyRate : 500;
+            document.getElementById('edit-w-ot-rate').value = worker.otRate !== undefined ? worker.otRate : 75;
+            document.getElementById('edit-w-pass').value = worker.password || '';
+
+            const phoneInput = document.getElementById('edit-w-phone');
+            phoneInput.value = (worker.phone || '').replace(/\D/g, '').slice(0, 10);
+            enforceEditTenDigitPhone(phoneInput);
+
+            openModal('modal-edit-worker');
+        }
+
+        async function handleEditWorker(e) {
+            e.preventDefault();
+            const workerId = document.getElementById('edit-w-id').value;
+            const worker = db.workers.find(w => w.id === workerId);
+            if (!worker) return;
+
+            const name = document.getElementById('edit-w-name').value.trim();
+            const dept = document.getElementById('edit-w-dept').value.trim();
+            const dailyRate = parseFloat(document.getElementById('edit-w-daily-rate').value) || 0;
+            const otRate = parseFloat(document.getElementById('edit-w-ot-rate').value) || 0;
+            const phone = document.getElementById('edit-w-phone').value.replace(/\D/g, '').trim();
+            const password = document.getElementById('edit-w-pass').value.trim();
+
+            if (!/^\d{10}$/.test(phone)) {
+                showToast('कृपया ठीक 10 अंकों का सही मोबाइल नंबर डालें!', true);
+                document.getElementById('edit-w-phone').focus();
+                return;
+            }
+
+            const initials = name.substring(0, 2).toUpperCase();
+            const updatedFields = {
+                name,
+                dept,
+                dailyRate,
+                otRate,
+                phone,
+                password,
+                photo: `https://placehold.co/100x100/4f46e5/ffffff?text=${initials}`
+            };
 
             const logObj = {
                 companyId: activeCompanyId,
                 time: `${today} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`,
-                text: `Admin ने वर्कर को हटाया (Deleted): ${wName} (ID: ${wId})`,
+                text: `Admin ने वर्कर ${name} (${workerId}) की डिटेल अपडेट की: ₹${dailyRate}/दिन, OT ₹${otRate}/hr, विभाग: ${dept}`,
                 createdAt: Date.now()
             };
 
             try {
                 if (firestore) {
-                    await firestore.collection('wt_workers').doc(wId).delete();
+                    await firestore.collection('wt_workers').doc(workerId).update(updatedFields);
                     await firestore.collection('wt_audit_logs').add(logObj);
                 } else {
-                    db.workers = db.workers.filter(w => w.id !== wId);
+                    Object.assign(worker, updatedFields);
                     db.auditLogs.unshift(logObj);
                 }
-                workerIdToDelete = null;
-                closeModal('modal-delete-worker');
-                showToast(`वर्कर ${wName} (${wId}) को सफलतापूर्वक हटा दिया गया है!`);
+                closeModal('modal-edit-worker');
+                renderCompanyAdmin();
+                showToast(`${name} (${workerId}) की नई सैलरी, OT दर और विवरण लाइव अपडेट हो गए!`);
             } catch (err) {
                 console.error(err);
-                showToast('वर्कर हटाने में त्रुटि!', true);
+                showToast('वर्कर डिटेल अपडेट करने में त्रुटि!', true);
             }
         }
 
@@ -4300,4 +4531,4 @@
         }
     </script>
 </body>
-                    </html>
+                                                                    </html>
