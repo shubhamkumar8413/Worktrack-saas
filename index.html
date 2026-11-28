@@ -289,7 +289,7 @@
                             <span id="sa-plan-count-growth" class="text-lg font-extrabold text-indigo-700 mt-0.5 block">0</span>
                         </div>
                         <div class="bg-amber-50/70 rounded-xl p-2.5 border border-amber-200/70">
-                            <span class="text-[10px] font-bold text-amber-700 block">Business (₹1,999)</span>
+                            <span class="text-[10px] font-bold text-amber-700 block">Business (₹1,399)</span>
                             <span id="sa-plan-count-business" class="text-lg font-extrabold text-amber-700 mt-0.5 block">0</span>
                         </div>
                     </div>
@@ -1307,7 +1307,7 @@
                         <select id="new-comp-plan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
                             <option value="Starter">Starter - ₹499/माह</option>
                             <option value="Growth" selected>Growth - ₹999/माह</option>
-                            <option value="Business">Business - ₹1,999/माह</option>
+                            <option value="Business">Business - ₹1,399/माह</option>
                         </select>
                     </div>
                     <div>
@@ -1355,7 +1355,7 @@
                         <select id="edit-comp-plan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
                             <option value="Starter">Starter - ₹499/माह</option>
                             <option value="Growth">Growth - ₹999/माह</option>
-                            <option value="Business">Business - ₹1,999/माह</option>
+                            <option value="Business">Business - ₹1,399/माह</option>
                         </select>
                     </div>
                     <div>
@@ -1674,7 +1674,7 @@
         const PLANS = {
             Starter: { price: 499, limit: 25, allFeatures: false },
             Growth: { price: 999, limit: 100, allFeatures: true },
-            Business: { price: 1999, limit: 500, allFeatures: true }
+            Business: { price: 1399, limit: 500, allFeatures: true }
         };
 
         let superAdminPassword = localStorage.getItem('wt_sa_pass') || 'admin@1234';
@@ -1851,7 +1851,7 @@
                 th_mobile: "मोबाइल नंबर",
                 th_actions: "एक्शन",
                 pay_lock_title: "सैलरी कैलकुलेटर और खर्ची (Advance)",
-                pay_lock_desc: "यह प्रीमियम फीचर Growth (₹999/माह) और Business (₹1,999/माह) प्लान में उपलब्ध है।",
+                pay_lock_desc: "यह प्रीमियम फीचर Growth (₹999/माह) और Business (₹1,399/माह) प्लान में उपलब्ध है।",
                 pay_title: "मासिक सैलरी और एडवांस किस्त (Installment) हिसाब",
                 pay_sub: "ऑटो सैलरी = कुल कमाई − इस माह की एडवांस कटौती (बकाया एडवांस अलग से ट्रैक होता है)",
                 btn_adv_manage: "एडवांस दें / किस्त काटें",
@@ -1982,7 +1982,7 @@
                 th_mobile: "Mobile Number",
                 th_actions: "Actions",
                 pay_lock_title: "Salary Calculator & Advance Tracker",
-                pay_lock_desc: "This premium feature is available in Growth (₹999/mo) and Business (₹1,999/mo) plans.",
+                pay_lock_desc: "This premium feature is available in Growth (₹999/mo) and Business (₹1,399/mo) plans.",
                 pay_title: "Monthly Salary & Advance Installment Ledger",
                 pay_sub: "Net Salary = Gross Earnings − Monthly Installment Deduction (Remaining advance tracked separately)",
                 btn_adv_manage: "Give Advance / Deduct EMI",
@@ -2113,7 +2113,7 @@
                 th_mobile: "મોબાઇલ નંબર",
                 th_actions: "એક્શન",
                 pay_lock_title: "પગાર કેલ્ક્યુલેટર અને ખર્ચી (Advance)",
-                pay_lock_desc: "આ પ્રીમિયમ ફીચર Growth (₹999/માસ) અને Business (₹1,999/માસ) પ્લાનમાં ઉપલબ્ધ છે.",
+                pay_lock_desc: "આ પ્રીમિયમ ફીચર Growth (₹999/માસ) અને Business (₹1,399/માસ) પ્લાનમાં ઉપલબ્ધ છે.",
                 pay_title: "માસિક પગાર અને એડવાન્સ હપ્તા (Installment) હિસાબ",
                 pay_sub: "ઓટો પગાર = કુલ કમાણી − આ મહિનાનો હપ્તો (બાકી એડવાન્સ અલગથી ટ્રેક થાય છે)",
                 btn_adv_manage: "એડવાન્સ આપો / હપ્તો કાપો",
@@ -2995,7 +2995,7 @@
                         <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="px-2.5 py-1 rounded-lg text-xs font-semibold border border-slate-200 bg-white block">
                             <option value="Starter" ${comp.plan === 'Starter' ? 'selected' : ''}>Starter (₹499)</option>
                             <option value="Growth" ${comp.plan === 'Growth' ? 'selected' : ''}>Growth (₹999)</option>
-                            <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
+                            <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,399)</option>
                         </select>
                         <div class="flex items-center gap-1.5">
                             <input type="date" value="${exp.expStr}" onchange="changeCompanyExpiry('${comp.id}', this.value)" class="border border-slate-200 rounded-md px-1.5 py-0.5 text-[11px] font-mono text-slate-700 bg-slate-50">
@@ -3085,7 +3085,7 @@
                                     <select onchange="changeCompanyPlan('${comp.id}', this.value)" class="mt-0.5 w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
                                         <option value="Starter" ${comp.plan === 'Starter' ? 'selected' : ''}>Starter (₹499)</option>
                                         <option value="Growth" ${comp.plan === 'Growth' ? 'selected' : ''}>Growth (₹999)</option>
-                                        <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
+                                        <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,399)</option>
                                     </select>
                                 </div>
                                 <div>
@@ -4307,7 +4307,7 @@
         function sendWhatsAppAttendance(workerId) {
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (!PLANS[comp.plan].allFeatures) {
-                showToast('WhatsApp शेयर फीचर Growth (₹999) और Business (₹1,999) प्लान में उपलब्ध है!', true);
+                showToast('WhatsApp शेयर फीचर Growth (₹999) और Business (₹1,399) प्लान में उपलब्ध है!', true);
                 return;
             }
             const w = db.workers.find(x => x.id === workerId);
@@ -4702,4 +4702,4 @@
         }
     </script>
 </body>
-                                        </html>
+                                                                    </html>
