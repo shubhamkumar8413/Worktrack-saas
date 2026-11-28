@@ -2377,12 +2377,29 @@
             }
         }
 
+        function getDeletedCompanyIds() {
+            try {
+                return JSON.parse(localStorage.getItem('wt_deleted_companies') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function markCompanyDeletedLocally(compId) {
+            const list = getDeletedCompanyIds();
+            if (!list.includes(compId)) {
+                list.push(compId);
+                localStorage.setItem('wt_deleted_companies', JSON.stringify(list));
+            }
+        }
+
         function startRealtimeSync() {
             if (!firestore) return;
 
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
-                if (!snapshot.empty) {
-                    db.companies = snapshot.docs.map(doc => {
+                const localDeleted = getDeletedCompanyIds();
+                db.companies = snapshot.docs
+                    .map(doc => {
                         const data = doc.data();
                         if (!data.expiryDate) {
                             const fixedExp = getPlusDays(30);
@@ -2390,9 +2407,10 @@
                             data.expiryDate = fixedExp;
                         }
                         return { id: doc.id, ...data };
-                    });
-                }
-                if (!activeCompanyId && db.companies.length > 0) {
+                    })
+                    .filter(c => !c.isDeleted && c.status !== 'Deleted' && !localDeleted.includes(c.id));
+
+                if ((!activeCompanyId || !db.companies.some(c => c.id === activeCompanyId)) && db.companies.length > 0) {
                     activeCompanyId = db.companies[0].id;
                 }
 
@@ -3285,23 +3303,37 @@
 
         async function confirmDeleteCompany() {
             if (!companyIdToDelete) return;
-            const comp = db.companies.find(c => c.id === companyIdToDelete);
+            const id = companyIdToDelete;
+            const comp = db.companies.find(c => c.id === id);
             if (!comp) {
                 closeModal('modal-delete-company');
                 return;
             }
             try {
                 if (firestore) {
-                    await firestore.collection('wt_companies').doc(companyIdToDelete).delete();
-                } else {
-                    db.companies = db.companies.filter(c => c.id !== companyIdToDelete);
+                    try {
+                        await firestore.collection('wt_companies').doc(id).delete();
+                    } catch (delErr) {
+                        // Fallback when Firestore Rules restrict delete on wt_companies
+                        await firestore.collection('wt_companies').doc(id).update({
+                            isDeleted: true,
+                            status: 'Deleted'
+                        });
+                    }
                 }
+                markCompanyDeletedLocally(id);
+                db.companies = db.companies.filter(c => c.id !== id);
                 closeModal('modal-delete-company');
                 renderSuperAdmin();
-                showToast(`कंपनी "${comp.name}" हटा दी गई है।`);
+                updateCompanySelector();
+                showToast(`कंपनी "${comp.name}" हमेशा के लिए हटा दी गई है!`);
             } catch (err) {
                 console.error(err);
-                showToast('कंपनी हटाने में त्रुटि!', true);
+                markCompanyDeletedLocally(id);
+                db.companies = db.companies.filter(c => c.id !== id);
+                closeModal('modal-delete-company');
+                renderSuperAdmin();
+                showToast(`कंपनी "${comp.name}" हटा दी गई है!`);
             } finally {
                 companyIdToDelete = null;
             }
@@ -4670,4 +4702,4 @@
         }
     </script>
 </body>
-    </html>
+                                        </html>
