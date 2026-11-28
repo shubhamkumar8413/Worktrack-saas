@@ -315,7 +315,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
-                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, +30 दिन Renew करें, लिंक कॉपी करें या पैनल खोलें</p>
+                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान, ID/Password व एक्सपायरी डेट एडिट करें, +30 दिन Renew करें या लिंक शेयर करें</p>
                             </div>
                             <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
                                 <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
@@ -1371,6 +1371,21 @@
         </div>
     </div>
 
+    <!-- DELETE COMPANY CONFIRMATION MODAL (SUPER ADMIN) -->
+    <div id="modal-delete-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-xl fade-in text-center">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl mx-auto mb-3 border border-rose-200">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">कंपनी को हमेशा के लिए हटाएं?</h3>
+            <p id="del-company-desc" class="text-xs text-slate-500 mt-1.5 leading-relaxed"></p>
+            <div class="flex items-center gap-2.5 mt-5">
+                <button type="button" onclick="closeModal('modal-delete-company')" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">रद्द करें</button>
+                <button type="button" onclick="confirmDeleteCompany()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition">हाँ, Delete करें</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-2">
@@ -1481,8 +1496,39 @@
             <form onsubmit="handleAddAdvance(event)" class="space-y-3.5">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_action_type_lbl">लेन-देन का प्रकार चुनें (Action Type)</label>
-                    <button type="button" onclick="confirmDeleteWorker()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 shadow-sm transition" data-i18n="btn_confirm_delete">हाँ, Delete करें</button>
-            </div>
+                    <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl">
+                        <button type="button" id="adv-type-btn-GIVEN" onclick="setAdvanceEntryType('GIVEN')" class="py-2 px-3 rounded-xl text-xs font-extrabold transition bg-amber-600 text-white shadow-xs" data-i18n="adv_btn_give">नया एडवांस दें</button>
+                        <button type="button" id="adv-type-btn-DEDUCTED" onclick="setAdvanceEntryType('DEDUCTED')" class="py-2 px-3 rounded-xl text-xs font-bold transition text-slate-600 hover:text-slate-900" data-i18n="adv_btn_deduct">किस्त काटें (Deduct)</button>
+                    </div>
+                    <input type="hidden" id="adv-entry-type" value="GIVEN">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_select_worker">वर्कर चुनें</label>
+                    <select id="adv-worker-select" onchange="updateAdvanceModalBalanceHint()" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm bg-white"></select>
+                    <div id="adv-modal-rem-hint" class="mt-1.5 text-[11px] bg-amber-50 border border-amber-200/80 text-amber-900 px-3 py-1.5 rounded-xl font-semibold flex items-center justify-between">
+                        <span data-i18n="adv_curr_rem">वर्तमान बकाया एडवांस:</span>
+                        <span id="adv-modal-rem-val" class="font-extrabold">₹0</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label id="adv-amount-label" class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_amt_give_lbl">नया एडवांस राशि (₹ में)</label>
+                        <input type="number" id="adv-amount" required min="1" placeholder="500" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_date_lbl">तारीख</label>
+                        <input type="date" id="adv-date" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1" data-i18n="adv_note_lbl">विवरण / किस्त नोट (वैकल्पिक)</label>
+                    <input type="text" id="adv-note" data-i18n-placeholder="adv_note_ph" placeholder="उदा. ₹20,000 एडवांस या पहली किस्त कटौती" class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-add-advance')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100" data-i18n="btn_cancel">रद्द करें</button>
+                    <button type="submit" id="adv-submit-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm" data-i18n="adv_save_give">नया एडवांस सेव करें</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -1638,6 +1684,7 @@
         let loggedInWorkerId = null;
         let sharedPortalMode = null;
         let selectedLinksCompanyId = null;
+        let companyIdToDelete = null;
         let initialRouteHandled = false;
         let activeAuditFilter = 'ALL';
 
@@ -2337,7 +2384,6 @@
                 if (!snapshot.empty) {
                     db.companies = snapshot.docs.map(doc => {
                         const data = doc.data();
-                        // Persist a fixed expiryDate in Firestore if an older record lacked one so it counts down daily!
                         if (!data.expiryDate) {
                             const fixedExp = getPlusDays(30);
                             firestore.collection('wt_companies').doc(doc.id).update({ expiryDate: fixedExp }).catch(() => {});
@@ -2976,7 +3022,7 @@
                             ${comp.status === 'Suspended' ? 'Suspended' : (exp.isExpired ? 'Expired' : 'Active')}
                         </span>
                     </td>
-                    <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                    <td class="py-4 px-6 text-right space-x-1 whitespace-nowrap">
                         <button type="button" onclick="openEditCompanyModal('${comp.id}')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold px-2.5 py-1.5 rounded-lg transition inline-flex items-center gap-1" title="कंपनी डिटेल एडिट करें">
                             <i class="fa-solid fa-pen-to-square"></i> Edit
                         </button>
@@ -2985,6 +3031,9 @@
                         </button>
                         <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="text-xs border border-slate-200 hover:bg-slate-100 text-slate-600 font-semibold px-2.5 py-1.5 rounded-lg transition">
                             ${comp.status === 'Active' ? 'Suspend' : 'Activate'}
+                        </button>
+                        <button type="button" onclick="openDeleteCompanyModal('${comp.id}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold px-2.5 py-1.5 rounded-lg transition" title="कंपनी Delete करें">
+                            <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
                 `;
@@ -3047,8 +3096,11 @@
                                 <button type="button" onclick="inspectCompany('${comp.id}')" class="flex-1 bg-slate-900 hover:bg-slate-800 text-white py-2 rounded-xl text-xs font-bold transition">
                                     पैनल खोलें
                                 </button>
-                                <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold border ${comp.status === 'Active' ? 'border-rose-200 text-rose-600 bg-rose-50/50' : 'border-emerald-200 text-emerald-700 bg-emerald-50/50'}">
+                                <button type="button" onclick="toggleCompanyStatus('${comp.id}')" class="px-3 py-2 rounded-xl text-xs font-bold border ${comp.status === 'Active' ? 'border-amber-200 text-amber-700 bg-amber-50/50' : 'border-emerald-200 text-emerald-700 bg-emerald-50/50'}">
                                     ${comp.status === 'Active' ? 'Suspend' : 'Activate'}
+                                </button>
+                                <button type="button" onclick="openDeleteCompanyModal('${comp.id}')" class="px-3 py-2 rounded-xl text-xs font-bold border border-rose-200 text-rose-600 bg-rose-50 hover:bg-rose-100 transition" title="Delete Company">
+                                    <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </div>
                         </div>
@@ -3092,7 +3144,6 @@
             const comp = db.companies.find(c => c.id === compId);
             if (!comp) return;
             const currentExp = formatExpiryInfo(comp.expiryDate);
-            // If already expired, add 30 days from today; otherwise extend 30 days from current expiry date
             const baseStr = currentExp.isExpired ? getToday() : currentExp.expStr;
             const nextExpiry = getPlusDays(30, baseStr);
             try {
@@ -3221,6 +3272,38 @@
             } catch (err) {
                 console.error(err);
                 showToast('कंपनी विवरण अपडेट करने में त्रुटि!', true);
+            }
+        }
+
+        function openDeleteCompanyModal(compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            companyIdToDelete = compId;
+            document.getElementById('del-company-desc').innerHTML = `क्या आप वाकई <strong>${comp.name}</strong> (<span class="font-mono font-bold text-slate-700">${comp.adminId}</span>) को हमेशा के लिए हटाना चाहते हैं?`;
+            openModal('modal-delete-company');
+        }
+
+        async function confirmDeleteCompany() {
+            if (!companyIdToDelete) return;
+            const comp = db.companies.find(c => c.id === companyIdToDelete);
+            if (!comp) {
+                closeModal('modal-delete-company');
+                return;
+            }
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(companyIdToDelete).delete();
+                } else {
+                    db.companies = db.companies.filter(c => c.id !== companyIdToDelete);
+                }
+                closeModal('modal-delete-company');
+                renderSuperAdmin();
+                showToast(`कंपनी "${comp.name}" हटा दी गई है।`);
+            } catch (err) {
+                console.error(err);
+                showToast('कंपनी हटाने में त्रुटि!', true);
+            } finally {
+                companyIdToDelete = null;
             }
         }
 
@@ -4587,4 +4670,4 @@
         }
     </script>
 </body>
-                </html>
+    </html>
