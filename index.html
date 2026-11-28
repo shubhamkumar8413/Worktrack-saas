@@ -358,22 +358,31 @@
             <!-- SA TAB 3: REVENUE -->
             <div id="sa-content-revenue" class="sa-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-emerald-400/20">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
-                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300">कुल मासिक आवर्ती आय (MRR)</span>
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-300" data-i18n="sa_rev_title">कुल मासिक आवर्ती आय (MRR)</span>
                             <h2 id="sa-rev-mrr-big" class="text-3xl font-extrabold text-white mt-1">₹0 / माह</h2>
                             <p id="sa-rev-arr-sub" class="text-xs text-emerald-200 mt-1">वार्षिक अनुमानित आय (ARR): ₹0</p>
                         </div>
-                        <button type="button" onclick="exportAllTenantsCSV()" class="bg-white/15 hover:bg-white/25 text-white border border-white/20 px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-csv text-emerald-300"></i> CSV रिपोर्ट
-                        </button>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="bg-white/10 border border-white/20 rounded-xl px-2.5 py-1.5 flex items-center gap-1.5">
+                                <i class="fa-regular fa-calendar text-emerald-300 text-xs"></i>
+                                <input type="month" id="sa-month-picker" onchange="renderSuperAdmin()" class="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer">
+                            </div>
+                            <button type="button" onclick="exportAllTenantsCSV()" class="bg-white/15 hover:bg-white/25 text-white border border-white/20 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-file-csv text-emerald-300"></i> CSV रिपोर्ट
+                            </button>
+                        </div>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm space-y-3">
-                    <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                        <i class="fa-solid fa-layer-group text-amber-500"></i> प्लान-वार मासिक आय विवरण
-                    </h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+                            <i class="fa-solid fa-layer-group text-amber-500"></i> <span data-i18n="sa_rev_breakdown_title">प्लान-वार मासिक आय व गतिविधि विवरण</span>
+                        </h3>
+                        <span id="sa-rev-selected-month-badge" class="text-[11px] font-bold bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full"></span>
+                    </div>
                     <div id="sa-revenue-breakdown" class="space-y-2.5"></div>
                 </div>
             </div>
@@ -656,9 +665,9 @@
                 <div onclick="switchCaTab('payroll')" class="cursor-pointer bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm hover:border-indigo-300 transition">
                     <div class="flex items-center justify-between mb-3">
                         <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-wallet text-indigo-600"></i> इस माह का सैलरी व खर्ची सारांश
+                            <i class="fa-solid fa-wallet text-indigo-600"></i> <span id="ca-home-month-summary-title">इस माह का सैलरी व खर्ची सारांश</span>
                         </h3>
-                        <span class="text-[11px] font-semibold text-indigo-600">पूरा हिसाब देखें →</span>
+                        <span class="text-[11px] font-semibold text-indigo-600">पुराना महीना / हिसाब देखें →</span>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="bg-slate-50 rounded-xl p-3 border border-slate-100">
@@ -732,7 +741,10 @@
                                 <i class="fa-solid fa-check-double mr-1"></i> <span data-i18n="btn_mark_all">चुने हुए Present करें</span>
                             </button>
                             <button type="button" onclick="exportCSV()" class="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
-                                <i class="fa-solid fa-file-excel text-emerald-600 mr-1"></i> <span data-i18n="btn_export">Excel/CSV रिपोर्ट</span>
+                                <i class="fa-solid fa-file-excel text-emerald-600 mr-1"></i> <span data-i18n="btn_export">दैनिक CSV</span>
+                            </button>
+                            <button type="button" onclick="exportMonthlyCSV()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                                <i class="fa-solid fa-calendar-days mr-1"></i> <span data-i18n="btn_export_month">मासिक CSV</span>
                             </button>
                             <button type="button" onclick="openAddWorkerModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-sm transition">
                                 <i class="fa-solid fa-user-plus mr-1"></i> <span data-i18n="btn_add_worker">नया Worker जोड़ें</span>
@@ -987,17 +999,31 @@
                     </div>
 
                     <div class="relative mt-4 pt-3.5 border-t border-white/10 flex items-center justify-between text-xs">
-                        <span class="text-emerald-200/90 font-medium"><i class="fa-regular fa-calendar-check mr-1"></i> आज की हाज़िरी:</span>
+                        <span class="text-indigo-200/90 font-medium"><i class="fa-regular fa-calendar-check mr-1"></i> आज की हाज़िरी:</span>
                         <span id="wd-today-status-badge" class="font-extrabold px-2.5 py-0.5 rounded-full bg-white/15 text-white text-[11px]">Not Marked</span>
                     </div>
+                </div>
+
+                <!-- Worker Month Selector Card (View Any Old Month) -->
+                <div class="bg-white rounded-2xl border border-indigo-200/80 p-3.5 shadow-sm flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                        <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs shrink-0">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-800 block" data-i18n="w_select_month_lbl">महीना चुनें (पुराना रिकॉर्ड देखें)</span>
+                            <span class="text-[10px] text-slate-400 block" data-i18n="w_select_month_sub">किसी भी पुराने महीने की हाज़िरी व सैलरी देखें</span>
+                        </div>
+                    </div>
+                    <input type="month" id="wd-month-picker" onchange="renderWorkerDashboard()" class="border border-slate-300 rounded-xl px-2.5 py-1.5 text-xs font-extrabold text-indigo-700 bg-indigo-50/50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
 
                 <div onclick="switchWTab('kharchi')" class="cursor-pointer bg-white rounded-2xl border border-emerald-200/80 p-4 shadow-sm hover:border-emerald-400 transition">
                     <div class="flex items-center justify-between mb-2.5">
                         <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                            <i class="fa-solid fa-wallet text-emerald-600"></i> अनुमानित नेट हिसाब (Est. Net Balance)
+                            <i class="fa-solid fa-wallet text-emerald-600"></i> <span data-i18n="w_net_bal_title">नेट हिसाब (Net Balance)</span>
                         </span>
-                        <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">इस माह</span>
+                        <span id="wd-home-month-badge" class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full border border-emerald-200">इस माह</span>
                     </div>
                     <div class="flex items-end justify-between">
                         <div>
@@ -1071,15 +1097,18 @@
 
             <div id="w-content-attendance" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-5">
-                    <div class="flex items-center justify-between gap-2 mb-3">
-                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5" data-i18n="w_history_title">
-                            <i class="fa-solid fa-calendar-days text-emerald-600"></i> हाल की हाज़िरी और ओवरटाइम
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-calendar-days text-emerald-600"></i> <span data-i18n="w_history_title">मासिक हाज़िरी और ओवरटाइम</span>
                         </h3>
-                        <select id="wd-att-filter" onchange="renderWorkerDashboard()" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs font-semibold text-slate-700">
-                            <option value="ALL" data-i18n="w_filter_all">सभी दिन (All)</option>
-                            <option value="Present">✅ Present</option>
-                            <option value="Absent">❌ Absent</option>
-                        </select>
+                        <div class="flex items-center gap-1.5">
+                            <input type="month" id="wd-att-month-picker" onchange="syncWorkerMonthPicker(this.value)" class="bg-indigo-50/60 border border-indigo-200 rounded-xl px-2 py-1 text-xs font-bold text-indigo-700">
+                            <select id="wd-att-filter" onchange="renderWorkerDashboard()" class="bg-slate-50 border border-slate-200 rounded-xl px-2 py-1 text-xs font-semibold text-slate-700">
+                                <option value="ALL" data-i18n="w_filter_all">सभी दिन</option>
+                                <option value="Present">✅ Present</option>
+                                <option value="Absent">❌ Absent</option>
+                            </select>
+                        </div>
                     </div>
                     <div id="wd-history-list" class="space-y-2.5"></div>
                 </div>
@@ -1087,21 +1116,25 @@
 
             <div id="w-content-kharchi" class="w-tab-content hidden fade-in space-y-4">
                 <div class="bg-gradient-to-br from-slate-900 to-emerald-950 text-white rounded-3xl p-5 shadow-lg border border-emerald-400/20 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider" data-i18n="w_sal_box_title">इस माह सैलरी व किस्त हिसाब</span>
-                        <span id="wd-calc-days-badge" class="text-[11px] bg-white/15 px-2.5 py-0.5 rounded-full font-semibold">0 दिन • 0 OT</span>
+                    <div class="flex items-center justify-between gap-2">
+                        <span class="text-xs font-bold text-emerald-300 uppercase tracking-wider" data-i18n="w_sal_box_title">मासिक सैलरी व किस्त हिसाब</span>
+                        <input type="month" id="wd-sal-month-picker" onchange="syncWorkerMonthPicker(this.value)" class="bg-white/15 border border-white/20 rounded-xl px-2.5 py-1 text-[11px] font-bold text-white">
+                    </div>
+                    <div class="flex items-center justify-between text-[11px] text-emerald-200">
+                        <span>चयनित माह का सारांश:</span>
+                        <span id="wd-calc-days-badge" class="bg-white/15 px-2.5 py-0.5 rounded-full font-semibold">0 दिन • 0 OT</span>
                     </div>
                     <div class="space-y-1.5 text-xs pt-1 border-t border-white/10">
                         <div class="flex justify-between text-slate-300">
-                            <span data-i18n="w_sal_gross_lbl">इस माह हाज़िरी व OT कमाई:</span>
+                            <span data-i18n="w_sal_gross_lbl">चयनित माह हाज़िरी व OT कमाई:</span>
                             <span id="wd-calc-gross" class="font-bold text-white">₹0</span>
                         </div>
                         <div class="flex justify-between text-amber-300">
-                            <span data-i18n="w_sal_ded_lbl">इस माह सैलरी से किस्त कटौती:</span>
+                            <span data-i18n="w_sal_ded_lbl">चयनित माह सैलरी से किस्त कटौती:</span>
                             <span id="wd-calc-adv" class="font-bold">- ₹0</span>
                         </div>
                         <div class="flex justify-between text-sm pt-2 border-t border-white/15 font-extrabold text-emerald-300">
-                            <span data-i18n="w_sal_net_lbl">इस माह नेट देय सैलरी:</span>
+                            <span data-i18n="w_sal_net_lbl">चयनित माह नेट देय सैलरी:</span>
                             <span id="wd-calc-net">₹0</span>
                         </div>
                     </div>
@@ -1467,6 +1500,8 @@
                 sa_kpi_workers_sub: "सभी कंपनियों के कर्मचारी मिलाकर",
                 sa_kpi_mrr: "मासिक सब्सक्रिप्शन आय (MRR)",
                 sa_kpi_mrr_sub: "एक्टिव प्लान्स से अनुमानित आय",
+                sa_rev_title: "कुल मासिक आवर्ती आय (MRR)",
+                sa_rev_breakdown_title: "प्लान-वार मासिक आय व गतिविधि विवरण",
                 sa_tab_companies: "कंपनियाँ",
                 sa_tab_revenue: "आय (MRR)",
                 sa_tab_settings: "सुरक्षा व APK",
@@ -1486,7 +1521,8 @@
                 tab_audit: "ऑडिट लॉग",
                 select_date: "तारीख चुनें:",
                 btn_mark_all: "चुने हुए Present करें",
-                btn_export: "Excel/CSV रिपोर्ट",
+                btn_export: "दैनिक CSV",
+                btn_export_month: "मासिक CSV",
                 btn_add_worker: "नया Worker जोड़ें",
                 th_worker: "वर्कर (Worker)",
                 th_dept: "विभाग",
@@ -1537,16 +1573,16 @@
                 w_stat_ot: "कुल ओवरटाइम",
                 w_due_badge: "बकाया",
                 w_rem_adv_lbl: "बकाया एडवांस (Remaining)",
+                w_select_month_lbl: "महीना चुनें (पुराना रिकॉर्ड देखें)",
+                w_select_month_sub: "किसी भी पुराने महीने की हाज़िरी व सैलरी देखें",
+                w_net_bal_title: "नेट हिसाब (Net Balance)",
                 w_view_id_btn: "मेरा ID Card देखें",
                 w_help_btn: "हेल्प / सपोर्ट",
                 w_filter_all: "सभी दिन (All)",
-                w_sal_box_title: "इस माह सैलरी व किस्त हिसाब",
-                w_sal_gross_lbl: "इस माह हाज़िरी व OT कमाई:",
-                w_sal_ded_lbl: "इस माह सैलरी से किस्त कटौती:",
-                w_sal_net_lbl: "इस माह नेट देय सैलरी:",
-                w_loan_title: "एडवांस लोन व बकाया बैलेंस",
-                w_loan_taken: "कुल लिया एडवांस",
-                w_loan_paid: "कुल किस्त जमा",
+                w_sal_box_title: "मासिक सैलरी व किस्त हिसाब",
+                w_sal_gross_lbl: "चयनित माह हाज़िरी व OT कमाई:",
+                w_sal_ded_lbl: "चयनित माह सैलरी से किस्त कटौती:",
+                w_sal_net_lbl: "चयनित माह नेट देय सैलरी:",
                 w_loan_rem: "बकाया एडवांस",
                 w_passbook_title: "एडवांस व किस्त कटौती पासबुक (Passbook)",
                 w_pb_paid: "✅ किस्त जमा (सैलरी से कटौती)",
@@ -1593,6 +1629,8 @@
                 sa_kpi_workers_sub: "Combined workers across all companies",
                 sa_kpi_mrr: "Monthly Subscription Revenue (MRR)",
                 sa_kpi_mrr_sub: "Estimated revenue from active plans",
+                sa_rev_title: "Monthly Recurring Revenue (MRR)",
+                sa_rev_breakdown_title: "Plan-Wise Revenue & Monthly Activity",
                 sa_tab_companies: "Companies",
                 sa_tab_revenue: "Revenue (MRR)",
                 sa_tab_settings: "Security & APK",
@@ -1612,7 +1650,8 @@
                 tab_audit: "Audit Log",
                 select_date: "Select Date:",
                 btn_mark_all: "Mark Selected Present",
-                btn_export: "Excel/CSV Report",
+                btn_export: "Daily CSV",
+                btn_export_month: "Monthly CSV",
                 btn_add_worker: "Add New Worker",
                 th_worker: "Worker",
                 th_dept: "Department",
@@ -1663,16 +1702,16 @@
                 w_stat_ot: "Total Overtime",
                 w_due_badge: "Due",
                 w_rem_adv_lbl: "Remaining Advance",
+                w_select_month_lbl: "Select Month (View Old History)",
+                w_select_month_sub: "Check any previous month's attendance & salary",
+                w_net_bal_title: "Net Salary Balance",
                 w_view_id_btn: "View My ID Card",
                 w_help_btn: "Help / Support",
                 w_filter_all: "All Days",
                 w_sal_box_title: "Monthly Salary & Installment Summary",
-                w_sal_gross_lbl: "This Month Attendance & OT Earnings:",
-                w_sal_ded_lbl: "This Month Installment Deducted:",
-                w_sal_net_lbl: "This Month Net Payable Salary:",
-                w_loan_title: "Advance Loan & Remaining Balance",
-                w_loan_taken: "Total Advance Taken",
-                w_loan_paid: "Total EMI Paid",
+                w_sal_gross_lbl: "Selected Month Attendance & OT Earnings:",
+                w_sal_ded_lbl: "Selected Month Installment Deducted:",
+                w_sal_net_lbl: "Selected Month Net Payable Salary:",
                 w_loan_rem: "Remaining Balance",
                 w_passbook_title: "Advance & Installment Passbook",
                 w_pb_paid: "✅ Installment Paid (Deducted from Salary)",
@@ -1719,6 +1758,8 @@
                 sa_kpi_workers_sub: "બધી કંપનીઓના કર્મચારીઓ મળીને",
                 sa_kpi_mrr: "માસિક સબ્સ્ક્રિપ્શન આવક (MRR)",
                 sa_kpi_mrr_sub: "એક્ટિવ પ્લાન્સમાંથી અંદાજિત આવક",
+                sa_rev_title: "કુલ માસિક આવક (MRR)",
+                sa_rev_breakdown_title: "પ્લાન મુજબ માસિક આવક અને વિગત",
                 sa_tab_companies: "કંપનીઓ",
                 sa_tab_revenue: "આવક (MRR)",
                 sa_tab_settings: "સુરક્ષા અને APK",
@@ -1738,7 +1779,8 @@
                 tab_audit: "ઓડિટ લોગ",
                 select_date: "તારીખ પસંદ કરો:",
                 btn_mark_all: "પસંદ કરેલ Present કરો",
-                btn_export: "Excel/CSV રિપોર્ટ",
+                btn_export: "દૈનિક CSV",
+                btn_export_month: "માસિક CSV",
                 btn_add_worker: "નવો Worker ઉમેરો",
                 th_worker: "વર્કર (Worker)",
                 th_dept: "વિભાગ",
@@ -1789,16 +1831,16 @@
                 w_stat_ot: "કુલ ઓવરટાઇમ",
                 w_due_badge: "બાકી",
                 w_rem_adv_lbl: "બાકી એડવાન્સ (Remaining)",
+                w_select_month_lbl: "મહિનો પસંદ કરો (જૂનો રેકોર્ડ જુઓ)",
+                w_select_month_sub: "કોઈપણ જૂના મહિનાની હાજરી અને પગાર જુઓ",
+                w_net_bal_title: "નેટ હિસાબ (Net Balance)",
                 w_view_id_btn: "મારું ID Card જુઓ",
                 w_help_btn: "હેલ્પ / સપોર્ટ",
                 w_filter_all: "બધા દિવસ (All)",
-                w_sal_box_title: "આ મહિનાનો પગાર અને હપ્તા હિસાબ",
-                w_sal_gross_lbl: "આ મહિનાની હાજરી અને OT કમાણી:",
-                w_sal_ded_lbl: "આ મહિનાના પગારમાંથી હપ્તો કપાયો:",
-                w_sal_net_lbl: "આ મહિનાનો નેટ પગાર:",
-                w_loan_title: "એડવાન્સ લોન અને બાકી બેલેન્સ",
-                w_loan_taken: "કુલ લીધેલ એડવાન્સ",
-                w_loan_paid: "કુલ હપ્તા જમા",
+                w_sal_box_title: "માસિક પગાર અને હપ્તા હિસાબ",
+                w_sal_gross_lbl: "પસંદ કરેલ મહિનાની હાજરી અને OT કમાણી:",
+                w_sal_ded_lbl: "પસંદ કરેલ મહિનાનો હપ્તો કપાયો:",
+                w_sal_net_lbl: "પસંદ કરેલ મહિનાનો નેટ પગાર:",
                 w_loan_rem: "બાકી એડવાન્સ",
                 w_passbook_title: "એડવાન્સ અને હપ્તા કપાત પાસબુક (Passbook)",
                 w_pb_paid: "✅ હપ્તો જમા (પગારમાંથી કપાત)",
@@ -2266,11 +2308,20 @@
         function initApp() {
             const datePicker = document.getElementById('ca-date-picker');
             const monthPicker = document.getElementById('ca-month-picker');
+            const saMonthPicker = document.getElementById('sa-month-picker');
+            const wdMonthPicker = document.getElementById('wd-month-picker');
+            const wdAttMonthPicker = document.getElementById('wd-att-month-picker');
+            const wdSalMonthPicker = document.getElementById('wd-sal-month-picker');
             const advDate = document.getElementById('adv-date');
             const newExp = document.getElementById('new-comp-expiry');
+            const currentMonth = today.slice(0, 7);
 
             if (datePicker) datePicker.value = today;
-            if (monthPicker) monthPicker.value = today.slice(0, 7);
+            if (monthPicker) monthPicker.value = currentMonth;
+            if (saMonthPicker) saMonthPicker.value = currentMonth;
+            if (wdMonthPicker) wdMonthPicker.value = currentMonth;
+            if (wdAttMonthPicker) wdAttMonthPicker.value = currentMonth;
+            if (wdSalMonthPicker) wdSalMonthPicker.value = currentMonth;
             if (advDate) advDate.value = today;
             if (newExp) newExp.value = defaultExpiry;
 
@@ -2564,8 +2615,15 @@
             const revMrrBig = document.getElementById('sa-rev-mrr-big');
             const revArrSub = document.getElementById('sa-rev-arr-sub');
             const revBreakdown = document.getElementById('sa-revenue-breakdown');
+            const saSelectedMonth = document.getElementById('sa-month-picker')?.value || today.slice(0, 7);
+            const saMonthBadge = document.getElementById('sa-rev-selected-month-badge');
+            if (saMonthBadge) saMonthBadge.innerText = saSelectedMonth;
+
+            const monthAttEntries = Object.values(db.attendance).filter(a => (a.date || '').startsWith(saSelectedMonth) && (a.status === 'Present' || a.status === 'Half Day'));
+            const monthAdvEntries = db.advances.filter(a => (a.date || '').startsWith(saSelectedMonth));
+
             if (revMrrBig) revMrrBig.innerText = `₹${mrr.toLocaleString('en-IN')} / माह`;
-            if (revArrSub) revArrSub.innerText = `वार्षिक अनुमानित आय (ARR): ₹${arr.toLocaleString('en-IN')}`;
+            if (revArrSub) revArrSub.innerText = `वार्षिक अनुमानित आय (ARR): ₹${arr.toLocaleString('en-IN')} • (${saSelectedMonth}: ${monthAttEntries.length} हाज़िरी रिकॉर्ड)`;
             if (revBreakdown) {
                 revBreakdown.innerHTML = Object.keys(PLANS).map(pName => {
                     const p = PLANS[pName];
@@ -2579,11 +2637,15 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-base font-extrabold text-emerald-600">₹${planMrr.toLocaleString('en-IN')}</div>
-                                <div class="text-[10px] text-slate-400">प्रति माह</div>
+                                <div class="text-[10px] text-slate-400">${saSelectedMonth}</div>
                             </div>
                         </div>
                     `;
-                }).join('');
+                }).join('') + `
+                <div class="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 flex items-center justify-between text-xs">
+                    <span class="font-bold text-indigo-950"><i class="fa-solid fa-database text-indigo-600 mr-1.5"></i>चयनित माह (${saSelectedMonth}) कुल प्लेटफ़ॉर्म रिकॉर्ड:</span>
+                    <span class="font-extrabold text-indigo-700">${monthAttEntries.length} हाज़िरी • ${monthAdvEntries.length} खर्ची लेन-देन</span>
+                </div>`;
             }
 
             const recentEl = document.getElementById('sa-home-recent-companies');
@@ -3328,8 +3390,10 @@
 
             const homeNetEl = document.getElementById('ca-home-net-salary');
             const homeAdvEl = document.getElementById('ca-home-total-advance');
+            const homeMonthTitleEl = document.getElementById('ca-home-month-summary-title');
             if (homeNetEl) homeNetEl.innerText = `₹${totalMonthNetSalary.toLocaleString('en-IN')}`;
             if (homeAdvEl) homeAdvEl.innerText = `₹${totalMonthAdvance.toLocaleString('en-IN')}`;
+            if (homeMonthTitleEl) homeMonthTitleEl.innerText = `${selectedMonth} का सैलरी व खर्ची सारांश`;
 
             // Render Premier Audit Logs
             const auditContainer = document.getElementById('ca-audit-list');
@@ -3630,16 +3694,50 @@
             showToast('Excel/CSV रिपोर्ट डाउनलोड हो गई!');
         }
 
+        function exportMonthlyCSV() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            const selectedMonth = document.getElementById('ca-month-picker').value || today.slice(0, 7);
+            const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
+
+            let csv = 'Company,Month,Worker ID,Name,Department,Present Days,Total OT Hours,Gross Earnings,Month Installment Deducted,Remaining Advance,Net Payable Salary\n';
+            tenantWorkers.forEach(w => {
+                const dailyRate = parseFloat(w.dailyRate || 500);
+                const otRate = parseFloat(w.otRate || 75);
+                let mPresent = 0;
+                let mOt = 0;
+
+                Object.keys(db.attendance).forEach(k => {
+                    const rec = db.attendance[k];
+                    if (rec.companyId === activeCompanyId && rec.workerId === w.id && (rec.date || '').startsWith(selectedMonth)) {
+                        if (rec.status === 'Present') mPresent += 1;
+                        if (rec.status === 'Half Day') mPresent += 0.5;
+                        mOt += parseFloat(rec.ot || 0);
+                    }
+                });
+
+                const advStats = getWorkerAdvanceStats(activeCompanyId, w.id, selectedMonth);
+                const grossPay = Math.round((mPresent * dailyRate) + (mOt * otRate));
+                const netPay = grossPay - advStats.monthDeducted;
+                csv += `"${comp.name}","${selectedMonth}","${w.id}","${w.name}","${w.dept}","${mPresent}","${mOt}","${grossPay}","${advStats.monthDeducted}","${advStats.remaining}","${netPay}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `WorkTrack_Monthly_Report_${comp.id}_${selectedMonth}.csv`;
+            a.click();
+            showToast(`${selectedMonth} की मासिक Excel/CSV रिपोर्ट डाउनलोड हो गई!`);
+        }
+
         function setAuditFilter(filterType) {
             activeAuditFilter = filterType;
             document.querySelectorAll('.audit-filter-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-500', 'text-white', 'font-bold', 'shadow-xs');
-                btn.classList.add('bg-white/10', 'text-slate-200', 'font-semibold');
+                btn.className = 'audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-semibold bg-white/10 text-slate-200 hover:bg-white/20 whitespace-nowrap transition';
             });
             const activeBtn = document.getElementById(`audit-filter-${filterType}`);
             if (activeBtn) {
-                activeBtn.classList.remove('bg-white/10', 'text-slate-200', 'font-semibold');
-                activeBtn.classList.add('bg-indigo-500', 'text-white', 'font-bold', 'shadow-xs');
+                activeBtn.className = 'audit-filter-btn px-3 py-1.5 rounded-xl text-[11px] font-bold bg-indigo-500 text-white shadow-xs whitespace-nowrap transition';
             }
             renderCompanyAdmin();
         }
@@ -3914,6 +4012,15 @@
             if (footer && !isSuperAdminUnlocked && !isCompanyAdminLoggedIn) footer.classList.remove('pb-20');
         }
 
+        function syncWorkerMonthPicker(monthVal) {
+            if (!monthVal) return;
+            ['wd-month-picker', 'wd-att-month-picker', 'wd-sal-month-picker'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.value !== monthVal) el.value = monthVal;
+            });
+            renderWorkerDashboard();
+        }
+
         function renderWorkerDashboard() {
             const worker = db.workers.find(w => w.id === loggedInWorkerId);
             if (!worker) return;
@@ -3962,6 +4069,10 @@
             const historyContainer = document.getElementById('wd-history-list');
             historyContainer.innerHTML = '';
 
+            const selectedMonthPrefix = document.getElementById('wd-month-picker')?.value || today.slice(0, 7);
+            const homeMonthBadge = document.getElementById('wd-home-month-badge');
+            if (homeMonthBadge) homeMonthBadge.innerText = selectedMonthPrefix;
+
             let totalPresent = 0;
             let totalAbsent = 0;
             let totalOt = 0;
@@ -3970,6 +4081,7 @@
             const allRecords = Object.keys(db.attendance)
                 .filter(k => k.startsWith(prefix))
                 .map(k => ({ date: k.replace(prefix, ''), ...db.attendance[k] }))
+                .filter(rec => (rec.date || '').startsWith(selectedMonthPrefix))
                 .sort((a, b) => b.date.localeCompare(a.date));
 
             allRecords.forEach(rec => {
@@ -3983,7 +4095,7 @@
             const filteredRecords = allRecords.filter(rec => attFilter === 'ALL' || rec.status === attFilter);
 
             if (filteredRecords.length === 0) {
-                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">कोई हाज़िरी रिकॉर्ड नहीं मिला।</p>`;
+                historyContainer.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">${selectedMonthPrefix} के लिए कोई हाज़िरी रिकॉर्ड नहीं मिला।</p>`;
             }
 
             filteredRecords.forEach(rec => {
@@ -4009,8 +4121,7 @@
             document.getElementById('wd-stat-absent').innerText = totalAbsent;
             document.getElementById('wd-stat-ot').innerText = totalOt;
 
-            const currentMonthPrefix = today.slice(0, 7);
-            const advStats = getWorkerAdvanceStats(worker.companyId, worker.id, currentMonthPrefix);
+            const advStats = getWorkerAdvanceStats(worker.companyId, worker.id, selectedMonthPrefix);
 
             const advStatEl = document.getElementById('wd-stat-advance');
             if (advStatEl) advStatEl.innerText = `₹${advStats.remaining.toLocaleString('en-IN')}`;
@@ -4029,16 +4140,9 @@
             if (advPctEl) advPctEl.innerText = advStats.totalGiven > 0 ? `${paidPct}% चुकता` : 'कोई बकाया नहीं';
             if (advBarEl) advBarEl.style.width = `${advStats.totalGiven > 0 ? paidPct : 0}%`;
 
-            // Current month attendance & earnings
-            let monthPresent = 0;
-            let monthOt = 0;
-            allRecords.forEach(rec => {
-                if (rec.date.startsWith(currentMonthPrefix)) {
-                    if (rec.status === 'Present') monthPresent += 1;
-                    if (rec.status === 'Half Day') monthPresent += 0.5;
-                    monthOt += parseFloat(rec.ot || 0);
-                }
-            });
+            // Selected month attendance & earnings
+            const monthPresent = totalPresent;
+            const monthOt = totalOt;
 
             const monthGrossEarnings = Math.round((monthPresent * dailyRate) + (monthOt * otRate));
             const monthNetBalance = monthGrossEarnings - advStats.monthDeducted;
@@ -4091,4 +4195,4 @@
         }
     </script>
 </body>
-                        </html>
+                                                                     </html>
