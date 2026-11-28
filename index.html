@@ -315,7 +315,7 @@
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                                 <h2 class="text-base font-bold text-slate-900">क्लाइंट कंपनियाँ (Tenants) और पोर्टल लिंक्स</h2>
-                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, लिंक कॉपी करें या पैनल खोलें</p>
+                                <p class="text-[11px] text-slate-500">प्रत्येक कंपनी के प्लान व एक्सपायरी डेट बदलें, +30 दिन Renew करें, लिंक कॉपी करें या पैनल खोलें</p>
                             </div>
                             <button type="button" onclick="openModal('modal-add-company')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-xl font-semibold text-xs shadow-sm transition flex items-center justify-center gap-1.5 shrink-0">
                                 <i class="fa-solid fa-plus"></i> <span data-i18n="sa_add_comp">नई कंपनी जोड़ें</span>
@@ -330,6 +330,7 @@
                             <select id="sa-company-filter" onchange="renderSuperAdmin()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                 <option value="ALL">सभी कंपनियाँ (All Status)</option>
                                 <option value="Active">✅ केवल Active</option>
+                                <option value="Expired">⏰ केवल Expired (समय समाप्त)</option>
                                 <option value="Suspended">⛔ केवल Suspended</option>
                             </select>
                         </div>
@@ -521,9 +522,14 @@
         </div>
 
         <div id="ca-dashboard-wrapper" class="hidden pb-24">
-            <div id="ca-suspended-banner" class="hidden mb-6 bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3.5 rounded-2xl flex items-center gap-3 text-sm font-medium">
-                <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg"></i>
-                <span>यह कंपनी खाता फिलहाल <strong>Suspended</strong> है। नया डेटा सेव करने के लिए Super Admin से संपर्क करें।</span>
+            <div id="ca-suspended-banner" class="hidden mb-6 bg-rose-50 border border-rose-200 text-rose-800 px-4 py-3.5 rounded-2xl flex items-center justify-between gap-3 text-sm font-medium">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-rose-600 text-lg shrink-0"></i>
+                    <span id="ca-suspended-msg">यह कंपनी खाता फिलहाल <strong>Suspended</strong> है। नया डेटा सेव करने के लिए Super Admin से संपर्क करें।</span>
+                </div>
+                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%20Team%2C%20%E0%A4%AE%E0%A5%87%E0%A4%B0%E0%A4%BE%20WorkTrack%20Plan%20Expire%20%E0%A4%B9%E0%A5%8B%20%E0%A4%97%E0%A4%AF%E0%A4%BE%20%E0%A4%B9%E0%A5%88%2C%20%E0%A4%95%E0%A5%83%E0%A4%AA%E0%A4%AF%E0%A4%BE%20Renew%20%E0%A4%95%E0%A4%B0%20%E0%A4%A6%E0%A5%87%E0%A4%82%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="shrink-0 bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold px-3.5 py-2 rounded-xl transition">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Renew करें
+                </a>
             </div>
 
             <!-- CA TAB 0: HOME -->
@@ -1305,7 +1311,7 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">प्लान एक्सपायरी डेट</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">प्लान एक्सपायरी डेट (30 दिन)</label>
                         <input type="date" id="new-comp-expiry" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
                     </div>
                 </div>
@@ -1852,7 +1858,7 @@
                 w_history_title: "તાજેતરની હાજરી અને ઓવરટાઇમ રેકોર્ડ",
                 adv_modal_title: "એડવાન્સ આપો અથવા હપ્તો કાપો",
                 adv_action_type_lbl: "વ્યવહારનો પ્રકાર પસંદ કરો (Action Type)",
-                adv_btn_give: "નવો એડવાન્સ આપો",
+                adv_btn_give: "નવો એડવાंस આપો",
                 adv_btn_deduct: "હપ્તો કાપો (Deduct)",
                 adv_select_worker: "વર્કર પસંદ કરો",
                 adv_curr_rem: "વર્તમાન બાકી એડવાન્સ:",
@@ -1984,7 +1990,6 @@
                 }
             });
 
-            // Re-render active views so dynamic cards, tables & badges switch language immediately
             if (isSuperAdminUnlocked) renderSuperAdmin();
             if (isCompanyAdminLoggedIn) renderCompanyAdmin();
             if (loggedInWorkerId) renderWorkerDashboard();
@@ -2025,29 +2030,38 @@
             console.error("Firebase init error:", err);
         }
 
-        const getToday = () => new Date().toISOString().split('T')[0];
+        // Local-timezone safe YYYY-MM-DD formatter (prevents UTC date shift bugs)
+        function formatLocalYYYYMMDD(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        const getToday = () => formatLocalYYYYMMDD(new Date());
         const getYesterday = () => {
             const d = new Date();
             d.setDate(d.getDate() - 1);
-            return d.toISOString().split('T')[0];
+            return formatLocalYYYYMMDD(d);
         };
-        const getPlusDays = (days) => {
-            const d = new Date();
+        const getPlusDays = (days, baseDateStr = null) => {
+            const d = baseDateStr ? new Date(baseDateStr + 'T00:00:00') : new Date();
             d.setDate(d.getDate() + days);
-            return d.toISOString().split('T')[0];
+            return formatLocalYYYYMMDD(d);
         };
 
         const today = getToday();
         const yesterday = getYesterday();
         const defaultExpiry = getPlusDays(30);
 
+        // True day-by-day countdown calculator based on stored company expiryDate
         function formatExpiryInfo(expiryDateStr) {
-            const expStr = expiryDateStr || defaultExpiry;
-            const todayDate = new Date(today + 'T00:00:00');
+            const expStr = (expiryDateStr && /^\d{4}-\d{2}-\d{2}$/.test(expiryDateStr)) ? expiryDateStr : defaultExpiry;
+            const todayDate = new Date(getToday() + 'T00:00:00');
             const expDate = new Date(expStr + 'T00:00:00');
-            const diffDays = Math.ceil((expDate - todayDate) / (1000 * 60 * 60 * 24));
+            const diffDays = Math.round((expDate - todayDate) / (1000 * 60 * 60 * 24));
             const formattedDate = expDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            return { expStr, formattedDate, diffDays };
+            return { expStr, formattedDate, diffDays, isExpired: diffDays < 0 };
         }
 
         const PLANS = {
@@ -2138,7 +2152,16 @@
 
             firestore.collection('wt_companies').onSnapshot((snapshot) => {
                 if (!snapshot.empty) {
-                    db.companies = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    db.companies = snapshot.docs.map(doc => {
+                        const data = doc.data();
+                        // Persist a fixed expiryDate in Firestore if an older record lacked one so it counts down daily!
+                        if (!data.expiryDate) {
+                            const fixedExp = getPlusDays(30);
+                            firestore.collection('wt_companies').doc(doc.id).update({ expiryDate: fixedExp }).catch(() => {});
+                            data.expiryDate = fixedExp;
+                        }
+                        return { id: doc.id, ...data };
+                    });
                 }
                 if (!activeCompanyId && db.companies.length > 0) {
                     activeCompanyId = db.companies[0].id;
@@ -2212,7 +2235,7 @@
             if (!m) return;
             if (id === 'modal-add-company') {
                 const expInput = document.getElementById('new-comp-expiry');
-                if (expInput && !expInput.value) expInput.value = defaultExpiry;
+                if (expInput && !expInput.value) expInput.value = getPlusDays(30);
             }
             m.classList.remove('hidden');
             m.classList.add('flex');
@@ -2267,7 +2290,6 @@
                 const backBtn = document.getElementById('sa-back-btn-box');
                 if (backBtn) backBtn.classList.add('hidden');
 
-                // Block Desktop/Laptop browsers unless secret key (?key=WT9988) is present
                 if (isBlocked || (secretKey !== 'WT9988' && (!isMobileAndroid || isDesktopOS || isWideDesktopScreen))) {
                     document.getElementById('sa-restricted-box').classList.remove('hidden');
                     document.getElementById('sa-login-box').classList.add('hidden');
@@ -2323,7 +2345,7 @@
             if (wdAttMonthPicker) wdAttMonthPicker.value = currentMonth;
             if (wdSalMonthPicker) wdSalMonthPicker.value = currentMonth;
             if (advDate) advDate.value = today;
-            if (newExp) newExp.value = defaultExpiry;
+            if (newExp) newExp.value = getPlusDays(30);
 
             startLockoutTicker();
             ['sa', 'ca', 'w'].forEach(k => updateLockoutUI(k));
@@ -2582,16 +2604,17 @@
             const totalWorkers = db.workers.length;
             let mrr = 0;
             let activeCount = 0;
-            let suspendedCount = 0;
+            let holdOrExpiredCount = 0;
             const planCounts = { Starter: 0, Growth: 0, Business: 0 };
 
             db.companies.forEach(comp => {
                 const planInfo = PLANS[comp.plan] || PLANS['Growth'];
-                if (comp.status === 'Active') {
+                const exp = formatExpiryInfo(comp.expiryDate);
+                if (comp.status === 'Active' && !exp.isExpired) {
                     mrr += planInfo.price;
                     activeCount++;
                 } else {
-                    suspendedCount++;
+                    holdOrExpiredCount++;
                 }
                 if (planCounts[comp.plan] !== undefined) {
                     planCounts[comp.plan]++;
@@ -2606,7 +2629,7 @@
             const homeArrEl = document.getElementById('sa-home-arr');
             const homeRatioEl = document.getElementById('sa-home-active-ratio');
             if (homeArrEl) homeArrEl.innerText = `₹${arr.toLocaleString('en-IN')} / वर्ष`;
-            if (homeRatioEl) homeRatioEl.innerText = `${activeCount} Active • ${suspendedCount} Hold`;
+            if (homeRatioEl) homeRatioEl.innerText = `${activeCount} Active • ${holdOrExpiredCount} Hold/Exp`;
 
             document.getElementById('sa-plan-count-starter').innerText = planCounts.Starter;
             document.getElementById('sa-plan-count-growth').innerText = planCounts.Growth;
@@ -2627,7 +2650,7 @@
             if (revBreakdown) {
                 revBreakdown.innerHTML = Object.keys(PLANS).map(pName => {
                     const p = PLANS[pName];
-                    const activeInPlan = db.companies.filter(c => c.plan === pName && c.status === 'Active').length;
+                    const activeInPlan = db.companies.filter(c => c.plan === pName && c.status === 'Active' && !formatExpiryInfo(c.expiryDate).isExpired).length;
                     const planMrr = activeInPlan * p.price;
                     return `
                         <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
@@ -2657,11 +2680,14 @@
                     recentEl.innerHTML = recentComps.map(c => {
                         const wCount = db.workers.filter(w => w.companyId === c.id).length;
                         const exp = formatExpiryInfo(c.expiryDate);
+                        const daysPill = exp.isExpired
+                            ? `<span class="text-rose-600 font-extrabold">Expired</span>`
+                            : `<span class="text-emerald-700 font-bold">${exp.diffDays} दिन शेष</span>`;
                         return `
                             <div class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-100">
                                 <div class="min-w-0">
                                     <div class="text-xs font-bold text-slate-900 truncate">${c.name}</div>
-                                    <div class="text-[10px] text-slate-500">${c.plan} • ${wCount} Workers • Exp: ${exp.formattedDate}</div>
+                                    <div class="text-[10px] text-slate-500">${c.plan} • ${wCount} Workers • Exp: ${exp.formattedDate} (${daysPill})</div>
                                 </div>
                                 <button type="button" onclick="inspectCompany('${c.id}')" class="text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-2.5 py-1 rounded-lg shrink-0">
                                     खोलें →
@@ -2676,8 +2702,12 @@
             const statusFilter = document.getElementById('sa-company-filter')?.value || 'ALL';
 
             const filteredCompanies = db.companies.filter(comp => {
+                const exp = formatExpiryInfo(comp.expiryDate);
                 const matchesSearch = !searchQuery || comp.name.toLowerCase().includes(searchQuery) || comp.adminId.toLowerCase().includes(searchQuery) || comp.id.toLowerCase().includes(searchQuery);
-                const matchesStatus = statusFilter === 'ALL' || comp.status === statusFilter;
+                const matchesStatus = statusFilter === 'ALL'
+                    || (statusFilter === 'Active' && comp.status === 'Active' && !exp.isExpired)
+                    || (statusFilter === 'Expired' && exp.isExpired)
+                    || (statusFilter === 'Suspended' && comp.status === 'Suspended');
                 return matchesSearch && matchesStatus;
             });
 
@@ -2701,6 +2731,12 @@
                 const adminUrl = `${base}?portal=admin&company=${comp.id}`;
                 const workerUrl = `${base}?portal=worker&company=${comp.id}`;
 
+                const countdownBadge = exp.isExpired
+                    ? `<span class="inline-block text-[10px] font-extrabold text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">⏰ Expired (${Math.abs(exp.diffDays)} दिन पहले)</span>`
+                    : (exp.diffDays === 0
+                        ? `<span class="inline-block text-[10px] font-extrabold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-md">⚠️ आज अंतिम दिन (0 दिन शेष)</span>`
+                        : `<span class="inline-block text-[10px] font-extrabold ${exp.diffDays <= 5 ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200'} px-2 py-0.5 rounded-md">⏳ ${exp.diffDays} दिन शेष</span>`);
+
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-50/80 transition';
                 tr.innerHTML = `
@@ -2715,9 +2751,12 @@
                             <option value="Business" ${comp.plan === 'Business' ? 'selected' : ''}>Business (₹1,999)</option>
                         </select>
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[10px] text-slate-500">Exp:</span>
                             <input type="date" value="${exp.expStr}" onchange="changeCompanyExpiry('${comp.id}', this.value)" class="border border-slate-200 rounded-md px-1.5 py-0.5 text-[11px] font-mono text-slate-700 bg-slate-50">
+                            <button type="button" onclick="renewCompanyPlan30Days('${comp.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2 py-1 rounded-md transition" title="आज/एक्सपायरी से +30 दिन बढ़ाएं">
+                                +30 दिन
+                            </button>
                         </div>
+                        <div>${countdownBadge}</div>
                     </td>
                     <td class="py-4 px-6">
                         <div class="flex items-center justify-between text-xs font-medium mb-1">
@@ -2749,9 +2788,9 @@
                         </div>
                     </td>
                     <td class="py-4 px-6">
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${comp.status === 'Active' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
-                            <span class="w-1.5 h-1.5 rounded-full ${comp.status === 'Active' ? 'bg-emerald-500' : 'bg-rose-500'}"></span>
-                            ${comp.status}
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${comp.status === 'Suspended' ? 'bg-rose-50 text-rose-700' : (exp.isExpired ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700')}">
+                            <span class="w-1.5 h-1.5 rounded-full ${comp.status === 'Suspended' ? 'bg-rose-500' : (exp.isExpired ? 'bg-amber-500' : 'bg-emerald-500')}"></span>
+                            ${comp.status === 'Suspended' ? 'Suspended' : (exp.isExpired ? 'Expired' : 'Active')}
                         </span>
                     </td>
                     <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
@@ -2766,9 +2805,11 @@
                 tbody.appendChild(tr);
 
                 if (cardsContainer) {
-                    const statusBadge = comp.status === 'Active'
-                        ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">● Active</span>'
-                        : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">● Suspended</span>';
+                    const statusBadge = comp.status === 'Suspended'
+                        ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">● Suspended</span>'
+                        : (exp.isExpired
+                            ? '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">⏰ Expired</span>'
+                            : '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">● Active</span>');
 
                     cardsContainer.innerHTML += `
                         <div class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm space-y-3">
@@ -2790,9 +2831,16 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <span class="text-[10px] text-slate-400 block font-semibold">प्लान एक्सपायरी डेट:</span>
+                                    <span class="text-[10px] text-slate-400 block font-semibold">एक्सपायरी डेट:</span>
                                     <input type="date" value="${exp.expStr}" onchange="changeCompanyExpiry('${comp.id}', this.value)" class="mt-0.5 w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-800">
                                 </div>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2 bg-slate-50/70 px-3 py-2 rounded-xl border border-slate-100">
+                                <div>${countdownBadge}</div>
+                                <button type="button" onclick="renewCompanyPlan30Days('${comp.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold px-3 py-1 rounded-lg shadow-xs transition">
+                                    <i class="fa-solid fa-rotate mr-1"></i> +30 दिन Renew
+                                </button>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2">
@@ -2842,18 +2890,41 @@
                 } else {
                     comp.expiryDate = newExpiryDate;
                 }
-                showToast(`${comp.name} की एक्सपायरी डेट ${newExpiryDate} सेट कर दी गई है!`);
+                const info = formatExpiryInfo(newExpiryDate);
+                showToast(`${comp.name} की एक्सपायरी डेट ${info.formattedDate} (${info.diffDays} दिन शेष) सेट हो गई!`);
             } catch (err) {
                 showToast('एक्सपायरी डेट अपडेट करने में त्रुटि!', true);
             }
         }
 
+        async function renewCompanyPlan30Days(compId) {
+            const comp = db.companies.find(c => c.id === compId);
+            if (!comp) return;
+            const currentExp = formatExpiryInfo(comp.expiryDate);
+            // If already expired, add 30 days from today; otherwise extend 30 days from current expiry date
+            const baseStr = currentExp.isExpired ? getToday() : currentExp.expStr;
+            const nextExpiry = getPlusDays(30, baseStr);
+            try {
+                if (firestore) {
+                    await firestore.collection('wt_companies').doc(compId).update({ expiryDate: nextExpiry, status: 'Active' });
+                } else {
+                    comp.expiryDate = nextExpiry;
+                    comp.status = 'Active';
+                }
+                const updated = formatExpiryInfo(nextExpiry);
+                showToast(`${comp.name} का प्लान 30 दिन बढ़ गया! नई एक्सपायरी: ${updated.formattedDate} (${updated.diffDays} दिन शेष)`);
+            } catch (err) {
+                showToast('प्लान Renew करने में त्रुटि!', true);
+            }
+        }
+
         function exportAllTenantsCSV() {
-            let csv = 'Company ID,Company Name,Admin ID,Plan,Expiry Date,Monthly Price,Active Workers,Status\n';
+            let csv = 'Company ID,Company Name,Admin ID,Plan,Expiry Date,Days Left,Monthly Price,Active Workers,Status\n';
             db.companies.forEach(comp => {
                 const p = PLANS[comp.plan] || PLANS['Growth'];
+                const exp = formatExpiryInfo(comp.expiryDate);
                 const wCount = db.workers.filter(w => w.companyId === comp.id).length;
-                csv += `"${comp.id}","${comp.name}","${comp.adminId}","${comp.plan}","${comp.expiryDate || defaultExpiry}","${p.price}","${wCount}","${comp.status}"\n`;
+                csv += `"${comp.id}","${comp.name}","${comp.adminId}","${comp.plan}","${exp.expStr}","${exp.diffDays}","${p.price}","${wCount}","${comp.status}"\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -2870,7 +2941,7 @@
             const adminId = document.getElementById('new-comp-admin-id').value.trim();
             const adminPass = document.getElementById('new-comp-admin-pass').value.trim();
             const plan = document.getElementById('new-comp-plan').value;
-            const expiryDate = document.getElementById('new-comp-expiry').value || defaultExpiry;
+            const expiryDate = document.getElementById('new-comp-expiry').value || getPlusDays(30);
             const newId = `COMP-${Date.now().toString().slice(-4)}`;
             const colors = ['bg-blue-600', 'bg-purple-600', 'bg-teal-600', 'bg-rose-600'];
             
@@ -2881,6 +2952,7 @@
                 adminPass: adminPass,
                 plan: plan,
                 expiryDate: expiryDate,
+                createdAtDate: getToday(),
                 status: 'Active',
                 color: colors[db.companies.length % colors.length]
             };
@@ -2893,7 +2965,7 @@
                 }
                 e.target.reset();
                 document.getElementById('new-comp-admin-pass').value = 'admin123';
-                document.getElementById('new-comp-expiry').value = defaultExpiry;
+                document.getElementById('new-comp-expiry').value = getPlusDays(30);
                 closeModal('modal-add-company');
                 showToast(`कंपनी "${name}" लाइव डेटाबेस में सेव हो गई!`);
                 setTimeout(() => openCompanyLinksModal(newId, false), 300);
@@ -2956,7 +3028,6 @@
             }
 
             clearFailedLogins('ca');
-            // Ensure complete tenant isolation: clear any lingering Super Admin unlock on this browser
             isSuperAdminUnlocked = false;
             sessionStorage.removeItem('wt_sa_unlocked');
 
@@ -3027,6 +3098,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        function isCompanyAccountLocked(comp) {
+            if (!comp) return true;
+            const exp = formatExpiryInfo(comp.expiryDate);
+            return comp.status === 'Suspended' || exp.isExpired;
+        }
+
         function renderCompanyAdmin() {
             const loginBox = document.getElementById('ca-login-box');
             const dashWrapper = document.getElementById('ca-dashboard-wrapper');
@@ -3062,6 +3139,11 @@
                     expTextEl.className = 'text-xs sm:text-sm font-extrabold text-rose-300 block truncate';
                     expIconWrap.className = 'w-9 h-9 rounded-xl bg-rose-500/25 text-rose-300 flex items-center justify-center text-sm shrink-0';
                     expBox.className = 'relative mt-4 bg-rose-950/50 backdrop-blur-sm rounded-2xl p-3 border border-rose-400/35 flex items-center justify-between gap-2';
+                } else if (expInfo.diffDays === 0) {
+                    expTextEl.innerText = `${expInfo.formattedDate} (आज अंतिम दिन — 0 दिन शेष!)`;
+                    expTextEl.className = 'text-xs sm:text-sm font-extrabold text-amber-300 block truncate';
+                    expIconWrap.className = 'w-9 h-9 rounded-xl bg-amber-400/25 text-amber-300 flex items-center justify-center text-sm shrink-0';
+                    expBox.className = 'relative mt-4 bg-amber-950/40 backdrop-blur-sm rounded-2xl p-3 border border-amber-400/35 flex items-center justify-between gap-2';
                 } else if (expInfo.diffDays <= 7) {
                     expTextEl.innerText = `${expInfo.formattedDate} (केवल ${expInfo.diffDays} दिन शेष!)`;
                     expTextEl.className = 'text-xs sm:text-sm font-extrabold text-amber-300 block truncate';
@@ -3075,8 +3157,17 @@
                 }
             }
 
-            const isSuspended = comp.status === 'Suspended';
-            document.getElementById('ca-suspended-banner').classList.toggle('hidden', !isSuspended);
+            const isLocked = isCompanyAccountLocked(comp);
+            const suspBanner = document.getElementById('ca-suspended-banner');
+            const suspMsg = document.getElementById('ca-suspended-msg');
+            suspBanner.classList.toggle('hidden', !isLocked);
+            if (suspMsg) {
+                if (expInfo.isExpired) {
+                    suspMsg.innerHTML = `आपका <strong>${comp.plan} Plan</strong> (${expInfo.formattedDate}) को <strong>Expire</strong> हो चुका है। नया डेटा सेव करने के लिए कृपया प्लान Renew करें।`;
+                } else if (comp.status === 'Suspended') {
+                    suspMsg.innerHTML = `यह कंपनी खाता फिलहाल <strong>Suspended</strong> है। नया डेटा सेव करने के लिए Super Admin से संपर्क करें।`;
+                }
+            }
 
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const selectedDate = document.getElementById('ca-date-picker').value || today;
@@ -3118,7 +3209,7 @@
                 tr.className = 'hover:bg-slate-50/70 transition';
                 tr.innerHTML = `
                     <td class="py-3.5 px-3 text-center">
-                        <input type="checkbox" value="${w.id}" class="ca-worker-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" ${isSuspended ? 'disabled' : ''}>
+                        <input type="checkbox" value="${w.id}" class="ca-worker-checkbox w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer" ${isLocked ? 'disabled' : ''}>
                     </td>
                     <td class="py-3.5 px-4">
                         <div class="flex items-center gap-3">
@@ -3134,7 +3225,7 @@
                         ${w.role ? `<div class="text-xs text-slate-400">${w.role}</div>` : ''}
                     </td>
                     <td class="py-3.5 px-4">
-                        <select id="att-status-${w.id}" ${isSuspended ? 'disabled' : ''} class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-indigo-500">
+                        <select id="att-status-${w.id}" ${isLocked ? 'disabled' : ''} class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-semibold bg-white focus:ring-2 focus:ring-indigo-500">
                             <option value="Not Marked" ${record.status === 'Not Marked' ? 'selected' : ''}>-- चुनें --</option>
                             <option value="Present" ${record.status === 'Present' ? 'selected' : ''}>✅ Present (हाज़िर)</option>
                             <option value="Half Day" ${record.status === 'Half Day' ? 'selected' : ''}>🌗 Half Day (आधा दिन)</option>
@@ -3144,18 +3235,18 @@
                     </td>
                     <td class="py-3.5 px-4">
                         <div class="flex items-center gap-1.5">
-                            <input type="number" step="0.5" min="0" max="16" id="att-ot-${w.id}" value="${record.ot}" ${isSuspended ? 'disabled' : ''} class="w-20 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-indigo-500">
+                            <input type="number" step="0.5" min="0" max="16" id="att-ot-${w.id}" value="${record.ot}" ${isLocked ? 'disabled' : ''} class="w-20 border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-800 focus:ring-2 focus:ring-indigo-500">
                             <span class="text-xs text-slate-400">hrs</span>
                         </div>
                     </td>
                     <td class="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
-                        <button type="button" onclick="saveWorkerAttendance('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
+                        <button type="button" onclick="saveWorkerAttendance('${w.id}')" ${isLocked ? 'disabled' : ''} class="bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow-sm transition">
                             Save
                         </button>
                         <button type="button" onclick="sendWhatsAppAttendance('${w.id}')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="WhatsApp पर हाज़िरी भेजें">
                             <i class="fa-brands fa-whatsapp"></i>
                         </button>
-                        <button type="button" onclick="openDeleteWorkerModal('${w.id}')" ${isSuspended ? 'disabled' : ''} class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="वर्कर हटाएं (Delete)">
+                        <button type="button" onclick="openDeleteWorkerModal('${w.id}')" ${isLocked ? 'disabled' : ''} class="bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition" title="वर्कर हटाएं (Delete)">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
@@ -3516,6 +3607,11 @@
         }
 
         async function saveWorkerAttendance(workerId) {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! कृपया पहले Renew करें।', true);
+                return;
+            }
             const selectedDate = document.getElementById('ca-date-picker').value || today;
             const status = document.getElementById(`att-status-${workerId}`).value;
             const ot = parseFloat(document.getElementById(`att-ot-${workerId}`).value) || 0;
@@ -3550,8 +3646,8 @@
         function openAddWorkerModal() {
             const comp = db.companies.find(c => c.id === activeCompanyId);
             if (!comp) return;
-            if (comp.status === 'Suspended') {
-                showToast('कंपनी Suspended है! नया वर्कर नहीं जोड़ सकते।', true);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! नया वर्कर नहीं जोड़ सकते।', true);
                 return;
             }
             const currentCount = db.workers.filter(w => w.companyId === activeCompanyId).length;
@@ -3633,8 +3729,8 @@
 
         function openDeleteWorkerModal(workerId) {
             const comp = db.companies.find(c => c.id === activeCompanyId);
-            if (comp && comp.status === 'Suspended') {
-                showToast('कंपनी Suspended है! वर्कर नहीं हटा सकते।', true);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! वर्कर नहीं हटा सकते।', true);
                 return;
             }
             const worker = db.workers.find(w => w.id === workerId);
@@ -3760,6 +3856,11 @@
         }
 
         async function markAllPresent() {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! कृपया पहले Renew करें।', true);
+                return;
+            }
             const checkedBoxes = Array.from(document.querySelectorAll('.ca-worker-checkbox:checked'));
             if (checkedBoxes.length === 0) {
                 showToast('कृपया पहले बाईं तरफ बॉक्स (☑️) में उन वर्कर्स को चुनें जिन्हें Present करना है!', true);
@@ -3876,6 +3977,11 @@
         }
 
         function openAdvanceModal(type = 'GIVEN', preselectWorkerId = null) {
+            const comp = db.companies.find(c => c.id === activeCompanyId);
+            if (isCompanyAccountLocked(comp)) {
+                showToast('आपका प्लान एक्सपायर या Suspended है! कृपया पहले Renew करें।', true);
+                return;
+            }
             const tenantWorkers = db.workers.filter(w => w.companyId === activeCompanyId);
             const advSelect = document.getElementById('adv-worker-select');
             if (advSelect) {
@@ -4140,7 +4246,6 @@
             if (advPctEl) advPctEl.innerText = advStats.totalGiven > 0 ? `${paidPct}% चुकता` : 'कोई बकाया नहीं';
             if (advBarEl) advBarEl.style.width = `${advStats.totalGiven > 0 ? paidPct : 0}%`;
 
-            // Selected month attendance & earnings
             const monthPresent = totalPresent;
             const monthOt = totalOt;
 
@@ -4195,4 +4300,4 @@
         }
     </script>
 </body>
-                                                                     </html>
+                    </html>
