@@ -1323,6 +1323,54 @@
         </div>
     </div>
 
+    <!-- EDIT COMPANY MODAL (SUPER ADMIN) -->
+    <div id="modal-edit-company" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-building-user text-amber-600 mr-1.5"></i>कंपनी विवरण एडिट करें</h3>
+                    <p id="edit-comp-id-badge" class="text-xs font-mono font-bold text-indigo-600 mt-0.5">Tenant ID: COMP-01</p>
+                </div>
+                <button type="button" onclick="closeModal('modal-edit-company')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form onsubmit="handleEditCompany(event)" class="space-y-4">
+                <input type="hidden" id="edit-comp-id">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">कंपनी का नाम</label>
+                    <input type="text" id="edit-comp-name" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-semibold">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Company Admin ID</label>
+                        <input type="text" id="edit-comp-admin-id" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Admin Password</label>
+                        <input type="text" id="edit-comp-admin-pass" required class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">सब्सक्रिप्शन प्लान</label>
+                        <select id="edit-comp-plan" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+                            <option value="Starter">Starter - ₹499/माह</option>
+                            <option value="Growth">Growth - ₹999/माह</option>
+                            <option value="Business">Business - ₹1,999/माह</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">एक्सपायरी डेट</label>
+                        <input type="date" id="edit-comp-expiry" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('modal-edit-company')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100">रद्द करें</button>
+                    <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-sm font-semibold shadow-sm">बदलाव सेव करें</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="modal-company-links" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-xl fade-in">
             <div class="flex items-center justify-between mb-2">
@@ -2929,6 +2977,9 @@
                         </span>
                     </td>
                     <td class="py-4 px-6 text-right space-x-1.5 whitespace-nowrap">
+                        <button type="button" onclick="openEditCompanyModal('${comp.id}')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-semibold px-2.5 py-1.5 rounded-lg transition inline-flex items-center gap-1" title="कंपनी डिटेल एडिट करें">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                        </button>
                         <button type="button" onclick="inspectCompany('${comp.id}')" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-3 py-1.5 rounded-lg transition">
                             पैनल खोलें
                         </button>
@@ -2953,7 +3004,12 @@
                                     <div class="font-extrabold text-slate-900 text-sm truncate">${comp.name}</div>
                                     <div class="text-[11px] text-slate-500 font-mono mt-0.5">ID: ${comp.adminId} • Pass: ${comp.adminPass}</div>
                                 </div>
-                                ${statusBadge}
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick="openEditCompanyModal('${comp.id}')" class="text-[11px] bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
+                                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                                    </button>
+                                    ${statusBadge}
+                                </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-2 items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100">
@@ -4531,4 +4587,4 @@
         }
     </script>
 </body>
-                                                                    </html>
+                </html>
