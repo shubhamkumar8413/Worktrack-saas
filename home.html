@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkTrack SaaS — Smart Workforce, Attendance, OT & Payroll Platform</title>
+    <meta name="description" content="WorkTrack SaaS: फ़ैक्ट्रियों, कंस्ट्रक्शन साइट्स और व्यवसायों के लिए दैनिक हाज़िरी, ओवरटाइम (OT), एडवांस/किस्त पासबुक और ऑटो सैलरी का 100% डिजिटल समाधान।">
+    <link rel="icon" type="image/png" href="icon-admin.png">
+    <link rel="apple-touch-icon" href="icon-admin.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans Devanagari -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .glass-nav {
+            background: rgba(2, 6, 23, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .hero-mesh {
+            background-color: #020617;
+            background-image:
+                radial-gradient(at 15% 15%, rgba(79, 70, 229, 0.35) 0px, transparent 50%),
+                radial-gradient(at 85% 20%, rgba(16, 185, 129, 0.25) 0px, transparent 50%),
+                radial-gradient(at 50% 85%, rgba(59, 130, 246, 0.2) 0px, transparent 55%);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- ===================================================================== -->
+    <!-- 1. PREMIUM STICKY NAVIGATION BAR                                      -->
+    <!-- ===================================================================== -->
+    <header class="glass-nav text-white sticky top-0 z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <!-- Brand Identity -->
+            <a href="#" class="flex items-center gap-2.5 shrink-0">
+                <div class="relative">
+                    <img src="icon-admin.png" onerror="this.onerror=null; this.src='https://placehold.co/80x80/0f172a/34d399?text=WT';" alt="WorkTrack Logo" class="w-9 h-9 rounded-xl object-cover border border-indigo-400/40 shadow-md">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-slate-950 absolute -bottom-0.5 -right-0.5"></span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-extrabold text-base tracking-tight text-white">WorkTrack</span>
+                        <span class="text-[9px] font-extrabold uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-500/25 text-indigo-300 border border-indigo-400/30">SAAS</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400 hidden sm:block leading-none mt-0.5">Attendance, OT & Payroll</span>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
+                <a href="#features" class="hover:text-white transition">ऐप फ़ीचर्स</a>
+                <a href="#how-it-works" class="hover:text-white transition">कैसे काम करता है?</a>
+                <a href="#pricing" class="hover:text-white transition">प्लान्स (₹499 से शुरू)</a>
+                <a href="#download-apk" class="hover:text-emerald-300 transition">Android Apps</a>
+            </nav>
+
+            <!-- Direct Portal Login Buttons (Connects straight to index.html) -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <a href="index.html?portal=company_admin" class="px-3 sm:px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] sm:text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-building-shield"></i>
+                    <span>Company Admin</span>
+                </a>
+                <a href="index.html?portal=worker" class="px-3 sm:px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] sm:text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                    <span>Worker</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================================================================== -->
+    <!-- 2. ULTRA-PREMIUM HERO BANNER & LIVE APP PREVIEW                       -->
+    <!-- ===================================================================== -->
+    <section class="hero-mesh text-white pt-10 pb-16 sm:pt-16 sm:pb-24 px-4 sm:px-6 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+            
+            <!-- Left Hero Copy -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-emerald-300 text-xs font-bold backdrop-blur-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>भारत का #1 स्मार्ट हाज़िरी, OT और पेरोल ऐप</span>
+                </div>
+
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-[1.15] text-white">
+                    कागज़ी रजिस्टर बंद करें — <span class="bg-gradient-to-r from-indigo-400 via-sky-300 to-emerald-400 bg-clip-text text-transparent">WorkTrack App</span> से पूरी कंपनी डिजिटल चलाएं!
+                </h1>
+
+                <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                    फ़ैक्ट्रियों, कंस्ट्रक्शन साइट्स, वर्कशॉप और व्यवसायों के लिए — कर्मचारियों की <strong>दैनिक हाज़िरी</strong>, <strong>ओवरटाइम (OT)</strong>, <strong>एडवांस/किस्त (खर्ची) पासबुक</strong> और <strong>1-क्लिक WhatsApp Salary Slip</strong> का 100% सुरक्षित क्लाउड प्लेटफ़ॉर्म।
+                </p>
+
+                <!-- Primary Portal Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
+                    <a href="index.html?portal=company_admin" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-extrabold text-sm shadow-xl shadow-indigo-950/50 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-building-shield"></i>
+                        <span>Company Admin लॉगिन खोलें</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                    <a href="index.html?portal=worker" class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm shadow-xl shadow-emerald-950/50 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-helmet-safety"></i>
+                        <span>Worker पोर्टल खोलें</span>
+                    </a>
+                </div>
+
+                <!-- Trust Badges -->
+                <div class="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2 text-xs text-slate-300 font-medium">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> रीयल-टाइम Firebase सिंक</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> हिंदी • English • ગુજરાતી</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-400"></i> 100% Tamper-Proof ऑडिट लॉग</span>
+                </div>
+            </div>
+
+            <!-- Right Interactive Dual-App Showcase Cards -->
+            <div class="lg:col-span-5 space-y-4">
+                <!-- Card 1: Company Admin App Preview -->
+                <div class="rounded-3xl bg-gradient-to-br from-slate-900/95 via-indigo-950/95 to-blue-950/95 p-5 border border-indigo-400/30 shadow-2xl backdrop-blur-md">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/25 text-indigo-200 border border-indigo-400/30">
+                            <i class="fa-solid fa-building-shield mr-1"></i> WorkTrack Admin App
+                        </span>
+                        <span class="text-[11px] font-bold text-emerald-300 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Live Sync
+                        </span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-white">कंपनी मालिक व HR कंट्रोल पैनल</h3>
+                    <p class="text-xs text-indigo-200 mt-0.5">1-टैप हाज़िरी, ऑटो सैलरी और WhatsApp पर Salary Slip भेजें</p>
+                    <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+                            <div class="text-[10px] text-indigo-200">आज हाज़िरी</div>
+                            <div class="text-sm font-extrabold text-emerald-300 mt-0.5">96%</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+                            <div class="text-[10px] text-indigo-200">कुल OT</div>
+                            <div class="text-sm font-extrabold text-amber-300 mt-0.5">32.5 hrs</div>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10">
+                            <div class="text-[10px] text-indigo-200">ऑटो सैलरी</div>
+                            <div class="text-sm font-extrabold text-white mt-0.5">100% सटीक</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
+                        <span class="text-[11px] text-slate-300">मालिक / HR के लिए</span>
+                        <a href="index.html?portal=company_admin" class="text-xs font-extrabold text-indigo-300 hover:text-white">लॉगिन करें →</a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Worker App Preview -->
+                <div class="rounded-3xl bg-gradient-to-br from-slate-900/95 via-emerald-950/95 to-teal-950/95 p-5 border border-emerald-400/30 shadow-2xl backdrop-blur-md">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/25 text-emerald-200 border border-emerald-400/30">
+                            <i class="fa-solid fa-helmet-safety mr-1"></i> WorkTrack Worker App
+                        </span>
+                        <span class="text-[10px] font-bold text-amber-300 bg-amber-400/15 px-2 py-0.5 rounded-full">100% Read-Only</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-white">कर्मचारी (Worker) पारदर्शी पोर्टल</h3>
+                    <p class="text-xs text-emerald-200 mt-0.5">अपनी हाज़िरी, OT, किस्त पासबुक और डिजिटल ID Card देखें</p>
+                    <div class="mt-3 pt-3 border-t border-white/10 flex items-center justify-between">
+                        <span class="text-[11px] text-slate-300">सभी कर्मचारियों के लिए</span>
+                        <a href="index.html?portal=worker" class="text-xs font-extrabold text-emerald-300 hover:text-white">Worker लॉगिन →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 3. COMPLETE APP FEATURES SHOWCASE (ADMIN + WORKER)                    -->
+    <!-- ===================================================================== -->
+    <section id="features" class="py-14 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-200">
+                COMPLETE WORKFORCE SUITE
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3 tracking-tight">
+                हर छोटे-बड़े व्यवसाय के लिए शक्तिशाली फ़ीचर्स
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2.5">
+                कंपनी मालिक के लिए पूरा नियंत्रण और कर्मचारियों के लिए 100% पारदर्शी रिकॉर्ड — दोनों अलग-अलग ऐप्स में।
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Company Admin Features Card -->
+            <div class="bg-white rounded-3xl border border-indigo-200/80 shadow-lg p-6 sm:p-8 space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-md">
+                            <i class="fa-solid fa-building-shield"></i>
+                        </span>
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">FOR BUSINESS OWNERS & HR</span>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Company Admin App फ़ीचर्स</h3>
+                        </div>
+                    </div>
+                    <a href="index.html?portal=company_admin" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-extrabold transition">
+                        खोलें →
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-calendar-check text-indigo-600"></i> दैनिक हाज़िरी व OT</div>
+                        <p class="text-slate-600 leading-relaxed">Present, Half Day, Absent, Leave और 0.5 hr सटीकता तक ओवरटाइम दर्ज करें।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-check-double text-emerald-600"></i> सिलेक्टिव बल्क हाज़िरी</div>
+                        <p class="text-slate-600 leading-relaxed">चेकबॉक्स से चुने हुए वर्कर्स को एक क्लिक में Present मार्क करने की सुविधा।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-indian-rupee-sign text-amber-600"></i> ऑटो सैलरी कैलकुलेटर</div>
+                        <p class="text-slate-600 leading-relaxed"><code>(हाज़िरी × दर) + (OT × दर) − किस्त</code> की 100% ऑटोमैटिक गणना।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-hand-holding-dollar text-rose-600"></i> एडवांस व किस्त ट्रैकर</div>
+                        <p class="text-slate-600 leading-relaxed">नया एडवांस दें और सैलरी से किस्त काटें — बकाया एडवांस अपने आप अपडेट।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-brands fa-whatsapp text-emerald-600"></i> 1-क्लिक WhatsApp Slip</div>
+                        <p class="text-slate-600 leading-relaxed">दैनिक हाज़िरी संदेश और पूरी मासिक सैलरी स्लिप सीधे वर्कर के WhatsApp पर भेजें।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-slate-800"></i> Tamper-Proof ऑडिट लॉग</div>
+                        <p class="text-slate-600 leading-relaxed">हर बदलाव का सुरक्षित रिकॉर्ड + दैनिक व मासिक Excel/CSV डाउनलोड।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Worker App Features Card -->
+            <div class="bg-white rounded-3xl border border-emerald-200/80 shadow-lg p-6 sm:p-8 space-y-5">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-xl shadow-md">
+                            <i class="fa-solid fa-helmet-safety"></i>
+                        </span>
+                        <div>
+                            <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600">FOR EMPLOYEES & STAFF</span>
+                            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">WorkTrack Worker App फ़ीचर्स</h3>
+                        </div>
+                    </div>
+                    <a href="index.html?portal=worker" class="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-extrabold transition">
+                        खोलें →
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-clock text-emerald-600"></i> लाइव हाज़िरी स्टेटस</div>
+                        <p class="text-slate-600 leading-relaxed">वर्कर लॉगिन करते ही देख सकता है कि आज उसकी हाज़िरी और OT दर्ज हुई या नहीं।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-calendar-days text-indigo-600"></i> पुराना महीना इतिहास</div>
+                        <p class="text-slate-600 leading-relaxed">किसी भी पिछले पुराने महीने को चुनकर उस महीने की हाज़िरी व सैलरी देखें।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-book-open text-amber-600"></i> बैंक जैसी डिजिटल पासबुक</div>
+                        <p class="text-slate-600 leading-relaxed">कब कितना एडवांस लिया और कितनी किस्त कटी — तारीख व बकाया बैलेंस सहित पूरा हिसाब।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-id-card text-sky-600"></i> Digital Staff ID Card</div>
+                        <p class="text-slate-600 leading-relaxed">फोटो, Employee ID, विभाग और सत्यापित बैज वाला आधिकारिक पहचान पत्र।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-lock text-rose-600"></i> 100% Read-Only सुरक्षा</div>
+                        <p class="text-slate-600 leading-relaxed">कर्मचारी केवल अपना रिकॉर्ड देख सकते हैं, उसमें कोई छेड़छाड़ नहीं कर सकते।</p>
+                    </div>
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-language text-purple-600"></i> अपनी भाषा में उपयोग</div>
+                        <p class="text-slate-600 leading-relaxed">एक टैप में हिंदी, English या ગુજરાતી भाषा में पूरा ऐप चलाएं।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 4. HOW IT WORKS (3 SIMPLE STEPS)                                      -->
+    <!-- ===================================================================== -->
+    <section id="how-it-works" class="py-12 px-4 sm:px-6 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-[11px] font-extrabold uppercase tracking-widest text-amber-300">3 EASY STEPS</span>
+                <h2 class="text-2xl sm:text-3xl font-black mt-1">सिर्फ़ 2 मिनट में अपनी कंपनी शुरू करें</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2">
+                    <span class="w-9 h-9 rounded-xl bg-indigo-500 text-white font-black text-sm flex items-center justify-center">1</span>
+                    <h3 class="text-base font-extrabold text-white pt-1">अपना प्लान चुनें और ID पाएं</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Starter, Growth या Business प्लान चुनें और तुरंत अपनी कंपनी का Admin ID व Password प्राप्त करें।</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2">
+                    <span class="w-9 h-9 rounded-xl bg-emerald-500 text-slate-950 font-black text-sm flex items-center justify-center">2</span>
+                    <h3 class="text-base font-extrabold text-white pt-1">वर्कर्स जोड़ें और PIN शेयर करें</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">सभी कर्मचारियों की दैनिक दर व OT दर डालकर 1-क्लिक में Auto-Generate ID व PIN WhatsApp पर भेजें।</p>
+                </div>
+                <div class="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2">
+                    <span class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center">3</span>
+                    <h3 class="text-base font-extrabold text-white pt-1">दैनिक हाज़िरी लगाएं — सैलरी ऑटो तैयार!</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">रोज़ की हाज़िरी व OT दर्ज करें; महीने के अंत में ऑटो सैलरी स्लिप और Excel रिपोर्ट तैयार मिलेगी।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 5. ROYAL GRADIENT PRICING PLANS (₹499 / ₹999 / ₹1,399)                -->
+    <!-- ===================================================================== -->
+    <section id="pricing" class="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">
+                TRANSPARENT PRICING
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-3 tracking-tight">
+                हर साइज़ के बिज़नेस के लिए किफ़ायती प्लान्स
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-2">कोई छिपा हुआ शुल्क नहीं — आज ही नया अकाउंट शुरू करें।</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            <!-- Plan 1: Starter -->
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
+                <div class="h-1.5 bg-slate-800 absolute top-0 left-0 right-0"></div>
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-500">STARTER PLAN</span>
+                    <div class="mt-3 flex items-baseline gap-1">
+                        <span class="text-4xl font-black text-slate-900">₹499</span>
+                        <span class="text-xs font-semibold text-slate-500">/ माह</span>
+                    </div>
+                    <div class="mt-1.5 text-xs font-bold text-indigo-600">25 Workers तक की क्षमता</div>
+
+                    <ul class="mt-6 pt-5 border-t border-slate-100 space-y-3 text-xs text-slate-700">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> दैनिक हाज़िरी और OT ट्रैकिंग</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Company Admin व Worker App</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> Excel/CSV रिपोर्ट व ऑडिट लॉग</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> हिंदी, English व ગુજરાતી सपोर्ट</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20Starter%20Plan%20(%E2%82%B9499%2F%E0%A4%AE%E0%A4%BE%E0%A4%B9)%20%E0%A4%B6%E0%A5%81%E0%A4%B0%E0%A5%82%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="mt-7 w-full py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i> Starter चुनें
+                </a>
+            </div>
+
+            <!-- Plan 2: Growth (Highlighted Royal Dark Indigo Card) -->
+            <div class="bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white rounded-3xl border-2 border-indigo-500 shadow-2xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute top-4 right-4 bg-gradient-to-r from-amber-400 to-orange-400 text-slate-950 text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow">
+                    सबसे लोकप्रिय
+                </div>
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-300">GROWTH PLAN</span>
+                    <div class="mt-3 flex items-baseline gap-1">
+                        <span class="text-4xl font-black text-white">₹999</span>
+                        <span class="text-xs font-semibold text-indigo-200">/ माह</span>
+                    </div>
+                    <div class="mt-1.5 text-xs font-bold text-emerald-300">100 Workers तक की क्षमता</div>
+
+                    <ul class="mt-6 pt-5 border-t border-white/15 space-y-3 text-xs text-slate-200">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> Starter के सभी फ़ीचर्स शामिल</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> <strong>ऑटो सैलरी व एडवांस/किस्त पासबुक</strong></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> <strong>1-क्लिक WhatsApp Salary Slip</strong></li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> सिलेक्टिव बल्क अटेंडेंस (☑️)</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20Growth%20Plan%20(%E2%82%B9999%2F%E0%A4%AE%E0%A4%BE%E0%A4%B9)%20%E0%A4%B6%E0%A5%81%E0%A4%B0%E0%A5%82%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="mt-7 w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 to-emerald-500 hover:opacity-95 text-white font-extrabold text-xs text-center shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Growth चुनें (Best Value)
+                </a>
+            </div>
+
+            <!-- Plan 3: Business -->
+            <div class="bg-white rounded-3xl border border-emerald-200 shadow-sm p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
+                <div class="h-1.5 bg-emerald-600 absolute top-0 left-0 right-0"></div>
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">BUSINESS PLAN</span>
+                    <div class="mt-3 flex items-baseline gap-1">
+                        <span class="text-4xl font-black text-slate-900">₹1,399</span>
+                        <span class="text-xs font-semibold text-slate-500">/ माह</span>
+                    </div>
+                    <div class="mt-1.5 text-xs font-bold text-emerald-600">500 Workers तक की क्षमता</div>
+
+                    <ul class="mt-6 pt-5 border-t border-slate-100 space-y-3 text-xs text-slate-700">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> बड़ी फ़ैक्ट्रियों और साइट्स के लिए</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> सभी प्रीमियम पेरोल व रिपोर्ट फ़ीचर्स</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> प्राथमिकता 24x7 WhatsApp व कॉल सपोर्ट</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> डेडिकेटेड ऑनबोर्डिंग सहायता</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/916200889059?text=%E0%A4%A8%E0%A4%AE%E0%A4%B8%E0%A5%8D%E0%A4%A4%E0%A5%87%20WorkTrack%2C%20%E0%A4%AE%E0%A5%81%E0%A4%9D%E0%A5%87%20Business%20Plan%20(%E2%82%B91%2C399%2F%E0%A4%AE%E0%A4%BE%E0%A4%B9)%20%E0%A4%B6%E0%A5%81%E0%A4%B0%E0%A5%82%20%E0%A4%95%E0%A4%B0%E0%A4%A8%E0%A4%BE%20%E0%A4%B9%E0%A5%88%E0%A5%A4" target="_blank" rel="noopener noreferrer" class="mt-7 w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Business चुनें
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 6. ANDROID APK DOWNLOAD & DIRECT PORTAL ACCESS                        -->
+    <!-- ===================================================================== -->
+    <section id="download-apk" class="py-12 px-4 sm:px-6 max-w-7xl mx-auto">
+        <div class="rounded-3xl bg-gradient-to-r from-indigo-950 via-slate-900 to-emerald-950 text-white p-6 sm:p-10 border border-white/10 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div class="space-y-2 text-center lg:text-left">
+                <span class="text-[11px] font-extrabold uppercase tracking-widest text-emerald-300">ANDROID MOBILE APPS</span>
+                <h3 class="text-xl sm:text-2xl font-black">अपने फ़ोन में WorkTrack Android App इंस्टॉल करें</h3>
+                <p class="text-xs text-slate-300 max-w-xl">
+                    कंपनी मालिक के लिए <strong>WT Admin App</strong> और सभी कर्मचारियों के लिए <strong>WT Worker App</strong> — सीधे वेब पोर्टल या Android ऐप से उपयोग करें।
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+                <a href="admin.html" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-building-shield"></i> WT Admin खोलें
+                </a>
+                <a href="worker.html" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs text-center transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-helmet-safety"></i> WT Worker खोलें
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 7. ENTERPRISE FOOTER                                                  -->
+    <!-- ===================================================================== -->
+    <footer class="bg-slate-950 text-slate-400 border-t border-slate-800/80 py-10 px-4 sm:px-6 mt-8">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div class="flex items-center gap-2.5">
+                <img src="icon-admin.png" onerror="this.onerror=null; this.src='https://placehold.co/60x60/0f172a/34d399?text=WT';" alt="WT" class="w-8 h-8 rounded-lg">
+                <div>
+                    <div class="font-extrabold text-white">WorkTrack SaaS</div>
+                    <div class="text-[11px] text-slate-400">© 2026 WorkTrack SaaS • All Rights Reserved.</div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 font-semibold">
+                <a href="index.html?portal=company_admin" class="text-indigo-300 hover:text-white transition">Company Admin Login</a>
+                <a href="index.html?portal=worker" class="text-emerald-300 hover:text-white transition">Worker Portal Login</a>
+                <a href="https://wa.me/916200889059" target="_blank" rel="noopener noreferrer" class="text-white bg-emerald-600/20 border border-emerald-500/30 px-3 py-1.5 rounded-xl hover:bg-emerald-600/30 transition">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> +91 6200889059
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+  </html>
